@@ -18,7 +18,7 @@ namespace museia.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Important for Identity
+            base.OnModelCreating(modelBuilder); 
 
             modelBuilder.Entity<Post>().ToTable("Post");
             modelBuilder.Entity<Reaction>().ToTable("Reaction");

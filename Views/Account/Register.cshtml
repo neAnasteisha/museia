@@ -5,6 +5,8 @@
 <div class="container mt-5">
     <h2 class="text-center">Реєстрація</h2>
     <form method="post" action="/Account/Register">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
         <div class="mb-3">
             <label class="form-label">Ім'я</label>
             <input type="text" class="form-control" name="username" required>
@@ -15,10 +17,6 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Пароль</label>
-            <input type="password" class="form-control" name="password" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Підтердіть пароль</label>
             <input type="password" class="form-control" name="password" required>
         </div>
         <button type="submit" class="btn btn-success w-100">Зареєструватися</button>

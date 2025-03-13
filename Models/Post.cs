@@ -29,7 +29,7 @@ namespace museia.Models
         public PostTag PostTag { get; set; }
 
         [Required(ErrorMessage = "User ID is required")]
-        public uint UserID { get; set; }
+        public string UserID { get; set; }
         [Required(ErrorMessage = "Date is required")]
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; }

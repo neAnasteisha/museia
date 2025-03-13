@@ -24,7 +24,7 @@ namespace museia.Models
         [Required]
         public uint PostID { get; set; } 
         [Required]
-        public uint UserID { get; set; } 
+        public string UserID { get; set; } 
 
         [ForeignKey("PostID")]
         public Post Post { get; set; }

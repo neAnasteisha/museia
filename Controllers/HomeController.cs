@@ -2,19 +2,27 @@ namespace museia.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using museia.Models;
+    using museia.Services;
     using System.Diagnostics;
 
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
+        private readonly PostService _postService;
+
+        public HomeController(PostService postService)
         {
-            _logger = logger;
+            _postService = postService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var posts = await _postService.GetAllPostsAsync();
             return View();
         }
 

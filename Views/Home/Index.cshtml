@@ -6,3 +6,15 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<div class="posts">
+    <h3>All Posts</h3>
+    @foreach (var post in Model.Posts)
+    {
+        <div class="post">
+            <h4>@post.Title</h4>
+            <p>@post.Content</p>
+            <p><strong>Posted on:</strong> @post.PostedDate.ToString("dd/MM/yyyy")</p>
+        </div>
+    }
+</div>
+

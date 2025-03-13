@@ -24,8 +24,6 @@ namespace museia.Models
         [NotMapped]
         public IFormFile? PostAlbum { get; set; }
 
-
-        [Required(ErrorMessage = "Tag is required")]
         public PostTag PostTag { get; set; }
 
         [Required(ErrorMessage = "User ID is required")]

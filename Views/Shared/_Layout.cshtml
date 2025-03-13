@@ -30,10 +30,25 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
-                        <!-- Кнопка справа -->
-                        <li class="nav-item">
-                            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Вхід</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <!-- Якщо користувач залогінений -->
+                            <li class="nav-item">
+                                <a href="/Post/Create" class="btn btn-success me-2" style="color: white"> Створити пост</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit" class="btn btn-danger">Вихід</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- Якщо користувач не залогінений -->
+                            <li class="nav-item">
+                                <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Вхід</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

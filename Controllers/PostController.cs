@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using museia.Data;
 using museia.Models;
+using museia.Services;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace museia.Controllers
@@ -14,11 +17,13 @@ namespace museia.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly PostService _postService;
 
-        public PostController(AppDbContext context, UserManager<User> userManager)
+        public PostController(AppDbContext context, UserManager<User> userManager, PostService postService)
         {
             _context = context;
             _userManager = userManager;
+            _postService = postService;
         }
 
         // Відображення форми створення поста
@@ -28,31 +33,16 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Post model)
+        public async Task<IActionResult> Create(Post post)
         {
-            if (!ModelState.IsValid)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
             {
-                return View(model);
+                return Unauthorized("User not found");
             }
 
-            // Отримуємо поточного користувача
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Створюємо новий пост
-            var post = new Post
-            {
-                PostText = model.PostText,
-                PostTag = model.PostTag,
-                CreatedAt = DateTime.UtcNow,
-                UserID = user.Id
-            };
-
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
+            // Викликаємо сервіс для створення поста
+            await _postService.CreatePostAsync(post.PostText, post.PostPhoto, post.PostTag, userId);
 
             return RedirectToAction("Index", "Home");
         }

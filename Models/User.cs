@@ -20,8 +20,7 @@ namespace museia.Models
 
         public UserType UserType { get; set; } = UserType.SimpleUser;
 
-        [NotMapped]
-        public IFormFile? UserAvatar { get; set; }
+        public string? UserAvatar { get; set; }
 
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();

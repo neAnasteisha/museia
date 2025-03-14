@@ -1,24 +1,20 @@
-﻿@{
+﻿@model Post
+@{
     ViewData["Title"] = "Створити пост";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center">📝 Створення поста</h2>
-
-    <form method="post" action="/Post/Create">
-        <div class="mb-3">
-            <label class="form-label">Заголовок</label>
-            <input type="text" class="form-control" name="title" required>
-        </div>
+<form method="post">
+    <div class="container mt-5">
+        <h2 class="text-center">📝 Створення поста</h2>
         <div class="mb-3">
             <label class="form-label">Опис</label>
-            <textarea class="form-control" name="content" rows="4" required></textarea>
+            <textarea class="form-control" rows="4" required asp-for="PostText"></textarea>
         </div>
         <button type="submit" class="btn btn-success w-100">Опублікувати</button>
-    </form>
 
-    <!-- Текстове посилання для повернення на головну -->
-    <div class="text-center mt-3">
-        <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
+        <!-- Текстове посилання для повернення на головну -->
+        <div class="text-center mt-3">
+            <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
+        </div>
     </div>
-</div>
+</form>

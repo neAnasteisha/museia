@@ -15,9 +15,9 @@
             foreach (var post in Model)
             {
                 <div class="post">
-                    <h4>@post</h4>
-                    <p>@post</p>
-                    <p><strong>Posted on:</strong> @post</p>
+                    <h4>@post.PostText</h4>
+                    <p>@post.PostTag</p>
+                    <p><strong>Posted on:</strong> @post.CreatedAt</p>
                 </div>
             }
         }

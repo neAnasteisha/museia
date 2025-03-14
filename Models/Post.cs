@@ -20,9 +20,7 @@ namespace museia.Models
         [MaxLength(500)]
         public string? PostText { get; set; }
 
-
-        [NotMapped]
-        public IFormFile? PostAlbum { get; set; }
+        public string? PostPhoto { get; set; }
 
         public PostTag PostTag { get; set; }
 

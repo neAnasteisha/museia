@@ -35,7 +35,12 @@
 
         public async Task UpdatePostAsync(Post post)
         {
-            _context.Posts.Update(post);
+            var existingPost = await _context.Posts.FindAsync(post.PostID);
+            if (existingPost != null)
+            {
+                existingPost.PostText = post.PostText;
+                existingPost.PostTag = post.PostTag;
+            }
             await _context.SaveChangesAsync();
         }
 

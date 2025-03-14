@@ -49,35 +49,35 @@ namespace museia.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[HttpGet("Редагувати/{id}")]
-        //public async Task<IActionResult> Edit(uint id)
-        //{
-        //    var post = await _postService.GetPostById(id);
-        //    if (post == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewBag.PostTags = _postService.GetPostTags();
+        [HttpGet]
+        public async Task<IActionResult> Edit(uint id)
+        {
+            var post = await _postService.GetPostById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            ViewBag.PostTags = _postService.GetPostTags();
 
-        //    return View(post);
-        //}
+            return View(post);
+        }
 
-        //[HttpPost("Редагувати/{id}")]
-        //public async Task<IActionResult> Edit(Post post)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        await _postService.UpdatePost(post);
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(post);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Edit(Post post)
+        {
+            if (ModelState.IsValid)
+            {
+                await _postService.UpdatePost(post);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(post);
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Delete(uint id)
-        //{
-        //    await _postService.DeletePost(id);
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Delete(uint id)
+        {
+            await _postService.DeletePost(id);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

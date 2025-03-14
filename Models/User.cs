@@ -10,7 +10,7 @@ namespace museia.Models
         Moderator
     }
 
-    public class User : IdentityUser // ✅ Extend IdentityUser
+    public class User : IdentityUser 
     {
         [Required(ErrorMessage = "Name is required")]
         [MaxLength(100)]

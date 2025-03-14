@@ -183,6 +183,9 @@ namespace museia.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("PostTag")
                         .HasColumnType("INTEGER");
 

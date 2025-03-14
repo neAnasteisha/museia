@@ -20,9 +20,19 @@ namespace museia.Controllers
             _postService = postService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchText)
         {
-            var posts = await _postService.GetAllPostsAsync();
+            List<Post> posts;
+
+            if (!string.IsNullOrEmpty(searchText)) // якщо Ї текст дл€ пошуку
+            {
+                posts = await _postService.SearchPostsAsync(searchText); // ¬икликаЇмо метод пошуку з серв≥су
+            }
+            else
+            {
+                posts = await _postService.GetAllPostsAsync(); // якщо пошук порожн≥й, показуЇмо вс≥ пости
+            }
+
             return View(posts);
         }
 

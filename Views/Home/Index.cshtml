@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<form method="get" asp-action="Index">
+    <input type="text" name="searchText" class="form-control" placeholder="Пошук"/>
+    <button type="submit" class="btn btn-primary">Пошук</button>
+</form>
 <div class="posts">
     <h3>All Posts</h3>
     @{
@@ -23,7 +27,7 @@
         else
         {
             <div>
-                <h4>Постів ще нема, лох</h4>
+                <h4>Нічого не вдалось знайти :(</h4>
             </div>
         }
     }

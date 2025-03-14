@@ -57,5 +57,10 @@
         {
             await _postRepository.DeletePostAsync(id);
         }
+
+        public async Task<List<Post>> SearchPosts(string searchText)
+        {
+            return await _postRepository.SearchPostsAsync(searchText);
+        }
     }
 }

@@ -1,11 +1,11 @@
 ﻿@model Post
 @{
-    ViewData["Title"] = "Створити пост";
+    ViewData["Title"] = "Редагувати пост";
 }
 
 <form method="post">
     <div class="container mt-5">
-        <h2 class="text-center">📝 Створення поста</h2>
+        <h2 class="text-center">📝 Редагувати пост</h2>
         <div class="mb-3">
             <label class="form-label">Опис</label>
             <textarea class="form-control" rows="4" required asp-for="PostText"></textarea>
@@ -14,7 +14,7 @@
             <label class="form-label">Тег</label>
             <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
         </div>
-        <button type="submit" class="btn btn-success w-100">Опублікувати</button>
+        <button type="submit" class="btn btn-success w-100">Зберегти зміни</button>
 
         <!-- Текстове посилання для повернення на головну -->
         <div class="text-center mt-3">

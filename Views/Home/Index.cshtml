@@ -17,8 +17,9 @@
                 <div class="post">
                     <h4>@post.PostText</h4>
                     <p>@post.PostTag</p>
-                    <p><strong>Posted on:</strong> @post.CreatedAt</p>
+                    <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
                 </div>
+
             }
         }
         else

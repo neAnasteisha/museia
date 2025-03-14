@@ -26,9 +26,12 @@ namespace museia.Controllers
             _postService = postService;
         }
 
-        // Відображення форми створення поста
+
+        [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.PostTags = _postService.GetPostTags();
+
             return View();
         }
 
@@ -40,11 +43,41 @@ namespace museia.Controllers
             {
                 return Unauthorized("User not found");
             }
-
             // Викликаємо сервіс для створення поста
             await _postService.CreatePostAsync(post.PostText, post.PostPhoto, post.PostTag, userId);
 
             return RedirectToAction("Index", "Home");
         }
+
+        //[HttpGet("Редагувати/{id}")]
+        //public async Task<IActionResult> Edit(uint id)
+        //{
+        //    var post = await _postService.GetPostById(id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewBag.PostTags = _postService.GetPostTags();
+
+        //    return View(post);
+        //}
+
+        //[HttpPost("Редагувати/{id}")]
+        //public async Task<IActionResult> Edit(Post post)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        await _postService.UpdatePost(post);
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(post);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> Delete(uint id)
+        //{
+        //    await _postService.DeletePost(id);
+        //    return RedirectToAction("Index");
+        //}
     }
 }

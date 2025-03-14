@@ -1,5 +1,6 @@
 ﻿namespace museia.Services
 {
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using museia.Models;
 
     public class PostService
@@ -9,6 +10,18 @@
         public PostService(PostRepository postRepository)
         {
             _postRepository = postRepository;
+        }
+
+        public List<SelectListItem> GetPostTags()
+        {
+            return Enum.GetValues(typeof(PostTag))
+                       .Cast<PostTag>()
+                       .Select(t => new SelectListItem
+                       {
+                           Value = t.ToString(),
+                           Text = t.ToString()
+                       })
+                       .ToList();
         }
 
         public async Task CreatePostAsync(string postText, string postPhoto, PostTag postTag, string userId)
@@ -28,6 +41,21 @@
             };
 
             await _postRepository.AddAsync(post);
+        }
+
+        public async Task<Post> GetPostById(uint id)
+        {
+            return await _postRepository.GetPostByIdAsync(id);
+        }
+
+        public async Task UpdatePost(Post post)
+        {
+            await _postRepository.UpdatePostAsync(post);
+        }
+
+        public async Task DeletePost(uint id)
+        {
+            await _postRepository.DeletePostAsync(id);
         }
     }
 }

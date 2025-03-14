@@ -5,11 +5,11 @@ namespace museia.Models
 {
     public enum PostTag
     {
-        Photo, 
-        Poetry,
-        Music,
-        Sculpture,
-        Painting
+        Фото, 
+        Поезія,
+        Музика,
+        Скульптура,
+        Малюнок
         //дописати
     }
     public class Post

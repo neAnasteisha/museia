@@ -4,10 +4,10 @@
     using museia.Data;
     using museia.Models;
 
-    public class PostService
+    public class PostRepository
     {
         private readonly AppDbContext _context;
-        public PostService(AppDbContext context)
+        public PostRepository(AppDbContext context)
         {
             _context = context;
         }

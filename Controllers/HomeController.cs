@@ -13,9 +13,9 @@ namespace museia.Controllers
         //{
         //    _logger = logger;
         //}
-        private readonly PostService _postService;
+        private readonly PostRepository _postService;
 
-        public HomeController(PostService postService)
+        public HomeController(PostRepository postService)
         {
             _postService = postService;
         }
@@ -23,7 +23,7 @@ namespace museia.Controllers
         public async Task<IActionResult> Index()
         {
             var posts = await _postService.GetAllPostsAsync();
-            return View();
+            return View(posts);
         }
 
         public IActionResult Privacy()

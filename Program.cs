@@ -24,7 +24,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<PostRepository>();
 
 var app = builder.Build();
 

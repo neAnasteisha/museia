@@ -65,7 +65,7 @@
         public async Task<List<Post>> SearchPostsByTextAsync(string searchText)
         {
             return await _context.Posts
-                .Where(p => EF.Functions.Like(p.PostText, $"%{searchText}%"))
+                .Where(p => EF.Functions.Like(p.PostText.ToLower(), $"%{searchText.ToLower()}%"))
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }

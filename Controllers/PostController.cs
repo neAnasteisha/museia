@@ -27,18 +27,6 @@ namespace museia.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchText)
-        {
-            List<Post> posts;
-
-            // Викликаємо метод пошуку з сервісу
-            posts = await _postService.SearchPosts(searchText);
-
-            return View(posts);
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet]
         public IActionResult Create()
         {
             ViewBag.PostTags = _postService.GetPostTags();

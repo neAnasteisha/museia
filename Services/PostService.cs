@@ -58,9 +58,28 @@
             await _postRepository.DeletePostAsync(id);
         }
 
-        public async Task<List<Post>> SearchPosts(string searchText)
+        public async Task<List<Post>> SearchPostsAsync(string searchText)
         {
-            return await _postRepository.SearchPostsAsync(searchText);
+            if (string.IsNullOrEmpty(searchText))
+            {
+                return await _postRepository.GetAllPostsAsync();
+            }
+
+            if (searchText.StartsWith("#"))
+            {
+                var tag = searchText.Substring(1);
+                if (Enum.TryParse<PostTag>(tag, true, out var enumTag))
+                {
+                    return await _postRepository.GetPostsByTagAsync(enumTag);
+                }
+            }
+            else
+            {
+                return await _postRepository.SearchPostsByTextAsync(searchText);
+            }
+
+            return new List<Post>();
         }
+
     }
 }

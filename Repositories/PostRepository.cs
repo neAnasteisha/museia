@@ -54,33 +54,20 @@
             }
         }
 
-        public async Task<List<Post>> SearchPostsAsync(string searchText)
+        public async Task<List<Post>> GetPostsByTagAsync(PostTag tag)
         {
-            if (string.IsNullOrEmpty(searchText))
-            {
-                return await _context.Posts.OrderByDescending(p => p.CreatedAt).ToListAsync();
-            }
+            return await _context.Posts
+                .Where(p => p.PostTag == tag)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+        }
 
-            if (searchText.StartsWith("#"))
-            {
-                var tag = searchText.Substring(1);
-                if (Enum.TryParse<PostTag>(tag, true, out var enumTag))
-                {
-                    return await _context.Posts
-                        .Where(p => p.PostTag == enumTag)
-                        .OrderByDescending(p => p.CreatedAt)
-                        .ToListAsync();
-                }
-            }
-            else
-            {
-                return await _context.Posts
-                    .Where(p => EF.Functions.Like(p.PostText.ToLower(), $"%{searchText}%")) // Перетворюємо текст поста в нижній регістр
-                    .OrderByDescending(p => p.CreatedAt)
-                    .ToListAsync();
-            }
-
-            return new List<Post>();
+        public async Task<List<Post>> SearchPostsByTextAsync(string searchText)
+        {
+            return await _context.Posts
+                .Where(p => EF.Functions.Like(p.PostText, $"%{searchText}%"))
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
         }
     }
 }

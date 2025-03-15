@@ -7,15 +7,9 @@ namespace museia.Controllers
 
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
+        private readonly PostService _postService;
 
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-        private readonly PostRepository _postService;
-
-        public HomeController(PostRepository postService)
+        public HomeController(PostService postService)
         {
             _postService = postService;
         }
@@ -23,15 +17,7 @@ namespace museia.Controllers
         public async Task<IActionResult> Index(string searchText)
         {
             List<Post> posts;
-
-            if (!string.IsNullOrEmpty(searchText)) // якщо Ї текст дл€ пошуку
-            {
-                posts = await _postService.SearchPostsAsync(searchText); // ¬икликаЇмо метод пошуку з серв≥су
-            }
-            else
-            {
-                posts = await _postService.GetAllPostsAsync(); // якщо пошук порожн≥й, показуЇмо вс≥ пости
-            }
+            posts = await _postService.SearchPostsAsync(searchText);
 
             return View(posts);
         }

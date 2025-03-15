@@ -6,13 +6,13 @@ using museia.Data;
 using museia.Models;
 using museia.Services;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace museia.Controllers
 {
-    [Authorize] // ✅ Доступ тільки для залогінених користувачів
     public class PostController : Controller
     {
         private readonly AppDbContext _context;
@@ -26,11 +26,34 @@ namespace museia.Controllers
             _postService = postService;
         }
 
+        public async Task<IActionResult> Index(string searchText)
+        {
+            List<Post> posts;
+            posts = await _postService.SearchPostsAsync(searchText);
+
+            return View(posts);
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Rules()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
             ViewBag.PostTags = _postService.GetPostTags();
-
             return View();
         }
 
@@ -42,10 +65,8 @@ namespace museia.Controllers
             {
                 return Unauthorized("User not found");
             }
-            // Викликаємо сервіс для створення поста
             await _postService.CreatePostAsync(post.PostText, post.PostPhoto, post.PostTag, userId);
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Post");
         }
 
         [HttpGet]
@@ -57,7 +78,6 @@ namespace museia.Controllers
                 return NotFound();
             }
             ViewBag.PostTags = _postService.GetPostTags();
-
             return View(post);
         }
 
@@ -67,7 +87,7 @@ namespace museia.Controllers
             if (ModelState.IsValid)
             {
                 await _postService.UpdatePost(post);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Post");
             }
             return View(post);
         }
@@ -76,7 +96,7 @@ namespace museia.Controllers
         public async Task<IActionResult> Delete(uint id)
         {
             await _postService.DeletePost(id);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Post");
         }
     }
 }

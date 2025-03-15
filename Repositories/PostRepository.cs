@@ -40,8 +40,8 @@
             {
                 existingPost.PostText = post.PostText;
                 existingPost.PostTag = post.PostTag;
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeletePostAsync(uint id)

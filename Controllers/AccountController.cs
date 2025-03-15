@@ -16,13 +16,11 @@ namespace museia.Controllers
             _signInManager = signInManager;
         }
 
-        // Показує сторінку входу
         public IActionResult Login()
         {
             return View();
         }
 
-        // Обробка входу
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -36,20 +34,18 @@ namespace museia.Controllers
             var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Post");
             }
 
             ModelState.AddModelError("", "Невдала спроба входу.");
             return View();
         }
 
-        // Показує сторінку реєстрації
         public IActionResult Register()
         {
             return View();
         }
 
-        // Обробка реєстрації
         [HttpPost]
         public async Task<IActionResult> Register(string username, string email, string password)
         {
@@ -71,7 +67,7 @@ namespace museia.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Post");
             }
 
             foreach (var error in result.Errors)
@@ -82,7 +78,6 @@ namespace museia.Controllers
             return View();
         }
 
-        // Вихід з акаунта
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

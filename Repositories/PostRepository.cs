@@ -5,7 +5,7 @@
     using museia.Data;
     using museia.Models;
 
-    public class PostRepository
+    public class PostRepository : IPostRepository
     {
         private readonly AppDbContext _context;
 

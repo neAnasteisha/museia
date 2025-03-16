@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using museia.Models;
 
-    public class PostService
+    public class PostService : IPostService
     {
         private PostRepository _postRepository;
 
@@ -53,8 +53,6 @@
             await _postRepository.UpdatePostAsync(post);
         }
 
-
-
         public async Task DeletePost(uint id)
         {
             await _postRepository.DeletePostAsync(id);
@@ -82,6 +80,5 @@
 
             return new List<Post>();
         }
-
     }
 }

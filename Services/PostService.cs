@@ -26,10 +26,10 @@
 
         public async Task CreatePostAsync(string postText, string postPhoto, PostTag postTag, string userId)
         {
-            //if (string.IsNullOrWhiteSpace(postText) && string.IsNullOrEmpty(postPhoto))
-            //{
-            //    throw new ArgumentException("Post can't be empty.");
-            //}
+            if (string.IsNullOrWhiteSpace(postText) && string.IsNullOrEmpty(postPhoto))
+            {
+                throw new ArgumentException("Допис не може бути порожнім.");
+            }
 
             var post = new Post
             {

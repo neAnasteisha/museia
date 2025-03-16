@@ -58,16 +58,32 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Post post)
+        public async Task<IActionResult> Create(Post model, IFormFile photoFile)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId))
+            string photoPath = null;
+
+            if (photoFile != null && photoFile.Length > 0)
             {
-                return Unauthorized("User not found");
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                Directory.CreateDirectory(uploadsFolder); 
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photoFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photoFile.CopyToAsync(stream);
+                }
+
+                photoPath = "/uploads/" + uniqueFileName; 
             }
-            await _postService.CreatePostAsync(post.PostText, post.PostPhoto, post.PostTag, userId);
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+
+            await _postService.CreatePostAsync(model.PostText, photoPath, model.PostTag, userId);
+
             return RedirectToAction("Index", "Post");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(uint id)

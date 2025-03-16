@@ -3,7 +3,7 @@
     ViewData["Title"] = "Створити пост";
 }
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="container mt-5">
         <h2 class="text-center">📝 Створення поста</h2>
         <div class="mb-3">
@@ -14,9 +14,12 @@
             <label class="form-label">Тег</label>
             <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
         </div>
+        <div class="mb-3">
+            <label class="form-label">Фото</label>
+            <input type="file" name="photoFile" class="form-control" />
+        </div>
         <button type="submit" class="btn btn-success w-100">Опублікувати</button>
 
-        <!-- Текстове посилання для повернення на головну -->
         <div class="text-center mt-3">
             <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
         </div>

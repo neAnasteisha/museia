@@ -3,22 +3,35 @@
     ViewData["Title"] = "Редагувати пост";
 }
 
-<form method="post">
-    <div class="container mt-5">
-        <h2 class="text-center">📝 Редагувати пост</h2>
-        <div class="mb-3">
-            <label class="form-label">Опис</label>
-            <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Тег</label>
-            <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
-        </div>
-        <button type="submit" class="btn btn-success w-100">Зберегти зміни</button>
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+    <input type="hidden" asp-for="PostID" />
 
-        <!-- Текстове посилання для повернення на головну -->
+    <div class="mb-3">
+        <label>Опис</label>
+        <textarea asp-for="PostText" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Тег</label>
+        <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.PostPhoto))
+    {
+        <div class="mb-3">
+            <label>Поточне фото:</label><br />
+            <img src="@Model.PostPhoto" style="max-width: 300px;" />
+        </div>
+    }
+
+    <div class="mb-3">
+        <label>Нове фото</label>
+        <input type="file" name="photoFile" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Зберегти зміни</button>
+
         <div class="text-center mt-3">
             <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
-        </div>
     </div>
 </form>

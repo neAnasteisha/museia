@@ -1,26 +1,52 @@
 ﻿@model List<Post>
+
 @{
     ViewData["Title"] = "Home Page";
 }
-<form method="get" asp-action="Index">
-    <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 300px;"/>
-</form>
-<div class="posts">
-    <h3>All Posts</h3>
-    @{
-        if(Model.Count != 0)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/post.css" />
+</head>
+<body>
+
+    <form method="get" asp-action="Index" class="m-3">
+        <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 300px;" />
+    </form>
+
+    <div class="posts m-3">
+        <h3>All Posts</h3>
+
+        @if (Model.Count != 0)
         {
             foreach (var post in Model)
             {
-                <div class="post">
-                    <h4>@post.PostText</h4>
-                    <p>@post.PostTag</p>
-                    <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
+                <div class="post mb-4 p-3 border rounded">
+                        <div class="post-content">
+                            <h4>@post.PostText</h4>
+                            <p>@post.PostTag</p>
+                            <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(post.PostPhoto))
+                        {
+                            <div class="post-image">
+                                <img src="@post.PostPhoto" alt="Фото поста" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
+                            </div>
+                        }
+
+                        <div class="post-actions">
+                        <a href="@Url.Action("Edit", "Post", new { id = post.PostID })" class="btn btn-edit-post">Редагувати</a>
+
+                            <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
+                            <button type="submit" class="btn btn-delete-post" onclick="return confirm('Ви впевнені, що хочете видалити цей пост?')">Видалити</button>
+                            </form>
+                        </div>
                 </div>
-                <a href="@Url.Action("Edit", "Post", new { id = post.PostID })" class="btn btn-warning btn-sm">Редагувати</a>
-                <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Ви впевнені, що хочете видалити цей пост?')">Видалити</button>
-                </form>
             }
         }
         else
@@ -29,7 +55,7 @@
                 <h4>Нічого не вдалось знайти :(</h4>
             </div>
         }
-    }
-    
-</div>
+    </div>
 
+</body>
+</html>

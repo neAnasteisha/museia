@@ -1,0 +1,24 @@
+﻿.post {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.post-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.btn-edit-post {
+    width: 10vw;
+    background: #da92da;
+    color: white;
+}
+
+.btn-delete-post {
+    width: 10vw;
+    background: #4e234e;
+    color: white;
+}
+

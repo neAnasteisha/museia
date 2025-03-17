@@ -78,5 +78,10 @@
             return filteredPosts;
         }
 
+        public async Task AddReactionAsync(Reaction reaction)
+        {
+            _context.Reactions.Add(reaction);
+            await _context.SaveChangesAsync();
+        }
     }
 }

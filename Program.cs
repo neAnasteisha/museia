@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using museia.Models;
 using museia.Services;
+using museia.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<PostRepository>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<ComplaintRepository>();
+builder.Services.AddScoped<ComplaintService>();
 
 var app = builder.Build();
 

@@ -45,6 +45,8 @@
                             <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
                             <button type="submit" class="btn btn-delete-post" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
                             </form>
+                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
+
                         </div>
                 </div>
             }

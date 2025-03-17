@@ -80,5 +80,17 @@
 
             return new List<Post>();
         }
+
+        public async Task AddReactionAsync(Emoji reactionType, string userId, uint postId)
+        {
+            var reaction = new Reaction
+            {
+                ReactionType = reactionType,
+                UserID = userId,
+                PostID = postId
+            };
+            await _postRepository.AddReactionAsync(reaction);
+        }
+
     }
 }

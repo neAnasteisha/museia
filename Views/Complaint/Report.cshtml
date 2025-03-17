@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Report Post";
+}
+
+<h2>Створення та подання скарги</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="complaintReason">Причина скарги:</label>
+        <textarea class="form-control" id="complaintReason" name="complaintReason" rows="3" required></textarea>
+    </div>
+    <input type="hidden" id="postId" name="postId" value="@ViewBag.PostId" />
+    <button type="submit" class="btn btn-primary">Відправити скаргу!</button>
+    <div class="text-center mt-3">
+        <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
+    </div>
+</form>

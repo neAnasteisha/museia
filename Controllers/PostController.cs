@@ -7,6 +7,7 @@ using museia.Models;
 using museia.Services;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace museia.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly PostService _postService;
+        private readonly ComplaintService _complaintService;
 
         public PostController(AppDbContext context, UserManager<User> userManager, PostService postService)
         {
@@ -109,10 +111,49 @@ namespace museia.Controllers
         }
 
         [HttpPost]
+        public IActionResult Report(uint id, string complaintReason)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                _complaintService.CreateComplaintAsync(complaintReason, userId, id).Wait();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("ПричинаСкарги", ex.Message);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Delete(uint id)
         {
             await _postService.DeletePost(id);
             return RedirectToAction("Index", "Post");
+        }
+
+        [HttpGet]
+        public IActionResult AddReaction(uint postId)
+        {
+            ViewBag.PostId = postId;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReaction(uint postId, Emoji reactionType)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {
+                await _postService.AddReactionAsync(reactionType, userId, postId);
+                return RedirectToAction("Index", "Post");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
+                return View();
+            }
         }
     }
 }

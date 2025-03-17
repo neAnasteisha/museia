@@ -13,6 +13,7 @@ namespace museia.Models
         Throwing_Up = 0x1F92E,
         Sparkle = 0x2728
     }
+
     public class Reaction
     {
         [Key]

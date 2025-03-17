@@ -1,4 +1,5 @@
-﻿@model List<Post>
+﻿@using System.Security.Claims
+@model List<Post>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -26,28 +27,51 @@
             foreach (var post in Model)
             {
                 <div class="post mb-4 p-3 border rounded">
-                        <div class="post-content">
-                            <h4>@post.PostText</h4>
-                            <p><strong>#</strong> @post.PostTag</p>
-                            <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
+                    <div class="post-content">
+                        <h4>@post.PostText</h4>
+                        <p><strong>#</strong> @post.PostTag</p>
+                        <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(post.PostPhoto))
+                    {
+                        <div class="post-image">
+                            <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
                         </div>
+                    }
 
-                        @if (!string.IsNullOrEmpty(post.PostPhoto))
+                    <div class="post-reactions">
+                        @if (post.Reactions != null && post.Reactions.Count > 0)
                         {
-                            <div class="post-image">
-                                <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
-                            </div>
+                            <ul>
+                                @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
+                                {
+                                    <li>@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                }
+                            </ul>
                         }
+                    </div>
 
-                        <div class="post-actions">
+                    <div class="post-actions">
                         <a href="@Url.Action("Edit", "Post", new { id = post.PostID })" class="btn btn-edit-post">Редагувати</a>
 
-                            <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
+                        <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
                             <button type="submit" class="btn btn-delete-post" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
-                            </form>
-                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
+                        </form>
 
-                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
+
+                            var userReaction = post.Reactions.FirstOrDefault(r => r.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                            var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
+
+                            <a href="@Url.Action("AddReaction", "Post", new { postId = post.PostID })" class="btn btn-reaction-post">
+                                @reactionLabel (@post.Reactions.Count)
+                            </a>
+
+                        }
+                    </div>
                 </div>
             }
         }
@@ -61,3 +85,20 @@
 
 </body>
 </html>
+
+@functions {
+    private string GetEmoji(Emoji reactionType)
+    {
+        return reactionType switch
+        {
+            Emoji.Heart => "❤️",
+            Emoji.ThumbsUp => "👍",
+            Emoji.Cry => "😢",
+            Emoji.Dragon => "🐉",
+            Emoji.Laughing => "😹",
+            Emoji.Throwing_Up => "🤮",
+            Emoji.Sparkle => "✨",
+            _ => string.Empty,
+        };
+    }
+}

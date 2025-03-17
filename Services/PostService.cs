@@ -89,8 +89,9 @@
                 UserID = userId,
                 PostID = postId
             };
-            await _postRepository.AddReactionAsync(reaction);
+            await _postRepository.AddOrUpdateReactionAsync(reaction);
         }
+
 
     }
 }

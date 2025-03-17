@@ -16,11 +16,13 @@
 
         public async Task<List<Post>> GetAllPostsAsync()
         {
-            var posts = await _context.Posts
+            return await _context.Posts
+                .Include(p => p.Reactions)
+                .ThenInclude(r => r.User)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
-            return posts;
         }
+
 
         public async Task AddAsync(Post post)
         {
@@ -30,7 +32,10 @@
 
         public async Task<Post> GetPostByIdAsync(uint id)
         {
-            return await _context.Posts.FindAsync(id);
+            return await _context.Posts
+            .Include(p => p.Reactions)
+            .ThenInclude(r => r.User)
+            .FirstOrDefaultAsync(p => p.PostID == id);
         }
 
         public async Task UpdatePostAsync(Post post)
@@ -83,5 +88,24 @@
             _context.Reactions.Add(reaction);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddOrUpdateReactionAsync(Reaction reaction)
+        {
+            var existingReaction = await _context.Reactions
+                .FirstOrDefaultAsync(r => r.PostID == reaction.PostID && r.UserID == reaction.UserID);
+
+            if (existingReaction != null)
+            {
+                existingReaction.ReactionType = reaction.ReactionType;
+                _context.Reactions.Update(existingReaction);
+            }
+            else
+            {
+                _context.Reactions.Add(reaction);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

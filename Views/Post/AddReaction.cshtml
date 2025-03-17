@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Add Reaction";
+}
+
+<h2>Add Reaction</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="reactionType">Reaction Type:</label>
+        <select class="form-control" id="reactionType" name="ReactionType">
+            <option value="Heart">❤️</option>
+            <option value="ThumbsUp">👍</option>
+            <option value="Cry">😢</option>
+            <option value="Dragon">🐉</option>
+            <option value="Laughing">😹</option>
+            <option value="Throwing_Up">🤮</option>
+            <option value="Sparkle">✨</option>
+        </select>
+    </div>
+    <input type="hidden" id="postId" name="postId" value="@ViewBag.PostId" />
+    <button type="submit" class="btn btn-primary">Submit Reaction</button>
+</form>

@@ -63,11 +63,11 @@
                         {
                             <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
 
-                            var userReaction = post.Reactions.FirstOrDefault(r => r.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                            var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == User.FindFirstValue(ClaimTypes.NameIdentifier));
                             var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
 
-                            <a href="@Url.Action("AddReaction", "Post", new { postId = post.PostID })" class="btn btn-reaction-post">
-                                @reactionLabel (@post.Reactions.Count)
+                            <a href="@Url.Action("AddReaction", "Post", new { postId = post?.PostID })" class="btn btn-reaction-post">
+                                @reactionLabel (@post?.Reactions?.Count)
                             </a>
 
                         }

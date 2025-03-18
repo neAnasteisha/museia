@@ -11,7 +11,4 @@ public interface IPostRepository
     Task<List<Post>> GetAllPostsAsync();
     Task<List<Post>> GetPostsByTagAsync(PostTag postTag);
     Task<List<Post>> SearchPostsByTextAsync(string searchText);
-    Task AddReactionAsync(Reaction reaction);
-    Task AddOrUpdateReactionAsync(Reaction reaction);
-
 }

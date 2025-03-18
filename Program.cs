@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using museia.Models;
 using museia.Services;
 using museia.Repositories;
+using museia.IService;
+using museia.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,9 +31,10 @@ builder.Services.AddScoped<PostRepository>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<ComplaintRepository>();
 builder.Services.AddScoped<ComplaintService>();
+builder.Services.AddScoped<IReactionService, ReactionService>();
+builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -65,7 +68,6 @@ using (var scope = app.Services.CreateScope())
     //    context.SaveChanges();
     //}
 }
-
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -133,27 +133,6 @@ namespace museia.Controllers
             return RedirectToAction("Index", "Post");
         }
 
-        [HttpGet]
-        public IActionResult AddReaction(uint postId)
-        {
-            ViewBag.PostId = postId;
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddReaction(uint postId, Emoji reactionType)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
-            {
-                await _postService.AddReactionAsync(reactionType, userId, postId);
-                return RedirectToAction("Index", "Post");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
-                return View();
-            }
-        }
+        
     }
 }

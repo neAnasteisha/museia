@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace museia.Views.Post
+namespace museia.Views.Reaction
 {
     public class AddReactionModel : PageModel
     {

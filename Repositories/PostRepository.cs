@@ -83,5 +83,13 @@
             return filteredPosts;
         }
 
+        public async Task<List<Post>> GetPostsByUserId(string userId)
+        {
+            return await _context.Posts
+                .Where(p => p.UserID == userId)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+        }
     }
+
 }

@@ -7,6 +7,4 @@ public interface IUserService
     Task<List<User>> GetAllUsersAsync();
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(string userId);
-    Task<User> RegisterUserAsync(string username, string email, string password);
-    Task<User> AuthenticateUserAsync(string username, string password);
 }

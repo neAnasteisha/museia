@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using museia.Data;
 using museia.Models;
 using museia.Services;
+using NuGet.Protocol.Plugins;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +20,7 @@ namespace museia.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly PostService _postService;
-        private readonly ComplaintService _complaintService;
+        //private readonly ComplaintService _complaintService;
 
         public PostController(AppDbContext context, UserManager<User> userManager, PostService postService)
         {
@@ -88,6 +89,7 @@ namespace museia.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(uint id)
         {
             var post = await _postService.GetPostById(id);
@@ -95,36 +97,61 @@ namespace museia.Controllers
             {
                 return NotFound();
             }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (post.UserID != userId)
+            {
+                return Forbid();
+            }
+
             ViewBag.PostTags = _postService.GetPostTags();
             return View(post);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(Post post)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    await _postService.UpdatePost(post);
+            //    return RedirectToAction("Index", "Post");
+            //}
+            //return View(post);
             if (ModelState.IsValid)
             {
+                var existingPost = await _postService.GetPostById(post.PostID);
+                if (existingPost == null)
+                {
+                    return NotFound();
+                }
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (existingPost.UserID != userId)
+                {
+                    return Forbid();
+                }
+
                 await _postService.UpdatePost(post);
                 return RedirectToAction("Index", "Post");
             }
             return View(post);
         }
 
-        [HttpPost]
-        public IActionResult Report(uint id, string complaintReason)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            try
-            {
-                _complaintService.CreateComplaintAsync(complaintReason, userId, id).Wait();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("ПричинаСкарги", ex.Message);
-            }
+        //[HttpPost]
+        //public IActionResult Report(uint id, string complaintReason)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    try
+        //    {
+        //        _complaintService.CreateComplaintAsync(complaintReason, userId, id).Wait();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ModelState.AddModelError("ПричинаСкарги", ex.Message);
+        //    }
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Delete(uint id)

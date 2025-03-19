@@ -81,8 +81,10 @@
             return new List<Post>();
         }
 
-        
-
+        public async Task<List<Post>> GetPostsOfUserAsync(string userId)
+        {
+            return await _postRepository.GetPostsByUserId(userId);
+        }
 
     }
 }

@@ -1,1 +1,34 @@
-﻿<a>Complaints</a>
+﻿@model List<museia.Models.ComplaintViewModel>
+
+@{
+    ViewData["Title"] = "Скарги";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    @foreach (var complaint in Model)
+    {
+        <div class="complaint">
+            <div class="complaint-content">
+                <h3>@(new string('-', 115))</h3>
+                <p><strong>Користувач:</strong> @complaint.UserName</p>
+                <p><strong>Причина скарги:</strong> @complaint.ComplaintReason</p>
+            </div>
+            <h3>Допис, на який надійшла скарга</h3>
+            <div class="post mb-4 p-3 border rounded">
+                <div class="post-content">
+                    <h4>@complaint.PostText</h4>
+                    <p><strong>#</strong> @complaint.PostTag</p>
+                    <p><strong>Дата публікації:</strong> @complaint.CreatedAt.ToString("yyyy-MM-dd")</p>
+                </div>
+                @if (!string.IsNullOrEmpty(complaint.PostPhoto))
+                {
+                    <div class="post-image">
+                        <img src="@complaint.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -56,6 +56,7 @@
         {
             return await _context.Complaints
                 .Where(c => c.ComplaintStatus == ComplaintStatus.Sent)
+                .Include(c => c.User)
                 .Include(c => c.Post)
                 .ToListAsync();
         }

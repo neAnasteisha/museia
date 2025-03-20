@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using museia.IService;
+using museia.Models;
 using museia.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -41,10 +43,10 @@ namespace museia.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Complaints(int postId)
+        public async Task<IActionResult> Complaints()
         {
-            var complaints = await _complaintService.GetAllUnconsideredComplaintsAsync();
-            return View(complaints);
+            var complaintViewModels = await _complaintService.GetAllUnconsideredComplaintsAsync();
+            return View(complaintViewModels);
         }
     }
 }

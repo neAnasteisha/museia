@@ -22,7 +22,7 @@ namespace museia.Services
                 ComplaintReason = complaintReason,
                 UserID = userId,
                 PostID = postId,
-                ComplaintStatus = ComplaintStatus.Accepted
+                ComplaintStatus = ComplaintStatus.Sent
             };
             await _complaintRepository.AddAsync(complaint);
         }
@@ -47,9 +47,21 @@ namespace museia.Services
             await _complaintRepository.DeleteComplaintAsync(id);
         }
 
-        public async Task<List<Complaint>> GetAllUnconsideredComplaintsAsync()
+        public async Task<List<ComplaintViewModel>> GetAllUnconsideredComplaintsAsync()
         {
-            return await _complaintRepository.GetAllUnconsideredComplaints();
+            var complaints = await _complaintRepository.GetAllUnconsideredComplaints();
+
+            var complaintViewModels = complaints.Select(c => new ComplaintViewModel
+            {
+                UserName = c.User.UserName,
+                ComplaintReason = c.ComplaintReason,
+                PostText = c.Post.PostText,
+                PostTag = c.Post.PostTag.ToString(),
+                PostPhoto = c.Post.PostPhoto,
+                CreatedAt = c.Post.CreatedAt
+            }).ToList();
+
+            return complaintViewModels;
         }
     }
 }

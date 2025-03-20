@@ -34,6 +34,8 @@ builder.Services.AddScoped<ComplaintService>();
 builder.Services.AddScoped<ReactionService>();
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CurrentUserService>();
 
 var app = builder.Build();
 

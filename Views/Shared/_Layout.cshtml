@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@inject museia.Services.CurrentUserService CurrentUserService
+@{
+    var userType = await CurrentUserService.GetCurrentUserTypeAsync();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,8 +21,14 @@
                 <a class="navbar-brand" asp-area="" asp-controller="Post" asp-action="Index">museia</a>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @* <a href="/User/Profile" class="btn btn-outline-primary ms-2">Мій профіль</a> *@
-                    <a href="/User/Profile" class="btn btn-outline-primary ms-2">@ViewContext.HttpContext.User.Identity.Name</a>
+                    if (userType == UserType.Moderator)
+                    {
+                        <a href="/User/Profile" class="btn btn-outline-primary ms-2">Нерозглянуті скарги</a>
+                    }
+                    else
+                    {
+                        <a href="/User/Profile" class="btn btn-outline-primary ms-2">@ViewContext.HttpContext.User.Identity.Name</a>
+                    }
                 }
 
                 <!-- Кнопка для мобільного меню -->
@@ -29,10 +40,16 @@
                 <!-- Навбар -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && userType == UserType.Moderator)
                         {
-                            <!-- Якщо користувач залогінений -->
-                            
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <button type="submit" class="btn btn-danger">Вихід</button>
+                                </form>
+                            </li>
+                        }
+                        else if (User.Identity.IsAuthenticated)
+                        {
                             <li class="nav-item">
                                 <a href="/Post/Create" class="btn btn-success me-2" style="color: white"> Створити допис</a>
                             </li>
@@ -47,7 +64,6 @@
                         }
                         else
                         {
-                            <!-- Якщо користувач не залогінений -->
                             <li class="nav-item">
                                 <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Вхід</a>
                             </li>

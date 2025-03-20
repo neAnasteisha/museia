@@ -10,5 +10,7 @@ namespace museia.IRepository
         Task<Complaint> GetComplaintByIdAsync(uint id);
         Task UpdateComplaintAsync(Complaint complaint);
         Task DeleteComplaintAsync(uint id);
+        Task<List<Complaint>> GetAllUnconsideredComplaints();
+
     }
 }

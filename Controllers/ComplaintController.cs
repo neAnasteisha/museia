@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using museia.IService;
 using museia.Services;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -37,6 +38,13 @@ namespace museia.Controllers
             }
 
             return RedirectToAction("Index", "Post");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Complaints(int postId)
+        {
+            var complaints = await _complaintService.GetAllUnconsideredComplaintsAsync();
+            return View(complaints);
         }
     }
 }

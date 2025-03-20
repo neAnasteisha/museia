@@ -1,4 +1,5 @@
-﻿using museia.Models;
+﻿using museia.IRepository;
+using museia.Models;
 using museia.Repositories;
 
 namespace museia.Services
@@ -44,6 +45,11 @@ namespace museia.Services
         public async Task DeleteComplaint(uint id)
         {
             await _complaintRepository.DeleteComplaintAsync(id);
+        }
+
+        public async Task<List<Complaint>> GetAllUnconsideredComplaintsAsync()
+        {
+            return await _complaintRepository.GetAllUnconsideredComplaints();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using museia.Models;
+using System.Threading.Tasks;
 
 namespace museia.IService
 {
@@ -10,5 +11,6 @@ namespace museia.IService
         Task UpdateComplaintAsync(Complaint complaint);
         Task DeleteComplaintAsync(uint id);
         Task<List<Complaint>> GetComplaintsByStatusAsync(ComplaintStatus status);
+        Task<List<Complaint>> GetAllUnconsideredComplaintsAsync();
     }
 }

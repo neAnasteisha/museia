@@ -51,5 +51,13 @@
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<Complaint>> GetAllUnconsideredComplaints()
+        {
+            return await _context.Complaints
+                .Where(c => c.ComplaintStatus == ComplaintStatus.Sent)
+                .Include(c => c.Post)
+                .ToListAsync();
+        }
     }
 }

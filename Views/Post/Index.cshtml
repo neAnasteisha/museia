@@ -6,6 +6,11 @@
     var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
+@inject museia.Services.CurrentUserService CurrentUserService
+@{
+    var userType = await CurrentUserService.GetCurrentUserTypeAsync();
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +60,7 @@
 
                     <div class="post-actions">
 
-                        @if (User.Identity.IsAuthenticated && post.UserID != currentUserId)
+                        @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
                         {
                             <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
 

@@ -14,6 +14,11 @@
             <div class="container-fluid">
                 <!-- Логотип -->
                 <a class="navbar-brand" asp-area="" asp-controller="Post" asp-action="Index">museia</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @* <a href="/User/Profile" class="btn btn-outline-primary ms-2">Мій профіль</a> *@
+                    <a href="/User/Profile" class="btn btn-outline-primary ms-2">@ViewContext.HttpContext.User.Identity.Name</a>
+                }
 
                 <!-- Кнопка для мобільного меню -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
@@ -27,18 +32,18 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <!-- Якщо користувач залогінений -->
-                            <li class="nav-item">
-                                @* <a class="nav-link" asp-area="" asp-controller="User" asp-action="Profile">Profile</a> *@
-                                <a href="/User/Profile" class="btn btn-success me-2" style="color: white"> Мій профіль</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a href="/Post/Create" class="btn btn-success me-2" style="color: white"> Створити допис</a>
                             </li>
-                            <li class="nav-item">
-                                <form method="post" asp-controller="Account" asp-action="Logout">
-                                    <button type="submit" class="btn btn-danger">Вихід</button>
-                                </form>
-                            </li>
+                            @if (ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Profile")
+                            {
+                                <li class="nav-item">
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <button type="submit" class="btn btn-danger">Вихід</button>
+                                    </form>
+                                </li>
+                            }
                         }
                         else
                         {

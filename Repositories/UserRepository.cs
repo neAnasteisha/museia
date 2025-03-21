@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using museia.Data;
     using museia.Models;
+    using System.ComponentModel;
     using System.Reflection.Metadata.Ecma335;
 
     public class UserRepository : IUserRepository
@@ -33,5 +34,7 @@
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
+
+        
     }
 }

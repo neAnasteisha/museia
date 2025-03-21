@@ -13,5 +13,6 @@ namespace museia.IRepository
         Task<List<Complaint>> GetAllUnconsideredComplaints();
         Task ApproveComplaint(uint id);
         Task RejectComplaint(uint id);
+        int GetAcceptedComplaintsCountForUser(string userId);
     }
 }

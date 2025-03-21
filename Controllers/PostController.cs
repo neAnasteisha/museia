@@ -154,10 +154,17 @@ namespace museia.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> Delete(uint id)
+        public async Task<IActionResult> Delete(uint id, UserType userType)
         {
             await _postService.DeletePost(id);
-            return RedirectToAction("Index", "Post");
+            if(userType == UserType.SimpleUser)
+            {
+                return RedirectToAction("User", "Profile");
+            }
+            else
+            {
+                return RedirectToAction("Complaints", "Complaint");
+            }
         }
 
         

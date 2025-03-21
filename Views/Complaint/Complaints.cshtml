@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Скарги";
 }
+@{
+    var acceptedComplaintsCount = ViewBag.AcceptedComplaintsCount;
+}
 
 <h2>@ViewData["Title"]</h2>
 
@@ -30,16 +33,40 @@
                 }
             </div>
             <div class="d-flex justify-content-end gap-2">
-                <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
-                    <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
-                    <input type="hidden" name="action" value="approve" />
-                    <button type="submit" class="btn btn-success">Прийняти</button>
-                </form>
-                <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
-                    <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
-                    <input type="hidden" name="action" value="reject" />
-                    <button type="submit" class="btn btn-danger">Відхилити</button>
-                </form>
+                @if (complaint.ComplaintStatus == ComplaintStatus.Sent)
+                {
+                    <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
+                        <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
+                        <input type="hidden" name="action" value="approve" />
+                        <button type="submit" class="btn btn-success">Прийняти</button>
+                    </form>
+                    <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
+                        <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
+                        <input type="hidden" name="action" value="reject" />
+                        <button type="submit" class="btn btn-danger">Відхилити</button>
+                    </form>
+                }
+                else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
+                {
+                    @if (acceptedComplaintsCount < 4)
+                    {
+                        <form method="post" action="@Url.Action("SendWarning", "User")">
+                            <input type="hidden" name="userId" value="@complaint.UserId" />
+                            <button type="submit" class="btn btn-warning">Надіслати попередження</button>
+                        </form>
+                    }
+                    else if (acceptedComplaintsCount == 4)
+                    {
+                        <form method="post" action="@Url.Action("BlockUser", "User")">
+                            <input type="hidden" name="userId" value="@complaint.UserId" />
+                            <button type="submit" class="btn btn-danger">Заблокувати користувача</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a>Шось тут не </a>
+                    }
+                }
             </div>
         </div>
     }

@@ -54,8 +54,10 @@ namespace museia.Services
             var complaintViewModels = complaints.Select(c => new ComplaintViewModel
             {
                 ComplaintID = c.ComplaintID,
+                UserId = c.User.Id,
                 UserName = c.User.UserName,
                 ComplaintReason = c.ComplaintReason,
+                ComplaintStatus = c.ComplaintStatus,
                 PostText = c.Post.PostText,
                 PostTag = c.Post.PostTag.ToString(),
                 PostPhoto = c.Post.PostPhoto,
@@ -72,6 +74,7 @@ namespace museia.Services
                 return false;
 
             await _complaintRepository.ApproveComplaint(id);
+
             return true;
         }
 
@@ -83,6 +86,11 @@ namespace museia.Services
 
             await _complaintRepository.RejectComplaint(id);
             return true;
+        }
+
+        public int GetAcceptedComplaintsCountForUser(string userId)
+        {
+            return _complaintRepository.GetAcceptedComplaintsCountForUser(userId);
         }
     }
 }

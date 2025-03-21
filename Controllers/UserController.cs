@@ -17,14 +17,16 @@ namespace museia.Controllers
         private readonly ComplaintService _complaintService;
         private readonly PostService _postService;
         private readonly ReactionService _reactionService;
+        private readonly UserService _userService;
 
-        public UserController(AppDbContext context, UserManager<User> userManager, ComplaintService complaintService, PostService postService, ReactionService reactionService)
+        public UserController(AppDbContext context, UserManager<User> userManager, ComplaintService complaintService, PostService postService, ReactionService reactionService, UserService userService)
         {
             _context = context;
             _userManager = userManager;
             _complaintService = complaintService;
             _postService = postService;
             _reactionService = reactionService;
+            _userService = userService;
         }
 
         public IActionResult Index()

@@ -29,6 +29,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<PostRepository>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ComplaintRepository>();
 builder.Services.AddScoped<ComplaintService>();
 builder.Services.AddScoped<ReactionService>();

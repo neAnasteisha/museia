@@ -55,7 +55,7 @@
         public async Task<List<Complaint>> GetAllUnconsideredComplaints()
         {
             return await _context.Complaints
-                .Where(c => c.ComplaintStatus == ComplaintStatus.Sent)
+                .Where(c => c.ComplaintStatus == ComplaintStatus.Sent || c.ComplaintStatus == ComplaintStatus.Processing)
                 .Include(c => c.User)
                 .Include(c => c.Post)
                 .ToListAsync();
@@ -66,7 +66,7 @@
             var complaint = await _context.Complaints.FindAsync(id);
             if (complaint != null)
             {
-                complaint.ComplaintStatus = ComplaintStatus.Accepted;
+                complaint.ComplaintStatus = ComplaintStatus.Processing;
                 await _context.SaveChangesAsync();
             }
         }
@@ -79,6 +79,14 @@
                 complaint.ComplaintStatus = ComplaintStatus.Declined;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public int GetAcceptedComplaintsCountForUser(string userId)
+        {
+            var count = _context.Complaints
+                                .Where(c => c.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
+                                .Count();
+            return count;
         }
     }
 }

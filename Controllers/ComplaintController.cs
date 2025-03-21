@@ -50,14 +50,15 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApproveComplaint(uint id)
+        public async Task<IActionResult> ApproveComplaint(uint id, string userId)
         {
             bool result = await _complaintService.ApproveComplaint(id);
             if (!result)
             {
                 return NotFound();
             }
-
+            var acceptedComplaintsCount = _complaintService.GetAcceptedComplaintsCountForUser(userId);
+            ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
             return RedirectToAction("Complaints");
         }
 
@@ -95,6 +96,5 @@ namespace museia.Controllers
 
             return BadRequest("Не вдалося оновити статус.");
         }
-
     }
 }

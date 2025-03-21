@@ -53,6 +53,7 @@ namespace museia.Services
 
             var complaintViewModels = complaints.Select(c => new ComplaintViewModel
             {
+                ComplaintID = c.ComplaintID,
                 UserName = c.User.UserName,
                 ComplaintReason = c.ComplaintReason,
                 PostText = c.Post.PostText,
@@ -62,6 +63,26 @@ namespace museia.Services
             }).ToList();
 
             return complaintViewModels;
+        }
+
+        public async Task<bool> ApproveComplaint(uint id)
+        {
+            var complaint = await _complaintRepository.GetComplaintByIdAsync(id);
+            if (complaint == null)
+                return false;
+
+            await _complaintRepository.ApproveComplaint(id);
+            return true;
+        }
+
+        public async Task<bool> RejectComplaint(uint id)
+        {
+            var complaint = await _complaintRepository.GetComplaintByIdAsync(id);
+            if (complaint == null)
+                return false;
+
+            await _complaintRepository.RejectComplaint(id);
+            return true;
         }
     }
 }

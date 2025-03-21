@@ -2,6 +2,7 @@
 {
     public class ComplaintViewModel
     {
+        public uint ComplaintID { get; set; }
         public string UserName { get; set; }
         public string ComplaintReason { get; set; }
         public string PostText { get; set; }

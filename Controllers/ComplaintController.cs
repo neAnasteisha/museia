@@ -48,5 +48,53 @@ namespace museia.Controllers
             var complaintViewModels = await _complaintService.GetAllUnconsideredComplaintsAsync();
             return View(complaintViewModels);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveComplaint(uint id)
+        {
+            bool result = await _complaintService.ApproveComplaint(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Complaints");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectComplaint(uint id)
+        {
+            bool result = await _complaintService.RejectComplaint(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction("Complaints");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateComplaintStatus(uint complaintId, string action)
+        {
+            bool result = false;
+
+            if (action == "approve")
+            {
+                result = await _complaintService.ApproveComplaint(complaintId);
+            }
+            else if (action == "reject")
+            {
+                result = await _complaintService.RejectComplaint(complaintId);
+            }
+
+            if (result)
+            {
+                var updatedComplaints = await _complaintService.GetAllUnconsideredComplaintsAsync();
+                return View("Complaints", updatedComplaints);
+            }
+
+            return BadRequest("Не вдалося оновити статус.");
+        }
+
     }
 }

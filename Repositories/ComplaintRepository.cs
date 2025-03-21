@@ -60,5 +60,25 @@
                 .Include(c => c.Post)
                 .ToListAsync();
         }
+
+        public async Task ApproveComplaint(uint id)
+        {
+            var complaint = await _context.Complaints.FindAsync(id);
+            if (complaint != null)
+            {
+                complaint.ComplaintStatus = ComplaintStatus.Accepted;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RejectComplaint(uint id)
+        {
+            var complaint = await _context.Complaints.FindAsync(id);
+            if (complaint != null)
+            {
+                complaint.ComplaintStatus = ComplaintStatus.Declined;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

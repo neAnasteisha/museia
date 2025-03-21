@@ -47,7 +47,7 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string email, string password)
+        public async Task<IActionResult> Register(string username, string email, string password, IFormFile avatar)
         {
             if (await _userManager.FindByEmailAsync(email) != null)
             {
@@ -55,10 +55,29 @@ namespace museia.Controllers
                 return View();
             }
 
+            string avatarPath = "/uploads/avatar.jpg";
+
+            if(avatar != null && avatar.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/avatars");
+                Directory.CreateDirectory(uploadsFolder);
+
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(avatar.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await avatar.CopyToAsync(stream);
+                }
+
+                avatarPath = "/uploads/avatars/" + uniqueFileName;
+            }
+
             var user = new User
             {
                 UserName = username,
                 Email = email,
+                UserAvatar = avatarPath,
                 UserType = UserType.SimpleUser
             };
 

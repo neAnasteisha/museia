@@ -81,10 +81,34 @@ namespace museia.Controllers
             return View(profileViewModel); 
         }
 
-        public IActionResult SendWarning(int userId, string message)
+        public IActionResult SendWarning(uint complaintId, uint postId)
         {
-            
+            // Оновлюємо статус скарги через сервіс
+            _complaintService.AcceptComplaint(complaintId);
+            _postService.DeletePost(postId);
+
+            // Перевірка, чи було показано попередження
+            //if (HttpContext.Session.GetString("ComplaintMessageShown") == null)
+            //{
+            //    // Встановлюємо прапор у сесії, щоб не показувати повідомлення більше
+            //    HttpContext.Session.SetString("ComplaintMessageShown", "true");
+
+            //    // Відправляємо повідомлення користувачеві
+            //    TempData["Message"] = "Ваш допис порушує правила нашого сервісу, тож був видалений. Якщо у Вас буде більше 3 скарг Ваш профіль буде заблоковано.";
+            //}
+
+            return RedirectToAction("Complaints", "Complaint"); // або на іншу сторінку
+        }
+
+        public IActionResult BlockUser(uint complaintId, uint postId)
+        {
+            _complaintService.AcceptComplaint(complaintId);
+            _postService.DeletePost(postId);
+            string userId = _postService.GetUserIdByPostIdAsync(postId).ToString();
+            _userService.DeleteUserAsync(userId);
+
             return RedirectToAction("Complaints", "Complaint");
         }
     }
+
 }

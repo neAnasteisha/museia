@@ -81,20 +81,26 @@
             }
         }
 
-        public void UpdateComplaint(Complaint complaint)
-        {
-            _context.Complaints.Update(complaint);
-            _context.SaveChanges();
-        }
-
         public int GetAcceptedComplaintsCountForUser(string userId)
         {
             int count = _context.Complaints
                                 .Where(c => c.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
+                                .GroupBy(c => c.UserID)
                                 .Count();
             
             return count;
            
         }
+
+        public async Task AcceptComplaint(uint complaintId)
+        {
+            var complaint = _context.Complaints.FirstOrDefault(c => c.ComplaintID == complaintId);
+            if (complaint != null)
+            {
+                complaint.ComplaintStatus = ComplaintStatus.Accepted;
+                _context.SaveChanges();
+            }
+        }
+
     }
 }

@@ -6,6 +6,12 @@
 @{
     var acceptedComplaintsCount = ViewBag.AcceptedComplaintsCount;
 }
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["Message"]
+    </div>
+}
 
 <h2>@ViewData["Title"]</h2>
 
@@ -54,10 +60,7 @@
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
                             <input type="hidden" name="userId" value="@complaint.UserId" />
-
-                            <label for="warningMessage">Повідомлення:</label>
-                            <textarea id="warningMessage" name="message" class="form-control" rows="3"></textarea>
-
+                            <input type="hidden" name="postId" value="@complaint.PostId" />
                             <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
                         </form>
                     }

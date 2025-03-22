@@ -90,5 +90,10 @@
         {
             return await _postRepository.GetUserNicknameForPostAsync(postId);
         }
+
+        public async Task<string> GetUserIdByPostIdAsync(uint postId)
+        {
+            return await _postRepository.GetUserIdByPostIdAsync(postId);
+        }
     }
 }

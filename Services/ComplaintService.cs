@@ -58,6 +58,7 @@ namespace museia.Services
                 UserName = c.User.UserName,
                 ComplaintReason = c.ComplaintReason,
                 ComplaintStatus = c.ComplaintStatus,
+                PostId = c.Post.PostID,
                 PostText = c.Post.PostText,
                 PostTag = c.Post.PostTag.ToString(),
                 PostPhoto = c.Post.PostPhoto,
@@ -91,6 +92,16 @@ namespace museia.Services
         public int GetAcceptedComplaintsCountForUser(string userId)
         {
             return _complaintRepository.GetAcceptedComplaintsCountForUser(userId);
+        }
+
+        public async Task<bool> AcceptComplaint(uint id)
+        {
+            var complaint = await _complaintRepository.GetComplaintByIdAsync(id);
+            if (complaint == null)
+                return false;
+
+            await _complaintRepository.AcceptComplaint(id);
+            return true;
         }
     }
 }

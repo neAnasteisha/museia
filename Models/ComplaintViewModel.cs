@@ -7,6 +7,7 @@
         public string UserName { get; set; }
         public string ComplaintReason { get; set; }
         public ComplaintStatus ComplaintStatus { get; set; }
+        public uint PostId { get; set; }
         public string PostText { get; set; }
         public string PostTag { get; set; }
         public string? PostPhoto { get; set; }

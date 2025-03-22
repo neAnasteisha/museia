@@ -11,4 +11,5 @@ public interface IPostService
     Task DeletePost(uint id);
     Task<List<Post>> SearchPostsAsync(string searchText);
     List<SelectListItem> GetPostTags();
+    Task<string> GetUserNicknameForPostAsync(int postId);
 }

@@ -1,4 +1,5 @@
-﻿using museia.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using museia.Models;
 using museia.Repositories;
 
 namespace museia.Services
@@ -26,6 +27,23 @@ namespace museia.Services
         public async Task DeleteUserAsync(string userId)
         {
             await _userRepository.DeleteUserAsync(userId);
+        }
+
+        public async Task<ProfileViewModel> GetProfileViewModelByIdAsync(string userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var posts = await _userRepository.GetPostsByUserIdAsync(user.Id);
+
+            return new ProfileViewModel
+            {
+                User = user,
+                UserPosts = posts
+            };
         }
     }
 }

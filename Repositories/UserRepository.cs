@@ -35,6 +35,11 @@
             await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<List<Post>> GetPostsByUserIdAsync(string userId)
+        {
+            return await _context.Posts
+                .Where(p => p.UserID == userId)
+                .ToListAsync();
+        }
     }
 }

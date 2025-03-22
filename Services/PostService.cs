@@ -86,5 +86,9 @@
             return await _postRepository.GetPostsByUserId(userId);
         }
 
+        public async Task<string> GetUserNicknameForPostAsync(int postId)
+        {
+            return await _postRepository.GetUserNicknameForPostAsync(postId);
+        }
     }
 }

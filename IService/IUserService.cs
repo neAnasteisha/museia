@@ -7,4 +7,5 @@ public interface IUserService
     Task<List<User>> GetAllUsersAsync();
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(string userId);
+    Task<ProfileViewModel> GetProfileViewModelByIdAsync(string userId);
 }

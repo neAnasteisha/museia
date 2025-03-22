@@ -90,6 +90,20 @@
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task<string> GetUserNicknameForPostAsync(int postId)
+        {
+            var post = await _context.Posts
+                .Include(p => p.User) 
+                .FirstOrDefaultAsync(p => p.PostID == postId);
+
+            if (post == null || post.User == null)
+            {
+                return "Невідомий користувач";
+            }
+
+            return post.User.UserName;
+        }
     }
 
 }

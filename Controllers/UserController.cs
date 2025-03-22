@@ -68,5 +68,17 @@ namespace museia.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> OtherUserProfile(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var profileViewModel = await _userService.GetProfileViewModelByIdAsync(id);
+            if (profileViewModel == null)
+                return NotFound();
+
+            return View(profileViewModel); 
+        }
     }
 }

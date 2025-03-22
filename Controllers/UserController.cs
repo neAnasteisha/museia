@@ -80,5 +80,11 @@ namespace museia.Controllers
 
             return View(profileViewModel); 
         }
+
+        public IActionResult SendWarning(int userId, string message)
+        {
+            
+            return RedirectToAction("Complaints", "Complaint");
+        }
     }
 }

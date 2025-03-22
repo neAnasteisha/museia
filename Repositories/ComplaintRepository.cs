@@ -81,12 +81,20 @@
             }
         }
 
+        public void UpdateComplaint(Complaint complaint)
+        {
+            _context.Complaints.Update(complaint);
+            _context.SaveChanges();
+        }
+
         public int GetAcceptedComplaintsCountForUser(string userId)
         {
-            var count = _context.Complaints
+            int count = _context.Complaints
                                 .Where(c => c.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
                                 .Count();
+            
             return count;
+           
         }
     }
 }

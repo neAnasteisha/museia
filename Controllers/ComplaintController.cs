@@ -50,38 +50,15 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ApproveComplaint(uint id, string userId)
-        {
-            bool result = await _complaintService.ApproveComplaint(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-            var acceptedComplaintsCount = _complaintService.GetAcceptedComplaintsCountForUser(userId);
-            ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
-            return RedirectToAction("Complaints");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RejectComplaint(uint id)
-        {
-            bool result = await _complaintService.RejectComplaint(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-
-            return RedirectToAction("Complaints");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateComplaintStatus(uint complaintId, string action)
+        public async Task<IActionResult> UpdateComplaintStatus(uint complaintId, string action, string userId)
         {
             bool result = false;
 
             if (action == "approve")
             {
                 result = await _complaintService.ApproveComplaint(complaintId);
+                var acceptedComplaintsCount = _complaintService.GetAcceptedComplaintsCountForUser(userId);
+                ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
             }
             else if (action == "reject")
             {

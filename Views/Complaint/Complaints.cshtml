@@ -38,11 +38,13 @@
                     <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
                         <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                         <input type="hidden" name="action" value="approve" />
+                        <input type="hidden" name="userId" value="@complaint.UserId" />
                         <button type="submit" class="btn btn-success">Прийняти</button>
                     </form>
                     <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
                         <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                         <input type="hidden" name="action" value="reject" />
+                        <input type="hidden" name="userId" value="@complaint.UserId" />
                         <button type="submit" class="btn btn-danger">Відхилити</button>
                     </form>
                 }
@@ -52,7 +54,11 @@
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
                             <input type="hidden" name="userId" value="@complaint.UserId" />
-                            <button type="submit" class="btn btn-warning">Надіслати попередження</button>
+
+                            <label for="warningMessage">Повідомлення:</label>
+                            <textarea id="warningMessage" name="message" class="form-control" rows="3"></textarea>
+
+                            <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
                         </form>
                     }
                     else if (acceptedComplaintsCount == 4)
@@ -64,7 +70,7 @@
                     }
                     else
                     {
-                        <a>Шось тут не </a>
+                        <a>Шось тут не так</a>
                     }
                 }
             </div>

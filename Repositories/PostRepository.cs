@@ -108,7 +108,7 @@
         public async Task<string> GetUserIdByPostIdAsync(uint postId)
         {
             var post = await GetPostByIdAsync(postId);
-            return post.User.ToString();
+            return post.UserID.ToString();
         }
     }
 

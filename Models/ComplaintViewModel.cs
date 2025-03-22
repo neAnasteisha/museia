@@ -12,5 +12,7 @@
         public string PostTag { get; set; }
         public string? PostPhoto { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int AcceptedComplaintsCount { get; set; }
+
     }
 }

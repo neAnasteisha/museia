@@ -7,9 +7,11 @@ namespace museia.Services
     public class ComplaintService
     {
         private ComplaintRepository _complaintRepository;
-        public ComplaintService(ComplaintRepository complaintRepository)
+        private PostRepository _postRepository;
+        public ComplaintService(ComplaintRepository complaintRepository, PostRepository postRepository)
         {
             _complaintRepository = complaintRepository;
+            _postRepository = postRepository;
         }
         public async Task CreateComplaintAsync(string complaintReason, string userId, uint postId)
         {
@@ -62,7 +64,9 @@ namespace museia.Services
                 PostText = c.Post.PostText,
                 PostTag = c.Post.PostTag.ToString(),
                 PostPhoto = c.Post.PostPhoto,
-                CreatedAt = c.Post.CreatedAt
+                CreatedAt = c.Post.CreatedAt,
+                AcceptedComplaintsCount = _complaintRepository.GetAcceptedComplaintsCountForUser(
+                    _postRepository.GetUserIdByPostIdAsync(c.Post.PostID).ToString()),
             }).ToList();
 
             return complaintViewModels;

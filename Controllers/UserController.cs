@@ -85,7 +85,8 @@ namespace museia.Controllers
         {
             // Оновлюємо статус скарги через сервіс
             _complaintService.AcceptComplaint(complaintId);
-            _postService.DeletePost(postId);
+            //_postService.DeletePost(postId);
+
 
             // Перевірка, чи було показано попередження
             //if (HttpContext.Session.GetString("ComplaintMessageShown") == null)

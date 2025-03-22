@@ -56,15 +56,15 @@
                 }
                 else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
                 {
-                    @if (complaint.AcceptedComplaintsCount < 4)
+                    @if (complaint.AcceptedComplaintsCount < 1)
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
-                            <input type="hidden" name="userId" value="@complaint.UserId" />
+                            <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                             <input type="hidden" name="postId" value="@complaint.PostId" />
                             <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
                         </form>
                     }
-                    else if (complaint.AcceptedComplaintsCount == 4)
+                    else if (complaint.AcceptedComplaintsCount == 1)
                     {
                         <form method="post" action="@Url.Action("BlockUser", "User")">
                             <input type="hidden" name="userId" value="@complaint.UserId" />

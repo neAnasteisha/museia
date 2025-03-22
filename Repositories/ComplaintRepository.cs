@@ -92,13 +92,13 @@
            
         }
 
-        public async Task AcceptComplaint(uint complaintId)
+        public async Task AcceptComplaint(uint id)
         {
-            var complaint = _context.Complaints.FirstOrDefault(c => c.ComplaintID == complaintId);
+            var complaint = await _context.Complaints.FindAsync(id);
             if (complaint != null)
             {
                 complaint.ComplaintStatus = ComplaintStatus.Accepted;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 

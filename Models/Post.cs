@@ -32,7 +32,7 @@ namespace museia.Models
 
         [ForeignKey("UserID")]
         public User User { get; set; }
-        public ICollection<Reaction> Reactions { get; set; }
-        public ICollection<Complaint> Complaints { get; set; }
+        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public ICollection<Complaint> Complaints { get; set; } = new List<Complaint>();
     }
 }

@@ -2,7 +2,7 @@
 @model museia.Models.ProfileViewModel
 
 @{
-    ViewData["Title"] = "Other User Profile";
+    ViewData["Title"] = "Профіль " + @Model.User.UserName;
     var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar) ? "/uploads/avatar.jpg" : Model.User.UserAvatar;
 }

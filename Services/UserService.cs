@@ -45,5 +45,6 @@ namespace museia.Services
                 UserPosts = posts
             };
         }
+
     }
 }

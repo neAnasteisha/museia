@@ -2,6 +2,16 @@
     ViewData["Title"] = "Реєстрація";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/register.css" />
+</head>
+<body>
+
 <div class="container mt-5">
     <h2 class="text-center">Реєстрація</h2>
     <form method="post" action="/Account/Register" onsubmit="saveFormData()" enctype="multipart/form-data">
@@ -40,6 +50,10 @@
         Вже маєте акаунт? <a href="/Account/Login">Увійти</a>
     </p>
 </div>
+
+
+</body>
+</html>
 
 <script src="~/js/register.js"></script>
 

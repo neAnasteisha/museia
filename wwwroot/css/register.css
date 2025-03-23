@@ -1,0 +1,97 @@
+﻿body {
+    background-color: #BEB7DF;
+}
+
+.container.mt-5 {
+    background-color: white;
+    border-radius: 10px; 
+    padding: 25px; 
+    margin: 10px auto;
+    max-width: 450px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+h2 {
+    color: #1E0504;
+    font-size: 26px;
+}
+
+.form-label {
+    color: #1E0504;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 450;
+}
+
+.form-control {
+    border: 1px solid #1E0504;
+    border-radius: 4px;
+    margin-bottom: 12px; 
+
+}
+
+    .form-control:focus{
+
+    }
+
+
+    .form-check-label {
+        color: #1E0504;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+.form-check-label a {
+    color: #1E0504;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+    .form-check-label a:hover {
+        color: #BEB7DF;
+    }
+
+
+
+.btn-success {
+    background-color: #1E0504;
+    border-color: #1E0504;
+    color: #E6E5E5;
+    border-radius: 4px;
+    margin: 4px 0; 
+}
+    .btn-success:hover {
+        background-color: #1E0504;
+        border-color: #1E0504;
+        color: white;
+    }
+
+    .btn-success:focus, .btn-success:active:focus {
+        background-color: #1E0504;
+        border-color: #1E0504;
+        color: white;
+    }
+
+
+
+text-center {
+    color: #1E0504;
+    text-align: center;
+    margin: 10px 0;
+}
+.text-center.mt-3 {
+    color: #1E0504;
+}
+
+.text-center a {
+    color: #1E0504;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+    .text-center a:hover {
+        color: #BEB7DF;
+    }
+

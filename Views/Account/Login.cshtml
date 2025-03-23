@@ -2,6 +2,16 @@
     ViewData["Title"] = "Вхід";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+<body>
+
 <div class="container mt-5">
     <h2 class="text-center">Вхід</h2>
     <form method="post" action="/Account/Login">
@@ -21,3 +31,5 @@
         Немає акаунта? <a href="/Account/Register">Зареєструватися</a>
     </p>
 </div>
+</body>
+</html>

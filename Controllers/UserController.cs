@@ -101,12 +101,12 @@ namespace museia.Controllers
             return RedirectToAction("Complaints", "Complaint"); // або на іншу сторінку
         }
 
-        public IActionResult BlockUser(uint complaintId, uint postId)
+        public async Task<IActionResult> BlockUser(uint complaintId, uint postId)
         {
-            _complaintService.AcceptComplaint(complaintId);
-            string userId = _postService.GetUserIdByPostIdAsync(postId).ToString();
-            _userService.DeleteUserAsync(userId);
-            _postService.DeletePost(postId);
+            
+            string userId = await _postService.GetUserIdByPostIdAsync(postId);
+            userId = userId.ToString();
+            await _userService.DeleteUserAsync(userId);
 
             return RedirectToAction("Complaints", "Complaint");
         }

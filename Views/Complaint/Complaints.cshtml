@@ -43,25 +43,22 @@
                 }
                 else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
                 {
-                    @if (complaint.UserCountOfWarnings < 1)
+                    @if (complaint.UserCountOfWarnings < 4)
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
                             <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
-                            <input type="hidden" name="postId" value="@complaint.PostId" />
                             <input type="hidden" name="userId" value="@complaint.PostsUserId" />
                             <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
                         </form>
                     }
-                    else if (complaint.UserCountOfWarnings > 1)
-                    {
-                        <form method="post" action="@Url.Action("BlockUser", "User")">
-                            <input type="hidden" name="userId" value="@complaint.UserId" />
-                            <button type="submit" class="btn btn-danger">Заблокувати користувача</button>
-                        </form>
-                    }
                     else
                     {
-                        <a>Шось тут не так</a>
+                        <form method="post" action="@Url.Action("BlockUser", "User")">
+                            <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
+                            <input type="hidden" name="postId" value="@complaint.PostId" />
+                            <input type="hidden" name="userId" value="@complaint.PostsUserId" />
+                            <button type="submit" class="btn btn-danger">Заблокувати користувача</button>
+                        </form>
                     }
                 }
             </div>

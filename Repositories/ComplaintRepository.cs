@@ -81,24 +81,25 @@
             }
         }
 
-        public int GetAcceptedComplaintsCountForUser(string userId)
+        public async Task<int> GetAcceptedComplaintsCountForUser(string userId)
         {
-            int count = _context.Complaints
-                                .Where(c => c.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
-                                .GroupBy(c => c.UserID)
-                                .Count();
-            
+            int count = await _context.Complaints
+                                .Where(c => c.Post.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
+                                .Select(c => c.UserID)
+                                .Distinct()
+                                .CountAsync();
+
             return count;
            
         }
 
-        public async Task AcceptComplaint(uint complaintId)
+        public async Task AcceptComplaint(uint id)
         {
-            var complaint = _context.Complaints.FirstOrDefault(c => c.ComplaintID == complaintId);
+            var complaint = await _context.Complaints.FindAsync(id);
             if (complaint != null)
             {
                 complaint.ComplaintStatus = ComplaintStatus.Accepted;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 

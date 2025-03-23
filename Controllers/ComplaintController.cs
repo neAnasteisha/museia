@@ -57,8 +57,8 @@ namespace museia.Controllers
             if (action == "approve")
             {
                 result = await _complaintService.ApproveComplaint(complaintId);
-                var acceptedComplaintsCount = _complaintService.GetAcceptedComplaintsCountForUser(userId);
-                ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
+                //var acceptedComplaintsCount = await _complaintService.GetAcceptedComplaintsCountForUser(userId);
+                //ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
             }
             else if (action == "reject")
             {

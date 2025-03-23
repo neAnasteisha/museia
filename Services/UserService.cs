@@ -45,5 +45,15 @@ namespace museia.Services
                 UserPosts = posts
             };
         }
+        public async Task IncrementWarningCounter(string userId)
+        {
+            await _userRepository.IncrementWarningCounter(userId);
+        }
+
+        public async Task<int> GetUserWarningCounterByUserId(string userId)
+        {
+            return await _userRepository.GetUserWarningCounterByUserId(userId);
+        }
+
     }
 }

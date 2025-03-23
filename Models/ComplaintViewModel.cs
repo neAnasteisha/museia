@@ -12,7 +12,8 @@
         public string PostTag { get; set; }
         public string? PostPhoto { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int AcceptedComplaintsCount { get; set; }
-
+        // інформація користувача чий це допис
+        public string PostsUserId { get; set; }
+        public int? UserCountOfWarnings { get; set; }
     }
 }

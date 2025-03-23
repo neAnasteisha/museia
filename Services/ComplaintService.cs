@@ -8,10 +8,13 @@ namespace museia.Services
     {
         private ComplaintRepository _complaintRepository;
         private PostRepository _postRepository;
-        public ComplaintService(ComplaintRepository complaintRepository, PostRepository postRepository)
+        private UserRepository _userRepository;
+
+        public ComplaintService(ComplaintRepository complaintRepository, PostRepository postRepository, UserRepository userRepository)
         {
             _complaintRepository = complaintRepository;
             _postRepository = postRepository;
+            _userRepository = userRepository;
         }
         public async Task CreateComplaintAsync(string complaintReason, string userId, uint postId)
         {
@@ -53,24 +56,31 @@ namespace museia.Services
         {
             var complaints = await _complaintRepository.GetAllUnconsideredComplaints();
 
-            var complaintViewModels = complaints.Select(c => new ComplaintViewModel
+            var complaintViewModels = await Task.WhenAll(complaints.Select(async c =>
             {
-                ComplaintID = c.ComplaintID,
-                UserId = c.User.Id,
-                UserName = c.User.UserName,
-                ComplaintReason = c.ComplaintReason,
-                ComplaintStatus = c.ComplaintStatus,
-                PostId = c.Post.PostID,
-                PostText = c.Post.PostText,
-                PostTag = c.Post.PostTag.ToString(),
-                PostPhoto = c.Post.PostPhoto,
-                CreatedAt = c.Post.CreatedAt,
-                AcceptedComplaintsCount = _complaintRepository.GetAcceptedComplaintsCountForUser(
-                    _postRepository.GetUserIdByPostIdAsync(c.Post.PostID).ToString()),
-            }).ToList();
+                var postUserId = await _postRepository.GetUserIdByPostIdAsync(c.Post.PostID);
+                var userWarnings = await _complaintRepository.GetAcceptedComplaintsCountForUser(postUserId);
 
-            return complaintViewModels;
+                return new ComplaintViewModel
+                {
+                    ComplaintID = c.ComplaintID,
+                    UserId = c.User.Id,
+                    UserName = c.User.UserName,
+                    ComplaintReason = c.ComplaintReason,
+                    ComplaintStatus = c.ComplaintStatus,
+                    PostId = c.Post.PostID,
+                    PostText = c.Post.PostText,
+                    PostTag = c.Post.PostTag.ToString(),
+                    PostPhoto = c.Post.PostPhoto,
+                    CreatedAt = c.Post.CreatedAt,
+                    PostsUserId = postUserId,
+                    UserCountOfWarnings = userWarnings
+                };
+            }));
+
+            return complaintViewModels.ToList();
         }
+
 
         public async Task<bool> ApproveComplaint(uint id)
         {
@@ -93,9 +103,9 @@ namespace museia.Services
             return true;
         }
 
-        public int GetAcceptedComplaintsCountForUser(string userId)
+        public async Task<int> GetAcceptedComplaintsCountForUser(string userId)
         {
-            return _complaintRepository.GetAcceptedComplaintsCountForUser(userId);
+            return await _complaintRepository.GetAcceptedComplaintsCountForUser(userId);
         }
 
         public async Task<bool> AcceptComplaint(uint id)

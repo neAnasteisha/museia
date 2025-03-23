@@ -1,18 +1,5 @@
 ﻿@model List<museia.Models.ComplaintViewModel>
 
-@{
-    ViewData["Title"] = "Скарги";
-}
-@* @{
-    var acceptedComplaintsCount = ViewBag.AcceptedComplaintsCount;
-} *@
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-warning">
-        @TempData["Message"]
-    </div>
-}
-
 <h2>@ViewData["Title"]</h2>
 
 <div>
@@ -44,7 +31,7 @@
                     <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
                         <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                         <input type="hidden" name="action" value="approve" />
-                        <input type="hidden" name="userId" value="@complaint.UserId" />
+                        <input type="hidden" name="userId" value="@complaint.PostsUserId" />
                         <button type="submit" class="btn btn-success">Прийняти</button>
                     </form>
                     <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
@@ -56,15 +43,16 @@
                 }
                 else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
                 {
-                    @if (complaint.AcceptedComplaintsCount < 1)
+                    @if (complaint.UserCountOfWarnings < 1)
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
                             <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                             <input type="hidden" name="postId" value="@complaint.PostId" />
+                            <input type="hidden" name="userId" value="@complaint.PostsUserId" />
                             <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
                         </form>
                     }
-                    else if (complaint.AcceptedComplaintsCount == 1)
+                    else if (complaint.UserCountOfWarnings > 1)
                     {
                         <form method="post" action="@Url.Action("BlockUser", "User")">
                             <input type="hidden" name="userId" value="@complaint.UserId" />

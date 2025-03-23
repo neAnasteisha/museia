@@ -22,6 +22,8 @@ namespace museia.Models
 
         public string? UserAvatar { get; set; }
 
+        public int CountOfWarnings { get; set; } = 0;
+
         public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
         public ICollection<Complaint> Complaints { get; set; } = new List<Complaint>();

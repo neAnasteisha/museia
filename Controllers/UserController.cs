@@ -81,11 +81,11 @@ namespace museia.Controllers
             return View(profileViewModel); 
         }
 
-        public IActionResult SendWarning(uint complaintId, uint postId)
+        public IActionResult SendWarning(uint complaintId, uint postId, string postsUserId)
         {
             // Оновлюємо статус скарги через сервіс
             _complaintService.AcceptComplaint(complaintId);
-            //_postService.DeletePost(postId);
+            _postService.DeletePost(postId);
 
 
             // Перевірка, чи було показано попередження
@@ -104,9 +104,9 @@ namespace museia.Controllers
         public IActionResult BlockUser(uint complaintId, uint postId)
         {
             _complaintService.AcceptComplaint(complaintId);
-            _postService.DeletePost(postId);
             string userId = _postService.GetUserIdByPostIdAsync(postId).ToString();
             _userService.DeleteUserAsync(userId);
+            _postService.DeletePost(postId);
 
             return RedirectToAction("Complaints", "Complaint");
         }

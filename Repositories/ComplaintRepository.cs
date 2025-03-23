@@ -81,13 +81,14 @@
             }
         }
 
-        public int GetAcceptedComplaintsCountForUser(string userId)
+        public async Task<int> GetAcceptedComplaintsCountForUser(string userId)
         {
-            int count = _context.Complaints
-                                .Where(c => c.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
-                                .GroupBy(c => c.UserID)
-                                .Count();
-            
+            int count = await _context.Complaints
+                                .Where(c => c.Post.UserID == userId && c.ComplaintStatus == ComplaintStatus.Accepted)
+                                .Select(c => c.UserID)
+                                .Distinct()
+                                .CountAsync();
+
             return count;
            
         }

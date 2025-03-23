@@ -11,12 +11,14 @@
 <h2>@ViewData["Title"]</h2>
 
 <div>
-    <h3>Сторінка користувача</h3>
+    <h3></strong> @Model.User.UserName</h3>
     <img src="@userAvatar" alt="Profile Photo" style="max-width: 150px; max-height: 150px; border-radius: 50%" />
-
-    <p><strong>Ім'я:</strong> @Model.User.UserName</p>
     <p><strong>Email:</strong> @Model.User.Email</p>
-    <p><strong>Опис:</strong> @Model.User.UserDescription</p>
+    @if (!string.IsNullOrEmpty(Model.User.UserDescription))
+    {
+        <p><strong>Опис:</strong> @Model.User.UserDescription</p>
+    }
+
 </div>
 
 <div>

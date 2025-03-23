@@ -63,16 +63,15 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     context.Database.Migrate();
 
-    //if (!context.Posts.Any()) // Щоб уникнути дублювання
-    //{
-
-    //    context.Posts.AddRange(
-    //        new Post { PostID = 1, CreatedAt = DateTime.Now.AddDays(-10), PostTag = PostTag.Поезія, PostText = "Бог ся рождає, хто ж то може знати. Ісус мо ім'я Марія мо муати.....", UserID = "98610c32-1d86-4555-b029-8f5a7a18c1dd" },
-    //        new Post { PostID = 2, CreatedAt = DateTime.Now.AddDays(-3), PostTag = PostTag.Поезія, PostText = "👨‍💻 Програміст влаштовується на роботу.\r\nHR запитує:\r\n— Яка у вас найбільша слабкість?\r\n\r\nПрограміст:\r\n— Регулярні вирази.\r\n\r\nHR:\r\n— А сила?\r\n\r\nПрограміст:\r\n— ([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,4})", UserID = "e5347ee1-d361-46eb-bc25-b55b0be48d95" }
-    //    );
-    //    context.SaveChanges();
-    //}
+    // Print all reactions
+    var reactions = context.Reactions.ToList(); // Ensure you have a DbSet<Reaction> Reactions in AppDbContext
+    Console.WriteLine("🔥 Reactions in Database:");
+    foreach (var reaction in reactions)
+    {
+        Console.WriteLine($"Reaction: {reaction.ReactionType}, Post: {reaction.PostID}, User: {reaction.UserID}");
+    }
 }
+
 
 app.UseAuthentication();
 app.UseAuthorization();

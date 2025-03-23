@@ -4,15 +4,15 @@
 @{
     ViewData["Title"] = "Профіль";
     var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    // Якщо аватар відсутній, використовується зображення за замовчуванням
     var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar) ? "/uploads/avatar.jpg" : Model.User.UserAvatar;
 }
-
 
 <h2>@ViewData["Title"]</h2>
 
 <div>
     <h3>Сторінка користувача</h3>
-    <img src="@Model.User.UserAvatar" alt="Profile Photo" style="max-width: 150px; max-height: 150px; border-radius: 50%" />
+    <img src="@userAvatar" alt="Profile Photo" style="max-width: 150px; max-height: 150px; border-radius: 50%" />
 
     <p><strong>Ім'я:</strong> @Model.User.UserName</p>
     <p><strong>Email:</strong> @Model.User.Email</p>

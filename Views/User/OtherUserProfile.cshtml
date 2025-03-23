@@ -4,6 +4,10 @@
 @{
     ViewData["Title"] = "Other User Profile";
     var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    // Use a default avatar if none is provided.
+    var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar) 
+                        ? "/uploads/avatar.jpg" 
+                        : Model.User.UserAvatar;
 }
 
 @inject museia.Services.CurrentUserService CurrentUserService
@@ -22,9 +26,11 @@
     <link rel="stylesheet" href="~/css/post.css" />
 </head>
 <body>
-    <h1>Профіль: @Model.User.UserName</h1>
-    <p><strong>Email:</strong> @Model.User.Email</p>
-    <p><strong>Опис:</strong> @Model.User.UserDescription</p>
+    <div class="profile-header" style="text-align:center; margin-bottom:20px;">
+        <img src="@userAvatar" alt="Avatar" style="width:150px; height:150px; border-radius:50%; margin-bottom:10px;" />
+        <h1>Профіль: @Model.User.UserName</h1>
+        <p><strong>Опис:</strong> @Model.User.UserDescription</p>
+    </div>
 
     <div class="posts m-3">
         <h3>Пости користувача</h3>
@@ -33,7 +39,6 @@
             foreach (var post in Model.UserPosts)
             {
                 <div class="post mb-4 p-3 border rounded">
-                   
                     <div class="post-content">
                         <h4>@post.PostText</h4>
                         <p><strong>#</strong> @post.PostTag</p>

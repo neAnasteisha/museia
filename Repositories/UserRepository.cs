@@ -39,6 +39,7 @@
         {
             return await _context.Posts
                 .Where(p => p.UserID == userId)
+                .Include(p => p.Reactions)  
                 .ToListAsync();
         }
 

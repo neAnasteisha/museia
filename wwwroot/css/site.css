@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #BEB7DF;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #C7AEB9;
 }
 
 html {
@@ -22,19 +22,19 @@ body {
 }
 
 .btn-primary {
-    background-color: #1E0504;
-    border-color: #1E0504;
+    background-color: #372A39;
+    border-color: #372A39;
     color: white;
 }
     .btn-primary:hover {
-        background-color: #1E0504;
-        border-color: #1E0504;
+        background-color: #372A39;
+        border-color: #372A39;
         color: white;
     }
 
     .btn-primary:focus, .btn-primary:active:focus {
-        background-color: #1E0504;
-        border-color: #1E0504;
+        background-color: #372A39;
+        border-color: #372A39;
         color: white;
     }
 

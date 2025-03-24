@@ -1,0 +1,13 @@
+﻿body {
+    background-color: #b3c7c9;
+}
+
+.btn-success {
+    background-color: #5a506a;
+}
+    .btn-success:hover {
+        background-color:#5a506a;
+    }
+    .btn-success:focus, .btn-success:active:focus {
+        background-color: #5a506a;
+    }

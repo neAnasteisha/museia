@@ -23,72 +23,77 @@
 </head>
 <body>
 
-    <form method="get" asp-action="Index" class="m-3">
-        <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 300px;" />
+    <form method="get" asp-action="Index" class="m-3" style=" padding-left:4.3vw;">
+        <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 20vw;"  />
     </form>
 
-    <div class="posts m-3">
-        <h3>All Posts</h3>
+    <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column; ">
 
         @if (Model.Count != 0)
         {
             foreach (var post in Model)
             {
-                <div class="post mb-4 p-3 border rounded">
-                    <!-- Отображення ніку автора: як текст для власних постів, або як посилання для інших користувачів -->
-                    <div class="post-user mb-2">
+                <div class="post mb-4 p-3 border " style="height:fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
+                    <div class="post-user mb-2" style="display:flex; flex-direction:row; gap:2vw; align-items: flex-start; justify-content: flex-start;">
+                        @if (!string.IsNullOrEmpty(post.PostPhoto))
+                        {
+                            <div class="post-image">
+                                <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height:21vw; " />
+                            </div>
+                        }
+                        <div style="display:flex; flex-direction:column; gap:2vw; height: fit-content; max-height:20vw;">
                         @{
                             var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
                         }
                         @if (post.UserID == currentUserId)
                         {
+                            <a class="nickname" style="color: black;">
                             @nickname
+                            </a>
                         }
                         else
                         {
-                            <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link">
+                                <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link nickname" style="">
                                 @nickname
                             </a>
                         }
-                    </div>
+                            <div class="post-content">
+                                <h4 class="post-text">@post.PostText</h4>
+                                <div class="post-meta">
+                                    <span class="post-tag"><strong>#</strong> @post.PostTag</span>
+                                    <span class="post-date"> @post.CreatedAt.ToString("yyyy.MM.dd")</span>
+                                </div>
+                            </div>
 
-                    <div class="post-content">
-                        <h4>@post.PostText</h4>
-                        <p><strong>#</strong> @post.PostTag</p>
-                        <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
-                    </div>
 
-                    @if (!string.IsNullOrEmpty(post.PostPhoto))
-                    {
-                        <div class="post-image">
-                            <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
-                        </div>
-                    }
+                            
+                                @if (post.Reactions != null && post.Reactions.Count > 0)
+                           {
+                                <div class="post-reactions">
+                                    <ul style="display:flex; flex-direction:row; gap:0.5vw;">
+                                        @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
+                                        {
+                                            <li style="list-style:none; padding:0vw; margin:0vw;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                        }
+                                    </ul>
 
-                    <div class="post-reactions">
-                        @if (post.Reactions != null && post.Reactions.Count > 0)
-                        {
-                            <ul>
-                                @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
-                                {
-                                    <li>@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                </div>
+
                                 }
-                            </ul>
-                        }
-                    </div>
+                            <div class="post-actions">
+                                @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
+                                {
+                                    <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0vw;">Поскаржитись</a>
 
-                    <div class="post-actions">
-                        @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
-                        {
-                            <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post">Поскаржитись</a>
+                                    var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
+                                    var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
 
-                            var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
-                            var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
-
-                            <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post">
-                                @reactionLabel (@post.Reactions?.Count)
-                            </a>
-                        }
+                                    <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post" style="padding:0vw;">
+                                        @reactionLabel (@post.Reactions?.Count)
+                                    </a>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             }

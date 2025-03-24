@@ -86,7 +86,7 @@ namespace museia.Controllers
         {
             await _complaintService.AcceptComplaint(complaintId);
             await _postService.DeletePost(postId);
-            return RedirectToAction("Index", "Post");
+            return RedirectToAction("Complaints", "Complaint");
         }
 
 

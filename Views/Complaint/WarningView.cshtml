@@ -1,18 +1,24 @@
-﻿@model museia.Models.Complaint
+﻿@model museia.Models.ComplaintViewModel
 
 @{
-    ViewData["Title"] = "Account Warning";
+    ViewData["Title"] = "Попередження аккаунту";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <div class="complaint-warning">
-    <p><strong>Warning:</strong> Your account has received a warning due to complaints regarding your content.</p>
-    <p><strong>Complaint Reason:</strong> @Model.ComplaintReason</p>
-    <p>Please review our community guidelines and take the necessary actions.</p>
+    <p><strong>Увага!</strong> Ваш аккаунт отримав попередження за порушення правил спільноти.</p>
+    <p><strong>Причина скарги:</strong> @Model.ComplaintReason</p>
+    <p>
+        Ви отримали <strong>@Model.UserCountOfWarnings</strong> попередження(ень).
+        Якщо кількість попереджень перевищить 3, Ваш аккаунт буде заблоковано.
+    </p>
+    <p>
+        Будь ласка, ознайомтесь із правилами спільноти та вжийте необхідних заходів для виправлення ситуації.
+    </p>
 
     <form method="post" asp-action="AcknowledgeComplaint" asp-controller="Complaint">
         <input type="hidden" name="complaintId" value="@Model.ComplaintID" />
-        <button type="submit" class="btn btn-primary">I have read your warning</button>
+        <button type="submit" class="btn btn-primary">Я ознайомився з попередженням</button>
     </form>
 </div>

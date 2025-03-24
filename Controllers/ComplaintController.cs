@@ -75,28 +75,48 @@ namespace museia.Controllers
 
             return BadRequest("Не вдалося оновити статус.");
         }
+
+
         [HttpGet]
         public async Task<IActionResult> WarningView()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
 
-            Complaint activeComplaint = null;
+            Complaint complaintEntity = null;
             foreach (var post in userPosts)
             {
                 var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
-                activeComplaint = complaints.FirstOrDefault(c =>
+                complaintEntity = complaints.FirstOrDefault(c =>
                     (c.ComplaintStatus == ComplaintStatus.Processing || c.ComplaintStatus == ComplaintStatus.Accepted)
                     && !c.IsAcknowledged);
-                if (activeComplaint != null)
+                if (complaintEntity != null)
                 {
-                    break;
+                    break; // Знайшли активну скаргу
                 }
             }
 
-            return View(activeComplaint);
-        }
+            if (complaintEntity == null)
+            {
+                return RedirectToAction("Index", "Post");
+            }
 
+            var viewModel = new ComplaintViewModel
+            {
+                ComplaintID = complaintEntity.ComplaintID,
+                ComplaintReason = complaintEntity.ComplaintReason,
+                ComplaintStatus = complaintEntity.ComplaintStatus,
+                PostId = complaintEntity.PostID,
+                PostText = complaintEntity.Post?.PostText,
+                PostTag = complaintEntity.Post?.PostTag.ToString(),
+                PostPhoto = complaintEntity.Post?.PostPhoto,
+                CreatedAt = complaintEntity.Post?.CreatedAt ?? DateTime.MinValue,
+                PostsUserId = complaintEntity.Post?.UserID,
+                UserCountOfWarnings = await _complaintService.GetAcceptedComplaintsCountForUser(complaintEntity.Post?.UserID)
+            };
+
+            return View(viewModel);
+        }
 
 
 

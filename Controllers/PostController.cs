@@ -37,16 +37,12 @@ namespace museia.Controllers
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Отримуємо всі пости поточного користувача
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
             bool hasActiveComplaint = false;
             foreach (var post in userPosts)
             {
-                // Отримуємо скарги за постом
                 var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
-                if (complaints.Any(c =>
-                     (c.ComplaintStatus == ComplaintStatus.Processing || c.ComplaintStatus == ComplaintStatus.Accepted)
-                     && !c.IsAcknowledged))
+                if (complaints.Any(c => c.ComplaintStatus == ComplaintStatus.Accepted && !c.IsAcknowledged))
                 {
                     hasActiveComplaint = true;
                     break;

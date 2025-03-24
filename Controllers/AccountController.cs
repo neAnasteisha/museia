@@ -183,12 +183,40 @@ namespace museia.Controllers
 
             return RedirectToAction("Profile", "User");
         }
-
-
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProfile()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return RedirectToAction("EditProfile");
+            }
+
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Login", "Account");
         }
     }
 }

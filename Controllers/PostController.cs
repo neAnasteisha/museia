@@ -180,7 +180,7 @@ namespace museia.Controllers
             await _postService.DeletePost(id);
             if(userType == UserType.SimpleUser)
             {
-                return RedirectToAction("User", "Profile");
+                return RedirectToAction("Profile", "User");
             }
             else
             {

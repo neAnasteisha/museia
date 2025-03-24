@@ -28,6 +28,13 @@ h2 {
     color: white;
 }
 
+
+body, h1, h2, h3, h4, h5, h6, p, a, span, div {
+    font-family: 'IBM Plex Serif', serif !important;
+    line-height: 2vw;
+    ;
+}
+
     .btn-primary:hover {
         background-color: #5a506a;
         border-color: #b3c7c9;

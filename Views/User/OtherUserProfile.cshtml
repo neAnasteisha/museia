@@ -25,7 +25,7 @@
 <body>
     <div class="profile-header" style="text-align:center; margin-bottom:20px;">
         <img src="@userAvatar" alt="Avatar" style="width:150px; height:150px; border-radius:50%; margin-bottom:10px;" />
-        <h1>Профіль:</strong> @Model.User.UserName</h1>
+        <h1></strong> @Model.User.UserName</h1>
         @if (!string.IsNullOrEmpty(Model.User.UserDescription))
         {
             <p><strong>Опис:</strong> @Model.User.UserDescription</p>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="posts m-3">
-        <h3>Пости користувача</h3>
+        <h3>Дописи </h3>
         @if (Model.UserPosts != null && Model.UserPosts.Count != 0)
         {
             foreach (var post in Model.UserPosts)

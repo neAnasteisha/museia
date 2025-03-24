@@ -2,36 +2,45 @@
 @{
     ViewData["Title"] = "Редагувати пост";
 }
+<!DOCTYPE html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="~/css/edit.css"/>
+</head>
+<body>
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="PostID" />
 
-<form method="post" asp-action="Edit" enctype="multipart/form-data">
-    <input type="hidden" asp-for="PostID" />
-
-    <div class="mb-3">
-        <label>Опис</label>
-        <textarea asp-for="PostText" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label>Тег</label>
-        <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.PostPhoto))
-    {
         <div class="mb-3">
-            <label>Поточне фото:</label><br />
-            <img src="@Model.PostPhoto" style="max-width: 300px;" />
+            <label>Опис</label>
+            <textarea asp-for="PostText" class="form-control"></textarea>
         </div>
-    }
 
-    <div class="mb-3">
-        <label>Нове фото</label>
-        <input type="file" name="photoFile" class="form-control" />
-    </div>
+        <div class="mb-3">
+            <label>Тег</label>
+            <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
+        </div>
 
-    <button type="submit" class="btn btn-success">Зберегти зміни</button>
+        @if (!string.IsNullOrEmpty(Model.PostPhoto))
+        {
+            <div class="mb-3">
+                <label>Поточне фото:</label><br />
+                <img src="@Model.PostPhoto" style="max-width: 300px;" />
+            </div>
+        }
+
+        <div class="mb-3">
+            <label>Нове фото</label>
+            <input type="file" name="photoFile" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Зберегти зміни</button>
 
         <div class="text-center mt-3">
-            <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
-    </div>
-</form>
+            <a href="" class="text-decoration-none">🔙 Вернутись назад</a>
+        </div>
+    </form>
+</body>
+
+</html> 
+

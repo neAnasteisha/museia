@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="profile-header">
-        <h2 style="margin-left:35px; padding-top:20px;">@ViewData["Title"]</h2>
+        @* h2 style="margin-left:35px; padding-top:20px;">@ViewData["Title"]</h2> *@
 
         <div>
             <h3 class="profile-username"></strong> @Model.User.UserName</h3>
@@ -24,7 +24,7 @@
             <p class="profile-email"><strong>Email:</strong> @Model.User.Email</p>
             @if (!string.IsNullOrEmpty(Model.User.UserDescription))
             {
-                <p><strong>Опис:</strong> @Model.User.UserDescription</p>
+                <p style="padding-left: 180px; margin-top:-20px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
             }
 
         </div>
@@ -32,7 +32,7 @@
     
 
     <div class="profile-post">
-        <h3 class="post-user">Дописи користувача</h3>
+        <h3 class="post-user">Дописи </h3>
         @if (Model.UserPosts.Count > 0)
         {
             <ul>

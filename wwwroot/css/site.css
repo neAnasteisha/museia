@@ -19,13 +19,21 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: #C7AEB9;
+    background-color: #b3c7c9;
 }
 .btn-danger{
     background-color:#372a39;
 }
-.btn-success{
-    background-color:#a88fac;
+
+
+body, h1, h2, h3, h4, h5, h6, p, a, span, div {
+    font-family: 'IBM Plex Serif', serif !important;
+    line-height: 2vw;
+    ;
+}
+
+.btn-success {
+    background-color: #5a506a;
 }
 .btn-primary {
     background-color: #5a506a;

@@ -1,15 +1,14 @@
 ﻿body {
-    background-color: #C7AEB9;
+    background-color: #959ab1;
 }
 
-.container.mt-5 {
+.container-register {
     background-color: white;
-    border-radius: 10px; 
-    padding: 25px; 
-    margin: 10px auto;
-    max-width: 450px; 
+    border-radius: 10px;
+    padding: 25px;
+    margin: 50px auto 30px auto;
+    max-width: 450px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
 }
 
 h2 {
@@ -45,7 +44,7 @@ h2 {
     }
 
         .form-check-label a:hover {
-            color: #C7AEB9;
+            color: #5a506a;
         }
 
 
@@ -93,6 +92,6 @@ text-center {
 }
 
     .text-center a:hover {
-        color: #C7AEB9;       
+        color: #5a506a;
     }
 

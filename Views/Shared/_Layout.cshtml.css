@@ -5,11 +5,15 @@ a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
-    color: #372A39;
 }
 
+.navbar {
+    background-color: #fffaf1;
+}
+
+
 a {
-  color: #0077cc; 
+    color: #0077cc;
 }
 
 
@@ -26,14 +30,15 @@ a {
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 /*button.accept-policy {
@@ -42,16 +47,14 @@ a {
 }*/
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-  background-color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: #fffaf1;
+    color: black;
 }
 
 
-.container {
-    color: #372A39;
-}
 

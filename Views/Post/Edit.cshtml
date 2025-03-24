@@ -1,46 +1,40 @@
-﻿@model Post
+﻿@model museia.Models.EditPostViewModel
+
 @{
-    ViewData["Title"] = "Редагувати пост";
+    ViewData["Title"] = "Редагування допису";
 }
-<!DOCTYPE html>
-<head>
-    <title></title>
-    <link rel="stylesheet" href="~/css/edit.css"/>
-</head>
-<body>
-    <form method="post" asp-action="Edit" enctype="multipart/form-data">
-        <input type="hidden" asp-for="PostID" />
 
-        <div class="mb-3">
-            <label>Опис</label>
-            <textarea asp-for="PostText" class="form-control"></textarea>
-        </div>
+<h2>Редагування допису</h2>
 
-        <div class="mb-3">
-            <label>Тег</label>
-            <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
-        </div>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="PostID" />
 
-        @if (!string.IsNullOrEmpty(Model.PostPhoto))
+    <div class="form-group">
+        <label asp-for="PostText">Текст допису</label>
+        <textarea asp-for="PostText" class="form-control"></textarea>
+        <span asp-validation-for="PostText" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PostTag">Тег</label>
+        <select asp-for="PostTag" asp-items="@(new SelectList(ViewBag.PostTags, "Value", "Text"))" class="form-control"></select>
+        <span asp-validation-for="PostTag" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Поточне зображення:</label>
+        @if (!string.IsNullOrEmpty(Model.PostPhotoUrl))
         {
-            <div class="mb-3">
-                <label>Поточне фото:</label><br />
-                <img src="@Model.PostPhoto" style="max-width: 300px;" />
-            </div>
+            <img src="@Model.PostPhotoUrl" alt="Фото допису" style="max-width: 200px; display: block;" />
         }
+    </div>
 
-        <div class="mb-3">
-            <label>Нове фото</label>
-            <input type="file" name="photoFile" class="form-control" />
-        </div>
+    <div class="form-group">
+        <label asp-for="PostPhoto">Нове зображення</label>
+        <input type="file" asp-for="PostPhoto" class="form-control" />
+        <span asp-validation-for="PostPhoto" class="text-danger"></span>
+    </div>
 
-        <button type="submit" class="btn btn-success">Зберегти зміни</button>
-
-        <div class="text-center mt-3">
-            <a href="" class="text-decoration-none">🔙 Вернутись назад</a>
-        </div>
-    </form>
-</body>
-
-</html> 
-
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+    <a asp-action="Profile" asp-controller="User" class="btn btn-secondary">Скасувати</a>
+</form>

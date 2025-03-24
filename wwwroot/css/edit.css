@@ -4,17 +4,29 @@
 
 .btn-success {
     background-color: #5a506a;
+    color: white;
 }
     .btn-success:hover {
-        background-color:#5a506a;
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
     }
     .btn-success:focus, .btn-success:active:focus {
         background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
     }
 
+
+.form-control {
+    border: 1px solid #0e0514;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    width: 450px;
+}
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'IBM Plex Serif', serif !important;
     line-height: 2vw;
-    ;
+    
 }

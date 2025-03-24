@@ -14,15 +14,41 @@
 
 .btn-edit-post {
     width: 10vw;
-    background: #5a506a;
+    background-color: #5a506a;
+    border-color: #b3c7c9;
     color: white;
 }
+    .btn-edit-post:hover {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
+
+    .btn-edit-post:focus, .btn-edit-post:active:focus {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
 
 .btn-delete-post {
     width: 10vw;
-    background: #372a39;
+    background-color: #5a506a;
+    border-color: #b3c7c9;
     color: white;
 }
+
+    .btn-delete-post:hover {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
+
+    .btn-delete-post:focus, .btn-delete-post:active:focus {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+}
+
 
 body {
     background-color: #b3c7c9;

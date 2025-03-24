@@ -3,8 +3,18 @@
     ViewData["Title"] = "Створити допис";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/post.css" />
+</head>
+<body>
+
 <form method="post" enctype="multipart/form-data">
-    <div class="container mt-5">
+    <div class="container-create-post">
         <h2 class="text-center">📝 Створення допису</h2>
         <div class="mb-3">
             <label class="form-label">Опис</label>
@@ -25,3 +35,5 @@
         </div>
     </div>
 </form>
+</body>
+</html>

@@ -1,0 +1,47 @@
+﻿body {
+    background-color: #b3c7c9;
+}
+
+h2 {
+    color: #0e0514;
+    font-size: 26px;
+}
+
+.reactionType {
+    color: #0e0514;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 499;
+}
+
+
+.form-control {
+    border: 1px solid #0e0514;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    width: 250px;
+    
+}
+
+.btn-primary {
+    background-color: #5a506a;
+    border-color: #b3c7c9;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
+
+    .btn-primary:focus, .btn-primary:active:focus {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
+
+
+
+

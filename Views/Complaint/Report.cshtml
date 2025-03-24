@@ -2,6 +2,16 @@
     ViewData["Title"] = "Report Post";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/report.css" />
+</head>
+<body>
+
 <h2>Створення та подання скарги</h2>
 
 <form method="post">
@@ -11,7 +21,10 @@
     </div>
     <input type="hidden" id="postId" name="postId" value="@ViewBag.PostId" />
     <button type="submit" class="btn btn-primary">Відправити скаргу!</button>
-    <div class="text-center mt-3">
+    @* <div class="text-center mt-3">
         <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
-    </div>
+    </div> *@
 </form>
+</body>
+</html>
+

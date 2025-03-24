@@ -1,0 +1,18 @@
+﻿@model museia.Models.Complaint
+
+@{
+    ViewData["Title"] = "Account Warning";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="complaint-warning">
+    <p><strong>Warning:</strong> Your account has received a warning due to complaints regarding your content.</p>
+    <p><strong>Complaint Reason:</strong> @Model.ComplaintReason</p>
+    <p>Please review our community guidelines and take the necessary actions.</p>
+
+    <form method="post" asp-action="AcknowledgeComplaint" asp-controller="Complaint">
+        <input type="hidden" name="complaintId" value="@Model.ComplaintID" />
+        <button type="submit" class="btn btn-primary">I have read your warning</button>
+    </form>
+</div>

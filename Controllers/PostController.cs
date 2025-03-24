@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using museia.Data;
+using museia.IService;
 using museia.Models;
 using museia.Services;
 using NuGet.Protocol.Plugins;
@@ -20,22 +21,46 @@ namespace museia.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly PostService _postService;
-        //private readonly ComplaintService _complaintService;
+        private readonly ComplaintService _complaintService;
 
-        public PostController(AppDbContext context, UserManager<User> userManager, PostService postService)
+        public PostController(AppDbContext context, UserManager<User> userManager, PostService postService, ComplaintService complaintService)
         {
             _context = context;
             _userManager = userManager;
             _postService = postService;
+            _complaintService = complaintService;
         }
+
 
         public async Task<IActionResult> Index(string searchText)
         {
-            List<Post> posts;
-            posts = await _postService.SearchPostsAsync(searchText);
+            List<Post> posts = await _postService.SearchPostsAsync(searchText);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Отримуємо всі пости поточного користувача
+            var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
+            bool hasActiveComplaint = false;
+            foreach (var post in userPosts)
+            {
+                // Отримуємо скарги за постом
+                var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
+                if (complaints.Any(c =>
+                     (c.ComplaintStatus == ComplaintStatus.Processing || c.ComplaintStatus == ComplaintStatus.Accepted)
+                     && !c.IsAcknowledged))
+                {
+                    hasActiveComplaint = true;
+                    break;
+                }
+            }
+
+            if (hasActiveComplaint)
+            {
+                return RedirectToAction("WarningView", "Complaint");
+            }
 
             return View(posts);
         }
+
 
         public IActionResult Privacy()
         {

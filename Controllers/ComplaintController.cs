@@ -11,12 +11,14 @@ namespace museia.Controllers
     public class ComplaintController : Controller
     {
         private readonly ComplaintService _complaintService;
+        private readonly PostService _postService;
 
-        public ComplaintController(ComplaintService complaintService)
+
+        public ComplaintController(ComplaintService complaintService, PostService postService)
         {
             _complaintService = complaintService;
+            _postService = postService;
         }
-
         [HttpGet]
         public IActionResult Report(int postId)
         {
@@ -72,6 +74,42 @@ namespace museia.Controllers
             }
 
             return BadRequest("Не вдалося оновити статус.");
+        }
+        [HttpGet]
+        public async Task<IActionResult> WarningView()
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
+
+            Complaint activeComplaint = null;
+            foreach (var post in userPosts)
+            {
+                var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
+                activeComplaint = complaints.FirstOrDefault(c =>
+                    (c.ComplaintStatus == ComplaintStatus.Processing || c.ComplaintStatus == ComplaintStatus.Accepted)
+                    && !c.IsAcknowledged);
+                if (activeComplaint != null)
+                {
+                    break;
+                }
+            }
+
+            return View(activeComplaint);
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AcknowledgeComplaint(uint complaintId)
+        {
+            var complaint = await _complaintService.GetComplaintById(complaintId);
+            if (complaint != null)
+            {
+                complaint.IsAcknowledged = true;
+                await _complaintService.UpdateComplaint(complaint);
+            }
+            return RedirectToAction("Index", "Post");
         }
     }
 }

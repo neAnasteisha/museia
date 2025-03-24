@@ -23,6 +23,7 @@ namespace museia.Models
 
         [Required]
         public string ComplaintReason { get; set; }
+        public bool IsAcknowledged { get; set; } = false;
 
         [Required]
         public ComplaintStatus ComplaintStatus { get; set; }

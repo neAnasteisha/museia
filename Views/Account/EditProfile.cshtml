@@ -28,3 +28,8 @@
 
     <button type="submit" class="btn btn-primary">Зберегти</button>
 </form>
+
+<form method="post" asp-action="DeleteProfile">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
+</form>
+

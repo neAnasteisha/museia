@@ -18,9 +18,15 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #C7AEB9;
 }
-
+.btn-danger{
+    background-color:#372a39;
+}
+.btn-success{
+    background-color:#a88fac;
+}
 .btn-primary {
     background-color: #0e0514;
     border-color: #959ab1;

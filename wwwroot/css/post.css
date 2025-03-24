@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     gap: 1vw;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .post-actions {
@@ -12,13 +14,13 @@
 
 .btn-edit-post {
     width: 10vw;
-    background: #da92da;
+    background: #a88fac;
     color: white;
 }
 
 .btn-delete-post {
     width: 10vw;
-    background: #4e234e;
+    background: #372a39;
     color: white;
 }
 

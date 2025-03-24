@@ -1,6 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Add Reaction";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/addreaction.css" />
+</head>
+<body>
 
 <h2>Add Reaction</h2>
 
@@ -20,3 +29,5 @@
     <input type="hidden" id="postId" name="postId" value="@ViewBag.PostId" />
     <button type="submit" class="btn btn-primary">Submit Reaction</button>
 </form>
+</body>
+</html>

@@ -116,7 +116,8 @@ h2 {
 }
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
-    font-family: 'IBM Plex Serif', serif;
+    font-family: 'IBM Plex Serif', serif !important;
+    line-height: 2vw;;
 }
 
 

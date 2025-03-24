@@ -97,6 +97,94 @@ namespace museia.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var model = new EditProfileViewModel
+            {
+                Username = user.UserName,
+                Description = user.UserDescription,
+                AvatarUrl = user.UserAvatar
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.UserName = model.Username;
+            user.UserDescription = model.Description;
+
+            if (model.Avatar != null && model.Avatar.Length > 0)
+            {
+                // Створюємо шлях для аватара користувача
+                string userFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/avatars", user.Id);
+                string avatarFolder = Path.Combine(userFolder, "avatar");
+
+                // Очищуємо папку avatar
+                if (Directory.Exists(avatarFolder))
+                {
+                    foreach (var file in Directory.GetFiles(avatarFolder))
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(avatarFolder);
+                }
+
+                // Генеруємо унікальне ім'я файлу
+                string fileExtension = Path.GetExtension(model.Avatar.FileName);
+                string uniqueFileName = $"avatar{fileExtension}"; // avatar.png / avatar.jpg
+                string filePath = Path.Combine(avatarFolder, uniqueFileName);
+
+                // Зберігаємо новий файл
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Avatar.CopyToAsync(stream);
+                }
+
+                // Оновлюємо шлях у базі
+                user.UserAvatar = $"/uploads/avatars/{user.Id}/avatar/{uniqueFileName}";
+            }
+
+            await _userManager.UpdateAsync(user);
+            await _signInManager.RefreshSignInAsync(user);
+
+            return RedirectToAction("Profile", "User");
+        }
+
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

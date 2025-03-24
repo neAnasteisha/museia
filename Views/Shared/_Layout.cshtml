@@ -57,6 +57,9 @@
                             @if (ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Profile")
                             {
                                 <li class="nav-item">
+                                    <a href="/Account/EditProfile" class="btn btn-primary">Редагувати профіль</a>
+                                </li>
+                                <li>
                                     <form method="post" asp-controller="Account" asp-action="Logout">
                                         <button type="submit" class="btn btn-danger">Вихід</button>
                                     </form>

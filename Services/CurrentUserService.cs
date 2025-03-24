@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity;
     using museia.Models;
+    using System.Security.Claims;
 
     public class CurrentUserService
     {
@@ -25,6 +26,16 @@
             var currentUser = await GetCurrentUserAsync();
             return currentUser?.UserType;
         }
+
+        public async Task RefreshCurrentUserAsync()
+        {
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var currentUser = await _userManager.FindByIdAsync(userId);
+            }
+        }
+
     }
 }
 

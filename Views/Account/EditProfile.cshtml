@@ -1,0 +1,30 @@
+﻿@model museia.Models.EditProfileViewModel
+
+<h2>Редагування профілю</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="username" class="form-label">Ім'я користувача</label>
+        <input type="text" class="form-control" asp-for="Username" placeholder="Залиште порожнім, якщо не хочете змінювати">
+    </div>
+
+    <div class="mb-3">
+        <label for="description" class="form-label">Опис</label>
+        <textarea class="form-control" asp-for="Description" rows="3" placeholder="Залиште порожнім, якщо не хочете змінювати"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="avatar" class="form-label">Аватар</label>
+        <input type="file" class="form-control" asp-for="Avatar">
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+    {
+        <div class="mb-3">
+            <p>Поточний аватар:</p>
+            <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 150px;">
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+</form>

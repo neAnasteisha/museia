@@ -76,14 +76,14 @@ namespace museia.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreatePost()
         {
             ViewBag.PostTags = _postService.GetPostTags();
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Post model, IFormFile photoFile)
+        public async Task<IActionResult> CreatePost(Post model, IFormFile photoFile)
         {
             string photoPath = null;
 
@@ -112,7 +112,7 @@ namespace museia.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Edit(uint id)
+        public async Task<IActionResult> EditPost(uint id)
         {
             var post = await _postService.GetPostById(id);
             if (post == null || post.UserID != _userManager.GetUserId(User))
@@ -134,7 +134,7 @@ namespace museia.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Edit(EditPostViewModel model)
+        public async Task<IActionResult> EditPost(EditPostViewModel model)
         {
             if (!ModelState.IsValid)
             {

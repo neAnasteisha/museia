@@ -52,7 +52,7 @@
                         else if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a href="/Post/Create" class="btn btn-success me-2" style="color: white"> Створити допис</a>
+                                <a href="/Post/CreatePost" class="btn btn-success me-2" style="color: white"> Створити допис</a>
                             </li>
                             @if (ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Profile")
                             {

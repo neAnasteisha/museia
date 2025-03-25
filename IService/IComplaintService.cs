@@ -10,10 +10,10 @@ namespace museia.IService
         Task<Complaint> GetComplaintByIdAsync(uint id);
         Task UpdateComplaintAsync(Complaint complaint);
         Task DeleteComplaintAsync(uint id);
-        Task<List<Complaint>> GetComplaintsByStatusAsync(ComplaintStatus status);
         Task<List<Complaint>> GetAllUnconsideredComplaintsAsync();
         Task<bool> ApproveComplaint(uint id);
         Task<bool> RejectComplaint(uint id);
+        Task<bool> AcceptComplaint(uint id);
         int GetAcceptedComplaintsCountForUser(string userId);
         Task<List<Complaint>> GetComplaintsByPostId(uint postId);
     }

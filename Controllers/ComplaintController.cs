@@ -29,7 +29,7 @@ namespace museia.Controllers
         [HttpPost]
         public async Task<IActionResult> Report(int postId, string complaintReason)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get the current user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             try
             {
@@ -59,8 +59,6 @@ namespace museia.Controllers
             if (action == "approve")
             {
                 result = await _complaintService.ApproveComplaint(complaintId);
-                //var acceptedComplaintsCount = await _complaintService.GetAcceptedComplaintsCountForUser(userId);
-                //ViewBag.AcceptedComplaintsCount = acceptedComplaintsCount;
             }
             else if (action == "reject")
             {
@@ -92,7 +90,7 @@ namespace museia.Controllers
                     && !c.IsAcknowledged);
                 if (complaintEntity != null)
                 {
-                    break; // Знайшли активну скаргу
+                    break;
                 }
             }
 

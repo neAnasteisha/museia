@@ -16,10 +16,10 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style=" position: fixed; top: 0; left:0; width: 100%; z-index: 1000;padding-right:2vw;>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <!-- Логотип -->
-                <a class="navbar-brand" asp-area="" asp-controller="Post" asp-action="Index" style="padding-left:2vw;">museia</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Post" asp-action="Index">museia</a>
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (userType == UserType.Moderator)
@@ -39,7 +39,7 @@
                 </button>
 
                 <!-- Навбар -->
-                <div class="collapse navbar-collapse" id="navbarNav" ">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated && userType == UserType.Moderator)
                         {

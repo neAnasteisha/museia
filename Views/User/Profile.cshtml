@@ -72,7 +72,7 @@
                             {
                                 <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post">Редагувати</a>
 
-                                <form method="post" action="@Url.Action("Delete", "Post", new { id = post.PostID })">
+                                <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })">
                                     <button type="submit" class="btn btn-delete-post" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
                                 </form>
                             }

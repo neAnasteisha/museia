@@ -184,7 +184,7 @@ namespace museia.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Delete(uint id, UserType userType)
+        public async Task<IActionResult> DeletePost(uint id, UserType userType)
         {
             await _postService.DeletePost(id);
             if(userType == UserType.SimpleUser)

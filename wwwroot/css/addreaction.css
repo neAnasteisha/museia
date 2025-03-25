@@ -4,22 +4,17 @@
 
 h2 {
     color: #0e0514;
-    font-size: 26px;
+     /*font-weight: 499;*/
 }
 
 .reactionType {
     color: #0e0514;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 15px;
-    font-weight: 499;
 }
 
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'IBM Plex Serif', serif !important;
     line-height: 2vw;
-    ;
 }
 
 .form-control {

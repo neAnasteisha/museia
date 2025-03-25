@@ -11,6 +11,9 @@ a.navbar-brand {
     background-color: #fffaf1;
 }
 
+.navbar-brand {
+    color: #0e0514;
+}
 
 a {
     color: #0077cc;
@@ -42,12 +45,14 @@ a {
 
 .footer {
     position: absolute;
+    padding-top: 10px;
+    margin: 0px auto 0px auto;
     bottom: 0;
     width: 100%;
     white-space: nowrap;
-    line-height: 60px;
     background-color: #fffaf1;
-    color: black;
+    color: #0e0514;
+    padding: 5px 0;
 }
 
 
@@ -105,3 +110,18 @@ a {
         color: white;
     }
 
+.btn-outline-primary.ms-2 {
+    border-color: #0e0514;
+    color: #0e0514;
+}
+    .btn-outline-primary.ms-2:hover {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }
+
+    .btn-outline-primary.ms-2:focus, btn-outline-primary.ms-2:active:focus {
+        background-color: #5a506a;
+        border-color: #b3c7c9;
+        color: white;
+    }

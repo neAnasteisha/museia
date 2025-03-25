@@ -1,28 +1,39 @@
 ﻿@model museia.Models.EditProfileViewModel
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/edit.css" />
+</head>
+<body>
+
 <h2>Редагування профілю</h2>
 
 <form method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="username" class="form-label">Ім'я користувача</label>
+    <div class="form-label">
+        <label for="username">Ім'я користувача</label>
         <input type="text" class="form-control" asp-for="Username" placeholder="Залиште порожнім, якщо не хочете змінювати">
     </div>
 
-    <div class="mb-3">
-        <label for="description" class="form-label">Опис</label>
+    <div class="form-label">
+        <label for="description">Опис</label>
         <textarea class="form-control" asp-for="Description" rows="3" placeholder="Залиште порожнім, якщо не хочете змінювати"></textarea>
     </div>
 
-    <div class="mb-3">
-        <label for="avatar" class="form-label">Аватар</label>
+    <div class="form-label">
+        <label for="avatar">Аватар</label>
         <input type="file" class="form-control" asp-for="Avatar">
     </div>
 
     @if (!string.IsNullOrEmpty(Model.AvatarUrl))
     {
-        <div class="mb-3">
+            <div class ="form-label">
             <p>Поточний аватар:</p>
-            <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 150px;">
+            <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 220px; max-height:250px;margin-top:-15px;margin-bottom:6px;">
         </div>
     }
 
@@ -33,3 +44,5 @@
     <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
 </form>
 
+</body>
+</html>

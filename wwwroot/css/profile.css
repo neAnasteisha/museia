@@ -1,16 +1,18 @@
-﻿body {
+﻿.profile-username {
+    padding-left: 200px;
+    padding-top: 60px;
+    padding-bottom: 0px;
 }
-.profile-username{
-    padding-left:180px;
-    padding-top:40px;
-}
-.profile-email{
-    margin-top:-40px;
-    padding-left:180px;
+
+.profile-email {
+    margin-top: -80px;
+    padding-left: 200px;
 }
 .profile-post{
     padding-top:50px;
+
 }
+
 .profile-header{
     width:1269px;
     height:250px;
@@ -22,11 +24,15 @@
 }
 .post-user{
     padding-left:35px;
+
 }
 
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'IBM Plex Serif', serif !important;
     line-height: 2vw;
-    ;
+}
+
+h3 {
+    color: #0e0514;
 }

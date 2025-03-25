@@ -15,12 +15,10 @@
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'IBM Plex Serif', serif !important;
     line-height: 2vw;
-    ;
 }
 
 h2 {
     color: #0e0514;
-    font-size: 26px;
     font-weight: bold;
 }
 
@@ -50,13 +48,13 @@ h2 {
 
     .btn-primary.w-100:hover {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #0e0514;
         color: white;
     }
 
     .btn-primary.w-100:focus, .btn-primary.w-100:active:focus {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #0e0514;
         color: white;
     }
 

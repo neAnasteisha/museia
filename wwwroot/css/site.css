@@ -42,13 +42,13 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
 }
     .btn-primary:hover {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #0e0514;
         color: white;
     }
 
     .btn-primary:focus, .btn-primary:active:focus {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #0e0514;
         color: white;
     }
 

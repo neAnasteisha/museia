@@ -4,12 +4,36 @@
     gap: 1vw;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #0e0514;
 }
 
 .post-actions {
     display: flex;
     flex-direction: row;
     gap: 1vw;
+}
+
+
+.btn-complaint-post,
+.btn-reaction-post {
+    color: #0e0514;
+    font-weight: 499;
+}
+
+.post-text {
+    color: #0e0514;
+    font-weight:bold;
+
+}
+
+.post-tag {
+    color: #0e0514;
+    font-weight: 499;
+}
+
+.post-date {
+    color: #0e0514;
+    font-weight: 499;
 }
 
 .btn-edit-post {
@@ -54,23 +78,20 @@ body {
     background-color: #b3c7c9;
 }
 
-.container-create-post {
+/*.container-create-post {
     background-color: white;
     border-radius: 10px;
     padding: 25px;
     margin: 85px auto 50px auto;
     max-width: 500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+}*/
 
 
 
 .form-label {
     color: #0e0514;
-    display: block;
-    margin-bottom: 4px;
-    font-size: 15px;
-    font-weight: 499;
+    margin-bottom:0px;
 }
 
 
@@ -78,49 +99,49 @@ body {
     border: 1px solid #0e0514;
     border-radius: 4px;
     margin-bottom: 12px;
+    width: 450px;
 }
 
 h2 {
     color: #0e0514;
-    font-size: 26px;
+    /*font-weight: 499;*/
 }
 
 
-.btn-success.w-100 {
-    background-color: /*#0e0514;*/ /* #959ab1;*/ #5a506a; /*#C9E2F5;*/
-    border-color: /* #959ab1;*/ #b3c7c9;
+.btn-success-publish {
+    background-color: #5a506a;
+    border-color: #0e0514;
     color: white;
-    border-radius: 4px;
-    margin: 4px 0;
-    font-weight: 499;
-    font-size: 15px;
+    margin-top: 6px;
 }
 
-    .btn-success.w-100:hover {
+    .btn-success-publish:hover {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #fffaf1;
         color: white;
     }
 
-    .btn-success.w-100:focus, .btn-success.w-100:active:focus {
+    .btn-success-publish:focus, .btn-success-publish:active:focus {
         background-color: #5a506a;
-        border-color: #b3c7c9;
+        border-color: #fffaf1;
         color: white;
     }
 
-.text-center.mt-3 {
+
+/*.text-center.mt-3 {
     color: #0e0514;
     font-weight: 499;
     font-size: 15px;
 }
 
-.text-center.mt-3 a {
-     color: #0e0514;
-}
+    .text-center.mt-3 a {
+         color: #0e0514;
+    }
 
-.text-center.mt-3 a:hover {
-     color: #5a506a;
-}
+    .text-center.mt-3 a:hover {
+         color: #5a506a;
+    }*/
+
 
 .nickname {
     width: fit-content;
@@ -130,20 +151,28 @@ h2 {
     font-family: 'IBM Plex Serif', serif;
     font-size: 1.3vw;
     font-weight: 600;
+    margin-bottom:-15px;
 }
+    .nickname:hover {
+        color: #0e0514;
+    }
 
-.post-text {
-    font-family: 'IBM Plex Serif', serif;
-    font-size: 1.1vw;
-    width: 100%;
-    max-height:10vw;
-    overflow-y:scroll;
-    scrollbar-width:none;
-}
+    .nickname:focus, .nickname:active:focus {
+        color: #0e0514;
+    }
+
+    .post-text {
+        font-family: 'IBM Plex Serif', serif;
+        font-size: 1.1vw;
+        width: 100%;
+        max-height: 10vw;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'IBM Plex Serif', serif !important;
-    line-height: 2vw;;
+    line-height: 2vw;
 }
 
 .post-meta {
@@ -156,7 +185,17 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     margin-top: 0.5em;
 }
 
-.post-tag,
-.post-date {
-    
+
+
+h3 {
+    color: #0e0514;
+    /*font-weight: 499;*/
+}
+
+h4{
+    margin-bottom:15px;
+}
+
+p {
+    color: #0e0514;
 }

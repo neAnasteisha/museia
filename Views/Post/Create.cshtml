@@ -14,25 +14,25 @@
 <body>
 
 <form method="post" enctype="multipart/form-data">
-    <div class="container-create-post">
-        <h2 class="text-center">📝 Створення допису</h2>
-        <div class="mb-3">
+    <div>
+        <h2 class="text">@* 📝 *@ Створення допису</h2>
+        <div>
             <label class="form-label">Опис</label>
             <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
         </div>
-        <div class="mb-3">
+        <div>
             <label class="form-label">Тег</label>
             <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
         </div>
-        <div class="mb-3">
+        <div>
             <label class="form-label">Фото</label>
             <input type="file" name="photoFile" class="form-control" />
         </div>
-        <button type="submit" class="btn btn-success w-100">Опублікувати</button>
+        <button type="submit" class="btn btn-success-publish">Опублікувати</button>
 
-        <div class="text-center mt-3">
+        @* <div class="text-center mt-3">
             <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
-        </div>
+        </div> *@
     </div>
 </form>
 </body>

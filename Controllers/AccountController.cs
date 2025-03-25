@@ -183,6 +183,7 @@ namespace museia.Controllers
 
             return RedirectToAction("Profile", "User");
         }
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

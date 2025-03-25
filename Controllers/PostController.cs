@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using museia.Data;
@@ -114,65 +115,73 @@ namespace museia.Controllers
         public async Task<IActionResult> Edit(uint id)
         {
             var post = await _postService.GetPostById(id);
-            if (post == null)
+            if (post == null || post.UserID != _userManager.GetUserId(User))
             {
                 return NotFound();
             }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (post.UserID != userId)
-            {
-                return Forbid();
-            }
 
+            var model = new EditPostViewModel
+            {
+                PostID = post.PostID,
+                PostText = post.PostText,
+                PostPhotoUrl = post.PostPhoto,
+                PostTag = post.PostTag
+            };
             ViewBag.PostTags = _postService.GetPostTags();
-            return View(post);
+
+            return View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Edit(Post post)
+        public async Task<IActionResult> Edit(EditPostViewModel model)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    await _postService.UpdatePost(post);
-            //    return RedirectToAction("Index", "Post");
-            //}
-            //return View(post);
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var existingPost = await _postService.GetPostById(post.PostID);
-                if (existingPost == null)
-                {
-                    return NotFound();
-                }
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (existingPost.UserID != userId)
-                {
-                    return Forbid();
-                }
-
-                await _postService.UpdatePost(post);
-                return RedirectToAction("Index", "Post");
+                ViewBag.PostTags = _postService.GetPostTags();
+                return View(model);
             }
-            return View(post);
+
+            var post = await _postService.GetPostById(model.PostID);
+            if (post == null || post.UserID != _userManager.GetUserId(User))
+            {
+                return NotFound();
+            }
+
+            post.PostText = model.PostText;
+            post.PostTag = model.PostTag.Value;
+
+            if (model.PostPhoto != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/posts", post.UserID);
+                Directory.CreateDirectory(uploadsFolder);
+
+                // Видалення старого фото
+                if (!string.IsNullOrEmpty(post.PostPhoto))
+                {
+                    string oldImagePath = Path.Combine("wwwroot", post.PostPhoto.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                string uniqueFileName = $"post_{Guid.NewGuid()}{Path.GetExtension(model.PostPhoto.FileName)}";
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.PostPhoto.CopyToAsync(stream);
+                }
+
+                post.PostPhoto = $"/uploads/posts/{post.UserID}/{uniqueFileName}";
+            }
+
+            await _postService.UpdatePost(post);
+            return RedirectToAction("Profile", "User");
         }
 
-        //[HttpPost]
-        //public IActionResult Report(uint id, string complaintReason)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    try
-        //    {
-        //        _complaintService.CreateComplaintAsync(complaintReason, userId, id).Wait();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.AddModelError("ПричинаСкарги", ex.Message);
-        //    }
 
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Delete(uint id, UserType userType)

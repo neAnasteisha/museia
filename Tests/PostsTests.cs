@@ -9,7 +9,7 @@
     public class PostsTests
     {
         [Fact]
-        public async Task SearchPostsAsync_ShouldReturnCorrectPosts()
+        public async Task SearchPostsByTagAsync_ShouldReturnPostsWithSomeTag()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "TestDb")

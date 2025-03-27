@@ -31,6 +31,10 @@
         public async Task DeleteUserAsync(string userId)
         {
             var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User not found.");
+            }
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }

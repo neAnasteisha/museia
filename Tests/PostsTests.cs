@@ -11,9 +11,7 @@
         [Fact]
         public async Task SearchPostsByTagAsync_ShouldReturnPostsWithSomeTag()
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDb")
-                .Options;
+            var options = InMemoryDB.CreateInMemoryDbOptions();
 
             using (var context = new AppDbContext(options))
             {

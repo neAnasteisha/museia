@@ -1,16 +1,17 @@
 ﻿using museia.IRepository;
+using museia.IService;
 using museia.Models;
 using museia.Repositories;
 
 namespace museia.Services
 {
-    public class ComplaintService
+    public class ComplaintService: IComplaintService
     {
-        private ComplaintRepository _complaintRepository;
-        private PostRepository _postRepository;
-        private UserRepository _userRepository;
+        private IComplaintRepository _complaintRepository;
+        private IPostRepository _postRepository;
+        private IUserRepository _userRepository;
 
-        public ComplaintService(ComplaintRepository complaintRepository, PostRepository postRepository, UserRepository userRepository)
+        public ComplaintService(IComplaintRepository complaintRepository, IPostRepository postRepository, IUserRepository userRepository)
         {
             _complaintRepository = complaintRepository;
             _postRepository = postRepository;
@@ -39,15 +40,15 @@ namespace museia.Services
         {
             return await _complaintRepository.GetComplaintsByUserIdAsync(userId);
         }
-        public async Task<Complaint> GetComplaintById(uint id)
+        public async Task<Complaint> GetComplaintByIdAsync(uint id)
         {
             return await _complaintRepository.GetComplaintByIdAsync(id);
         }
-        public async Task UpdateComplaint(Complaint complaint)
+        public async Task UpdateComplaintAsync(Complaint complaint)
         {
             await _complaintRepository.UpdateComplaintAsync(complaint);
         }
-        public async Task DeleteComplaint(uint id)
+        public async Task DeleteComplaintAsync(uint id)
         {
             await _complaintRepository.DeleteComplaintAsync(id);
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using museia.Data;
+using museia.IService;
 using museia.Models;
 using museia.Services;
 using System.Diagnostics;
@@ -14,12 +15,12 @@ namespace museia.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly ComplaintService _complaintService;
-        private readonly PostService _postService;
-        private readonly ReactionService _reactionService;
-        private readonly UserService _userService;
+        private readonly IComplaintService _complaintService;
+        private readonly IPostService _postService;
+        private readonly IReactionService _reactionService;
+        private readonly IUserService _userService;
 
-        public UserController(AppDbContext context, UserManager<User> userManager, ComplaintService complaintService, PostService postService, ReactionService reactionService, UserService userService)
+        public UserController(AppDbContext context, UserManager<User> userManager, IComplaintService complaintService, IPostService postService, IReactionService reactionService, IUserService userService)
         {
             _context = context;
             _userManager = userManager;

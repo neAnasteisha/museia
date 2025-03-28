@@ -27,13 +27,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<PostRepository>();
-builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<ComplaintRepository>();
-builder.Services.AddScoped<ComplaintService>();
-builder.Services.AddScoped<ReactionService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
+builder.Services.AddScoped<IComplaintService, ComplaintService>();
 builder.Services.AddScoped<IReactionService, ReactionService>();
 builder.Services.AddScoped<IReactionRepository, ReactionRepository>();
 builder.Services.AddHttpContextAccessor();

@@ -2,12 +2,14 @@
 {
     using Microsoft.AspNetCore.Mvc.Rendering;
     using museia.Models;
+    using museia.IService;
+    using museia.IRepository;
 
     public class PostService : IPostService
     {
-        private PostRepository _postRepository;
+        private IPostRepository _postRepository;
 
-        public PostService(PostRepository postRepository)
+        public PostService(IPostRepository postRepository)
         {
             _postRepository = postRepository;
         }

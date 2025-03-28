@@ -21,10 +21,10 @@ namespace museia.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly PostService _postService;
-        private readonly ComplaintService _complaintService;
+        private readonly IPostService _postService;
+        private readonly IComplaintService _complaintService;
 
-        public PostController(AppDbContext context, UserManager<User> userManager, PostService postService, ComplaintService complaintService)
+        public PostController(AppDbContext context, UserManager<User> userManager, IPostService postService, IComplaintService complaintService)
         {
             _context = context;
             _userManager = userManager;

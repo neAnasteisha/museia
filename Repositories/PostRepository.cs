@@ -4,6 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using museia.Data;
     using museia.Models;
+    using museia.IRepository;
 
     public class PostRepository : IPostRepository
     {

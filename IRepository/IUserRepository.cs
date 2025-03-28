@@ -2,12 +2,15 @@
 using System.Threading.Tasks;
 using museia.Models;
 
-public interface IUserRepository
+namespace museia.IRepository
 {
-    Task<User> GetUserByIdAsync(string userId);
-    Task<List<User>> GetAllUsersAsync();
-    Task UpdateUserAsync(User user);
-    Task DeleteUserAsync(string userId);
+    public interface IUserRepository
+    {
+        Task<User> GetUserByIdAsync(string userId);
+        Task<List<User>> GetAllUsersAsync();
+        Task UpdateUserAsync(User user);
+        Task DeleteUserAsync(string userId);
 
-    Task<List<Post>> GetPostsByUserIdAsync(string userId);
+        Task<List<Post>> GetPostsByUserIdAsync(string userId);
+    }
 }

@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using museia.Models;
 using museia.Repositories;
+using museia.IService;
+using museia.IRepository;
 
 namespace museia.Services
 {
     public class UserService : IUserService
     {
-        private UserRepository _userRepository;
-        public UserService(UserRepository userRepository)
+        private IUserRepository _userRepository;
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -45,15 +47,5 @@ namespace museia.Services
                 UserPosts = posts
             };
         }
-        public async Task IncrementWarningCounter(string userId)
-        {
-            await _userRepository.IncrementWarningCounter(userId);
-        }
-
-        public async Task<int> GetUserWarningCounterByUserId(string userId)
-        {
-            return await _userRepository.GetUserWarningCounterByUserId(userId);
-        }
-
     }
 }

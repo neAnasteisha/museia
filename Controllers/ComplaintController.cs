@@ -10,11 +10,11 @@ namespace museia.Controllers
 {
     public class ComplaintController : Controller
     {
-        private readonly ComplaintService _complaintService;
-        private readonly PostService _postService;
+        private readonly IComplaintService _complaintService;
+        private readonly IPostService _postService;
 
 
-        public ComplaintController(ComplaintService complaintService, PostService postService)
+        public ComplaintController(IComplaintService complaintService, IPostService postService)
         {
             _complaintService = complaintService;
             _postService = postService;
@@ -121,11 +121,11 @@ namespace museia.Controllers
         [HttpPost]
         public async Task<IActionResult> AcknowledgeComplaint(uint complaintId)
         {
-            var complaint = await _complaintService.GetComplaintById(complaintId);
+            var complaint = await _complaintService.GetComplaintByIdAsync(complaintId);
             if (complaint != null)
             {
                 complaint.IsAcknowledged = true;
-                await _complaintService.UpdateComplaint(complaint);
+                await _complaintService.UpdateComplaintAsync(complaint);
             }
             return RedirectToAction("Index", "Post");
         }

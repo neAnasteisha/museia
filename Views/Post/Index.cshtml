@@ -7,7 +7,7 @@
 }
 
 @inject museia.Services.CurrentUserService CurrentUserService
-@inject museia.Services.PostService postService
+@inject museia.IService.IPostService postService
 
 @{
     var userType = await CurrentUserService.GetCurrentUserTypeAsync();

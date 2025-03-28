@@ -5,6 +5,7 @@
     using museia.Models;
     using System.ComponentModel;
     using System.Reflection.Metadata.Ecma335;
+    using museia.IRepository;
 
     public class UserRepository : IUserRepository
     {

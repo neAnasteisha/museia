@@ -13,6 +13,10 @@
 
 }
 
+.post-actions-btn .hover{
+    color:red;
+}
+
 .profile-header{
     width:1269px;
     height:250px;

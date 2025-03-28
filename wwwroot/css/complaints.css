@@ -1,0 +1,10 @@
+﻿.complaint {
+    display: flex;
+    flex-direction: column;
+}
+
+.complaint-content {
+    font-size: large;
+}
+
+

@@ -1,18 +1,25 @@
 ﻿@model List<museia.Models.ComplaintViewModel>
 
 
-<h2>@ViewData["Title"]</h2>
+@ViewData["Title"]
 
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/complaints.css" />
+    <link rel="stylesheet" href="~/css/post.css" />
+</head>
+<body>
 <div>
     @foreach (var complaint in Model.AsEnumerable().Reverse())
     {
         <div class="complaint">
             <div class="complaint-content">
-                <h3>@(new string('-', 115))</h3>
                 <p><strong>Користувач:</strong> @complaint.UserName</p>
                 <p><strong>Причина скарги:</strong> @complaint.ComplaintReason</p>
             </div>
-            <h3>Допис, на який надійшла скарга</h3>
             <div class="post mb-4 p-3 border rounded">
                 <div class="post-content">
                     <h4>@complaint.PostText</h4>
@@ -67,4 +74,6 @@
         </div>
     }
 </div>
+</body>
+
 

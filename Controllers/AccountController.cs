@@ -31,6 +31,12 @@ namespace museia.Controllers
                 return View();
             }
 
+            if (user.IsBlocked)
+            {
+                ModelState.AddModelError("", "Ваш обліковий запис заблокований.");
+                return View();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
             if (result.Succeeded)
             {
@@ -49,8 +55,16 @@ namespace museia.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string username, string email, string password, IFormFile avatar)
         {
-            if (await _userManager.FindByEmailAsync(email) != null)
+            var existingUser = await _userManager.FindByEmailAsync(email);
+
+            if (existingUser != null)
             {
+                if (existingUser.IsBlocked)
+                {
+                    ModelState.AddModelError("", "Ваш обліковий запис заблокований. Ви не можете зареєструватися повторно.");
+                    return View();
+                }
+
                 ModelState.AddModelError("", "Користувач із таким email вже існує!");
                 return View();
             }

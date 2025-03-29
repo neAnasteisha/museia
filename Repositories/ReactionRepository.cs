@@ -37,5 +37,22 @@ namespace museia.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Reaction>> GetReactionsByUserIdAsync(string userId)
+        {
+            return await _context.Reactions
+                .Where(p => p.UserID == userId)
+                .ToListAsync();
+        }
+
+        public async Task DeleteReactionAsync(uint id)
+        {
+            var reaction = await _context.Reactions.FindAsync(id);
+            if (reaction != null)
+            {
+                _context.Reactions.Remove(reaction);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

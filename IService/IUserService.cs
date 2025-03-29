@@ -10,5 +10,7 @@ namespace museia.IService
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(string userId);
         Task<ProfileViewModel> GetProfileViewModelByIdAsync(string userId);
+        Task IsUserBlockedAsync(string userId);
+        Task BlockUserAsync(string userId);
     }
 }

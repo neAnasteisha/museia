@@ -84,7 +84,7 @@ namespace museia.Controllers
             Complaint complaintEntity = null;
             foreach (var post in userPosts)
             {
-                var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
+                var complaints = await _complaintService.GetComplaintsByPostIdAsync(post.PostID);
                 complaintEntity = complaints.FirstOrDefault(c =>
                     (c.ComplaintStatus == ComplaintStatus.Processing || c.ComplaintStatus == ComplaintStatus.Accepted)
                     && !c.IsAcknowledged);

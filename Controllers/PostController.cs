@@ -42,7 +42,7 @@ namespace museia.Controllers
             bool hasActiveComplaint = false;
             foreach (var post in userPosts)
             {
-                var complaints = await _complaintService.GetComplaintsByPostId(post.PostID);
+                var complaints = await _complaintService.GetComplaintsByPostIdAsync(post.PostID);
                 if (complaints.Any(c => c.ComplaintStatus == ComplaintStatus.Accepted && !c.IsAcknowledged))
                 {
                     hasActiveComplaint = true;

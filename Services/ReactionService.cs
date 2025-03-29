@@ -24,6 +24,16 @@ namespace museia.Services
             };
             await _reactionRepository.AddOrUpdateReactionAsync(reaction);
         }
+
+        public async Task<List<Reaction>> GetReactionsByUserIdAsync(string userId)
+        {
+            return await _reactionRepository.GetReactionsByUserIdAsync(userId);
+        }
+
+        public async Task DeleteReactionAsync(uint id)
+        {
+            await _reactionRepository.DeleteReactionAsync(id);
+        }
     }
 
 }

@@ -32,11 +32,11 @@ namespace museia.Services
             };
             await _complaintRepository.AddAsync(complaint);
         }
-        public async Task<List<Complaint>> GetComplaintsByPostId(uint postId)
+        public async Task<List<Complaint>> GetComplaintsByPostIdAsync(uint postId)
         {
             return await _complaintRepository.GetComplaintsByPostIdAsync(postId);
         }
-        public async Task<List<Complaint>> GetComplaintsByUserId(string userId)
+        public async Task<List<Complaint>> GetComplaintsByUserIdAsync(string userId)
         {
             return await _complaintRepository.GetComplaintsByUserIdAsync(userId);
         }

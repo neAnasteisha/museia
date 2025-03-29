@@ -6,8 +6,8 @@ namespace museia.IService
     public interface IComplaintService
     {
         Task CreateComplaintAsync(string complaintReason, string userId, uint postId);
-        Task<List<Complaint>> GetComplaintsByPostId(uint postId);
-        Task<List<Complaint>> GetComplaintsByUserId(string userId);
+        Task<List<Complaint>> GetComplaintsByPostIdAsync(uint postId);
+        Task<List<Complaint>> GetComplaintsByUserIdAsync(string userId);
         Task<Complaint> GetComplaintByIdAsync(uint id);
         Task UpdateComplaintAsync(Complaint complaint);
         Task DeleteComplaintAsync(uint id);

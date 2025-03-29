@@ -10,7 +10,8 @@ namespace museia.IRepository
         Task<List<User>> GetAllUsersAsync();
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(string userId);
-
         Task<List<Post>> GetPostsByUserIdAsync(string userId);
+        Task<bool> IsUserBlockedAsync(string userId);
+        Task BlockUserAsync(string userId);
     }
 }

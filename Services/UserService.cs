@@ -47,5 +47,15 @@ namespace museia.Services
                 UserPosts = posts
             };
         }
+
+        public async Task IsUserBlockedAsync(string userId)
+        {
+            await _userRepository.IsUserBlockedAsync(userId);
+        }
+
+        public async Task BlockUserAsync(string userId)
+        {
+            await _userRepository.BlockUserAsync(userId);
+        }
     }
 }

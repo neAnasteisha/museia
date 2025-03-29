@@ -96,7 +96,25 @@ namespace museia.Controllers
             
             string userId = await _postService.GetUserIdByPostIdAsync(postId);
             userId = userId.ToString();
-            await _userService.DeleteUserAsync(userId);
+            await _userService.BlockUserAsync(userId);
+
+            var usersPosts = await _postService.GetPostsOfUserAsync(userId);
+            foreach (var post in usersPosts)
+            {
+                await _postService.DeletePost(post.PostID);
+            }
+
+            var usersReactions = await _reactionService.GetReactionsByUserIdAsync(userId);
+            foreach (var reaction in usersReactions)
+            {
+                await _reactionService.DeleteReactionAsync(reaction.ReactionID);
+            }
+
+            var usersComplaints = await _complaintService.GetComplaintsByUserIdAsync(userId);
+            foreach (var complaint in usersComplaints)
+            {
+                await _complaintService.DeleteComplaintAsync(complaint.ComplaintID);
+            }
 
             return RedirectToAction("Complaints", "Complaint");
         }

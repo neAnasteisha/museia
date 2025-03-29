@@ -48,33 +48,22 @@
                 .ToListAsync();
         }
 
-        public async Task IncrementWarningCounter(string userId)
+        public async Task<bool> IsUserBlockedAsync(string userId)
+        {
+            return await _context.Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.IsBlocked)
+            .FirstOrDefaultAsync();
+        }
+
+        public async Task BlockUserAsync(string userId)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user != null)
             {
-                var property = typeof(User).GetProperty("CountOfWarnings");
-                if (property != null && property.PropertyType == typeof(int))
-                {
-                    int currentValue = (int)property.GetValue(user);
-                    property.SetValue(user, currentValue + 1);
-                    await _context.SaveChangesAsync();
-                }
+                user.IsBlocked = true;
             }
-        }
-
-        public async Task<int> GetUserWarningCounterByUserId(string userId)
-        {
-            var user = _context.Users.FindAsync(userId);
-            if (user != null)
-            {
-                var property = typeof(User).GetProperty("");
-                if (property != null && property.PropertyType == typeof(int))
-                {
-                    return (int)property.GetValue(user);
-                }
-            }
-            return 0;
+            await _context.SaveChangesAsync();
         }
     }
 }

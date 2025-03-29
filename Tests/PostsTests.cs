@@ -41,7 +41,7 @@
         }
 
         [Fact]
-        public async Task CreatePostAsync_ShouldAddPost_WhenTextIsProvided()
+        public async Task CreatePost_ShouldAddPost_WhenTextIsProvided()
         {
             var (userManagerMock, postService, user) = await CreateTestContext();
 
@@ -61,7 +61,7 @@
         }
 
         [Fact]
-        public async Task CreatePostAsync_ShouldAddPost_WhenPhotoIsProvided()
+        public async Task CreatePost_ShouldAddPost_WhenPhotoIsProvided()
         {
             var (userManagerMock, postService, user) = await CreateTestContext();
 
@@ -81,7 +81,7 @@
         }
 
         [Fact]
-        public async Task CreatePostAsync_ShouldThrowException_WhenPostIsEmpty()
+        public async Task CreatePost_ShouldThrowException_WhenPostIsEmpty()
         {
             var (userManagerMock, postService, user) = await CreateTestContext();
 
@@ -94,7 +94,7 @@
         }
 
         [Fact]
-        public async Task SearchPostsAsync_ShouldReturnPostsByTag_WhenSearchTextStartsWithHash()
+        public async Task GetPostsByTag_ShouldReturnPostsByTag()
         {
             var searchText = "#Поезія";
             var expectedTag = PostTag.Поезія;

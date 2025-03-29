@@ -24,7 +24,7 @@
         }
 
         [Fact]
-        public async Task DeleteUserAsync_ShouldRemoveUser()
+        public async Task DeleteProfile_ShouldRemoveUser()
         {
             var user = new User { UserName = "testuser", Email = "testuser@example.com", Id = Guid.NewGuid().ToString() };
 

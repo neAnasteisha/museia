@@ -91,7 +91,7 @@ namespace museia.Controllers
         }
 
 
-        public async Task<IActionResult> BlockUser(uint complaintId, uint postId)
+        public async Task<IActionResult> BlockUser(uint complaintId, uint postId, string postUserId)
         {
             
             string userId = await _postService.GetUserIdByPostIdAsync(postId);

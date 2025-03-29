@@ -78,7 +78,6 @@ namespace museia.Services
                     UserCountOfWarnings = userWarnings
                 };
             }));
-
             return complaintViewModels.ToList();
         }
 

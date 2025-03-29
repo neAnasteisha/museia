@@ -89,6 +89,7 @@
                                 .Select(c => c.UserID)
                                 .Distinct()
                                 .CountAsync();
+            Console.WriteLine($"111111111111111111111111111111Count: {count}");
 
             return count;
            

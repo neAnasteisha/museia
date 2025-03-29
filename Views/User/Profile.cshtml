@@ -35,12 +35,14 @@
     
 
     <div class="profile-post">
-        <h3 class="post-user">Дописи </h3>
-        @if (Model.UserPosts.Count > 0)
+        @if (Model.UserPosts.Count > 0 && Model.UserPosts.Any(post => !post.IsHidden))
         {
+            <h3 class="post-user">Дописи </h3>
             <ul>
-                @foreach (var post in Model.UserPosts)
+                @foreach (var post in Model.UserPosts.OrderByDescending(p => p.CreatedAt))
                 {
+                    @if (!post.IsHidden)
+                    {
                     <div class="post mb-4 p-3 border rounded">
                         <div class="post-content">
                             <h4>@post.PostText</h4>
@@ -79,15 +81,11 @@
                         </div>
                     </div>
                 }
+                }
             </ul>
-        }
-        else
-        {
-            <p style="margin-left:35px;">Пости не знайдено.</p>
         }
     </div>
 </body>
-</html>
 
 
 

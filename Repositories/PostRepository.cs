@@ -18,6 +18,7 @@
         public async Task<List<Post>> GetAllPostsAsync()
         {
             return await _context.Posts
+                .Where(p => p.IsHidden == false)
                 .Include(p => p.Reactions)
                 .ThenInclude(r => r.User)
                 .OrderByDescending(p => p.CreatedAt)
@@ -63,6 +64,7 @@
         public async Task<List<Post>> GetPostsByTagAsync(PostTag tag)
         {
             return await _context.Posts
+                .Where(p => p.IsHidden == false)
                 .Where(p => p.PostTag == tag)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -71,6 +73,7 @@
         public async Task<List<Post>> SearchPostsByTextAsync(string searchText)
         {
             var allPosts = await _context.Posts
+                .Where(p => p.IsHidden == false)
                 .Where(p => p.PostText != null)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
@@ -110,6 +113,16 @@
         {
             var post = await GetPostByIdAsync(postId);
             return post.UserID.ToString();
+        }
+
+        public async Task MakePostHiddenAsync(uint id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+            if (post != null)
+            {
+                post.IsHidden = true;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 

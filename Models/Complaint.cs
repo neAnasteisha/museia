@@ -15,11 +15,12 @@ namespace museia.Models
         [Key]
         public uint ComplaintID { get; set; }
 
-        [Required]
-        public string UserID { get; set; } 
 
         [Required]
-        public uint PostID { get; set; } 
+        public string UserID { get; set; }
+
+        [Required]
+        public uint PostID { get; set; }
 
         [Required]
         public string ComplaintReason { get; set; }

@@ -97,5 +97,10 @@
         {
             return await _postRepository.GetUserIdByPostIdAsync(postId);
         }
+
+        public async Task MakePostHiddenAsync(uint id)
+        {
+            await _postRepository.MakePostHiddenAsync(id);
+        }
     }
 }

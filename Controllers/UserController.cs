@@ -86,7 +86,7 @@ namespace museia.Controllers
         public async Task<IActionResult> SendWarning(uint complaintId, uint postId, string postsUserId)
         {
             await _complaintService.AcceptComplaint(complaintId);
-            await _postService.DeletePost(postId);
+            await _postService.MakePostHiddenAsync(postId);
             return RedirectToAction("Complaints", "Complaint");
         }
 

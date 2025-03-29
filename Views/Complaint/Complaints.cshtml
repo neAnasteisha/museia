@@ -15,7 +15,7 @@
 <div>
     @foreach (var complaint in Model.AsEnumerable().Reverse())
     {
-        <div class="complaint">
+            <div class="complaint">
             <div class="complaint-content">
                 <p><strong>Користувач:</strong> @complaint.UserName</p>
                 <p><strong>Причина скарги:</strong> @complaint.ComplaintReason</p>
@@ -51,7 +51,7 @@
                 }
                 else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
                 {
-                    @if (complaint.UserCountOfWarnings < 1)
+                    @if (complaint.UserCountOfWarnings < 2)
                     {
                         <form method="post" action="@Url.Action("SendWarning", "User")">
                             <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />

@@ -16,5 +16,6 @@ namespace museia.IRepository
         Task<string> GetUserNicknameForPostAsync(int postId);
         Task<string> GetUserIdByPostIdAsync(uint postId);
         Task<List<Post>> GetPostsByUserId(string userId);
+        Task MakePostHiddenAsync(uint id);
     }
 }

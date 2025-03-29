@@ -29,6 +29,7 @@ namespace museia.Models
         [Required(ErrorMessage = "Date is required")]
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; }
+        public bool IsHidden { get; set; } = false;
 
         [ForeignKey("UserID")]
         public User User { get; set; }

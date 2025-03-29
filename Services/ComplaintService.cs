@@ -58,9 +58,10 @@ namespace museia.Services
             var complaints = await _complaintRepository.GetAllUnconsideredComplaints();
 
             var complaintViewModels = await Task.WhenAll(complaints.Select(async c =>
-            {
+            {            
                 var postUserId = await _postRepository.GetUserIdByPostIdAsync(c.Post.PostID);
                 var userWarnings = await _complaintRepository.GetAcceptedComplaintsCountForUser(postUserId);
+                
 
                 return new ComplaintViewModel
                 {

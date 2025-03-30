@@ -29,15 +29,26 @@ namespace museia.Tests
 
         private async Task<(Mock<UserManager<User>> userManagerMock, PostService postService, User user)> CreateTestContext()
         {
-            var user = new User { UserName = "testuser", Email = "testuser@example.com" };
+            var user = new User { UserName = "testuser", Email = "testuser@example.com", Id = "user-001" };
 
             _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
-
             _userManagerMock.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
             return (_userManagerMock, _postService, user);
+        }
+
+        private Post CreateTestPost(User user, uint postId = 1, string text = "Old description", PostTag tag = PostTag.Поезія, string photo = "/old/photo.jpg")
+        {
+            return new Post
+            {
+                PostID = postId,
+                PostText = text,
+                PostTag = tag,
+                PostPhoto = photo,
+                UserID = user.Id
+            };
         }
 
         [Fact]
@@ -87,7 +98,8 @@ namespace museia.Tests
             var userId = user.Id;
 
             var exception = await Assert.ThrowsAsync<ArgumentException>(
-                () => postService.CreatePostAsync(null, null, PostTag.Музика, userId));
+                () => postService.CreatePostAsync(null, null, PostTag.Музика, userId)
+            );
 
             Assert.Equal("Допис не може бути порожнім.", exception.Message);
         }
@@ -115,18 +127,13 @@ namespace museia.Tests
         [Fact]
         public async Task EditPost_ShouldChangeDescription()
         {
-            var post = new Post
-            {
-                PostID = 1,
-                PostText = "Old description",
-                PostTag = PostTag.Поезія,
-                PostPhoto = "/old/photo.jpg",
-                UserID = "user-123"
-            };
+            var (userManagerMock, postService, user) = await CreateTestContext();
+            var post = CreateTestPost(user, postId: 1, text: "Old description", tag: PostTag.Поезія, photo: "/old/photo.jpg");
+
             _postRepositoryMock.Setup(repo => repo.UpdatePostAsync(post)).Returns(Task.CompletedTask);
 
             post.PostText = "New description";
-            await _postService.UpdatePost(post);
+            await postService.UpdatePost(post);
 
             _postRepositoryMock.Verify(repo => repo.UpdatePostAsync(
                 It.Is<Post>(p => p.PostText == "New description")
@@ -136,18 +143,13 @@ namespace museia.Tests
         [Fact]
         public async Task EditPost_ShouldChangeTag()
         {
-            var post = new Post
-            {
-                PostID = 2,
-                PostText = "Description",
-                PostTag = PostTag.Поезія,
-                PostPhoto = "/photo.jpg",
-                UserID = "user-456"
-            };
+            var (userManagerMock, postService, user) = await CreateTestContext();
+            var post = CreateTestPost(user, postId: 2, text: "Description", tag: PostTag.Поезія, photo: "/photo.jpg");
+
             _postRepositoryMock.Setup(repo => repo.UpdatePostAsync(post)).Returns(Task.CompletedTask);
 
             post.PostTag = PostTag.Музика;
-            await _postService.UpdatePost(post);
+            await postService.UpdatePost(post);
 
             _postRepositoryMock.Verify(repo => repo.UpdatePostAsync(
                 It.Is<Post>(p => p.PostTag == PostTag.Музика)
@@ -157,18 +159,13 @@ namespace museia.Tests
         [Fact]
         public async Task EditPost_ShouldChangePhoto()
         {
-            var post = new Post
-            {
-                PostID = 3,
-                PostText = "Description",
-                PostTag = PostTag.Поезія,
-                PostPhoto = "/old/photo.jpg",
-                UserID = "user-789"
-            };
+            var (userManagerMock, postService, user) = await CreateTestContext();
+            var post = CreateTestPost(user, postId: 3, text: "Description", tag: PostTag.Поезія, photo: "/old/photo.jpg");
+
             _postRepositoryMock.Setup(repo => repo.UpdatePostAsync(post)).Returns(Task.CompletedTask);
 
             post.PostPhoto = "/new/photo.jpg";
-            await _postService.UpdatePost(post);
+            await postService.UpdatePost(post);
 
             _postRepositoryMock.Verify(repo => repo.UpdatePostAsync(
                 It.Is<Post>(p => p.PostPhoto == "/new/photo.jpg")
@@ -178,26 +175,35 @@ namespace museia.Tests
         [Fact]
         public async Task EditPost_ShouldChangeAllFields()
         {
-            var post = new Post
-            {
-                PostID = 4,
-                PostText = "Old description",
-                PostTag = PostTag.Поезія,
-                PostPhoto = "/old/photo.jpg",
-                UserID = "user-000"
-            };
+            var (userManagerMock, postService, user) = await CreateTestContext();
+            var post = CreateTestPost(user, postId: 4, text: "Old description", tag: PostTag.Поезія, photo: "/old/photo.jpg");
+
             _postRepositoryMock.Setup(repo => repo.UpdatePostAsync(post)).Returns(Task.CompletedTask);
 
             post.PostText = "New description";
             post.PostTag = PostTag.Музика;
             post.PostPhoto = "/new/photo.jpg";
-            await _postService.UpdatePost(post);
+            await postService.UpdatePost(post);
 
             _postRepositoryMock.Verify(repo => repo.UpdatePostAsync(
                 It.Is<Post>(p => p.PostText == "New description" &&
                                    p.PostTag == PostTag.Музика &&
                                    p.PostPhoto == "/new/photo.jpg")
             ), Times.Once);
+        }
+
+        [Fact]
+        public async Task EditPost_ShouldThrowException_WhenBothTextAndPhotoEmpty()
+        {
+            var (userManagerMock, postService, user) = await CreateTestContext();
+
+            var post = CreateTestPost(user, postId: 5, text: "Тестовий почт", tag: PostTag.Поезія, photo: "/old/photo.jpg");
+
+            post.PostText = "";
+            post.PostPhoto = null;
+
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => postService.UpdatePost(post));
+            Assert.Equal("Пост не може бути порожнім.", exception.Message);
         }
     }
 }

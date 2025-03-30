@@ -52,6 +52,11 @@
 
         public async Task UpdatePost(Post post)
         {
+            if (string.IsNullOrWhiteSpace(post.PostText) && string.IsNullOrEmpty(post.PostPhoto))
+            {
+                throw new ArgumentException("Пост не може бути порожнім.");
+            }
+
             await _postRepository.UpdatePostAsync(post);
         }
 

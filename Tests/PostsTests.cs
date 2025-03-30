@@ -205,5 +205,70 @@ namespace museia.Tests
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => postService.UpdatePost(post));
             Assert.Equal("Пост не може бути порожнім.", exception.Message);
         }
+
+
+        // тест пошуку існуючого допису
+
+        [Fact]
+        public async Task GetPostById_ShouldReturnPost_WhenFound()
+        {
+            uint postId = 1;
+            var testUser = new User { Id = "user-001", UserName = "Test" };
+            var expectedPost = new Post
+            {
+                PostID = postId,
+                PostText = "Test post",
+                PostTag = PostTag.Поезія,
+                UserID = testUser.Id
+            };
+
+            _postRepositoryMock
+                .Setup(repo => repo.GetPostByIdAsync(postId))
+                .ReturnsAsync(expectedPost);
+
+            var result = await _postService.GetPostById(postId);
+
+            Assert.NotNull(result);
+            Assert.Equal(expectedPost.PostID, result.PostID);
+            Assert.Equal(expectedPost.PostText, result.PostText);
+            Assert.Equal(expectedPost.PostTag, result.PostTag);
+            Assert.Equal(expectedPost.UserID, result.UserID);
+        }
+
+        // тест пошуку неіснуючого допису
+
+        [Fact]
+        public async Task GetPostById_ShouldReturnNull_WhenNotFound()
+        {
+            uint postId = 999;
+            _postRepositoryMock.Setup(repo => repo.GetPostByIdAsync(postId)).ReturnsAsync((Post)null);
+
+            var result = await _postService.GetPostById(postId);
+
+            Assert.Null(result);
+        }
+
+        // тест видалення допису
+        [Fact]
+        public async Task DeletePost_ShouldRemovePost_WhenPostExists()
+        {
+            uint postId = 1;
+            var testUser = new User { Id = "user-001", UserName = "Test" };
+            var post = new Post
+            {
+                PostID = postId,
+                PostText = "Test post",
+                PostTag = PostTag.Поезія,
+                UserID = testUser.Id
+            };
+
+            _postRepositoryMock.Setup(repo => repo.GetPostByIdAsync(postId)).ReturnsAsync(post);
+
+            _postRepositoryMock.Setup(repo => repo.DeletePostAsync(postId)).Returns(Task.CompletedTask);
+
+            await _postService.DeletePost(postId);
+
+            _postRepositoryMock.Verify(repo => repo.DeletePostAsync(postId), Times.Once);
+        }
     }
 }

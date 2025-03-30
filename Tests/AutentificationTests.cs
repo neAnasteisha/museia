@@ -5,6 +5,7 @@ using Moq;
 using museia.Controllers;
 using museia.Models;
 using Xunit;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace museia.Tests
 {
@@ -104,6 +105,51 @@ namespace museia.Tests
 
             _mockUserManager.Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once);
             _mockSignInManager.Verify(sm => sm.SignInAsync(It.IsAny<User>(), false, null), Times.Once);
+        }
+
+
+
+
+        // тест входу за існуючими даними користувача
+
+        [Fact]
+        public async Task Login_ShouldLogInAndRedirectToHome_WhenCredentialsAreCorrect()
+        {
+            var user = new User
+            {
+                Email = "supermario@mail.com"
+            };
+
+            _mockUserManager.Setup(u => u.FindByEmailAsync(user.Email))
+                            .ReturnsAsync(user);
+            _mockSignInManager.Setup(s => s.PasswordSignInAsync(user, "password", false, false))
+                              .ReturnsAsync(SignInResult.Success);
+
+            var result = await _accountController.Login(user.Email, "password") as RedirectToActionResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Post", result.ControllerName);
+        }
+
+        // тест входу за неіснуючими даними користувача
+        [Fact]
+        public async Task Login_ShouldReturnError_WhenCredentialsAreIncorrect()
+        {
+            var email = "unrealuser@e.mail";
+            var password = "wrongpassword";
+
+            _mockUserManager.Setup(u => u.FindByEmailAsync(email))
+                            .ReturnsAsync((User)null);
+
+            _mockSignInManager.Setup(s => s.PasswordSignInAsync(It.IsAny<User>(), password, false, false))
+                              .ReturnsAsync(SignInResult.Failed);
+
+            var result = await _accountController.Login(email, password) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.False(result.ViewData.ModelState.IsValid);
+            Assert.Contains("", result.ViewData.ModelState.Keys);
         }
     }
 }

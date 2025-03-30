@@ -65,5 +65,17 @@ namespace museia.Tests
             _mockUserManager.Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once);
             _mockSignInManager.Verify(sm => sm.SignInAsync(It.IsAny<User>(), false, null), Times.Once);
         }
+
+        [Fact]
+        public async Task Logout_ShouldSignOutAndRedirectToLogin()
+        {
+            _mockSignInManager.Setup(s => s.SignOutAsync()).Returns(Task.CompletedTask);
+
+            var result = await _accountController.Logout();
+
+            _mockSignInManager.Verify(s => s.SignOutAsync(), Times.Once);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+        }
     }
 }

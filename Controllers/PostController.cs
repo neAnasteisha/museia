@@ -142,6 +142,14 @@ namespace museia.Controllers
                 return View(model);
             }
 
+            // Якщо і опис, і фото не заповнені, додаємо помилку в ModelState
+            if (string.IsNullOrWhiteSpace(model.PostText) && model.PostPhoto == null)
+            {
+                ModelState.AddModelError("", "Ви повинні заповнити принаймні одне з полів: опис або фото.");
+                ViewBag.PostTags = _postService.GetPostTags();
+                return View(model);
+            }
+
             var post = await _postService.GetPostById(model.PostID);
             if (post == null || post.UserID != _userManager.GetUserId(User))
             {
@@ -197,6 +205,7 @@ namespace museia.Controllers
             }
         }
 
-        
+
+
     }
 }

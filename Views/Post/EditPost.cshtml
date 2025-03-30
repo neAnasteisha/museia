@@ -38,3 +38,11 @@
     <button type="submit" class="btn btn-primary">Зберегти</button>
     <a asp-action="Profile" asp-controller="User" class="btn btn-secondary">Скасувати</a>
 </form>
+
+@* Якщо ModelState містить помилку для незаповненого поля (з ключем ""), відобразимо повідомлення *@
+@if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+{
+    <p class="text-danger mt-2">
+        @ViewData.ModelState[string.Empty].Errors[0].ErrorMessage
+    </p>
+}

@@ -77,5 +77,33 @@ namespace museia.Tests
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Login", redirectResult.ActionName);
         }
+
+        // Тест для перевірки реєстрації користувача з автоматичним погодженням правил
+        [Fact]
+        public async Task Register_ShouldProceed_WhenUserRegistersAndRulesAreAutomaticallyAccepted()
+        {
+            // Arrange
+            string email = "newuser@example.com";
+
+            _mockUserManager.Setup(u => u.FindByEmailAsync(It.IsAny<string>()))
+                            .ReturnsAsync((User)null);
+
+            _mockUserManager.Setup(u => u.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                            .ReturnsAsync(IdentityResult.Success);
+
+            _mockSignInManager.Setup(s => s.SignInAsync(It.IsAny<User>(), false, null))
+                              .Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _accountController.Register("username", email, "Password123!", null) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Post", result.ControllerName);
+
+            _mockUserManager.Verify(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()), Times.Once);
+            _mockSignInManager.Verify(sm => sm.SignInAsync(It.IsAny<User>(), false, null), Times.Once);
+        }
     }
 }

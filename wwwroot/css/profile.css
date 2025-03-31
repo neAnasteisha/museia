@@ -1,9 +1,9 @@
-﻿.profile-username {
+﻿/*.profile-username {
     padding-left: 200px;
     padding-top: 60px;
     padding-bottom: 0px;
 }
-
+*/
 .profile-email {
     margin-top: -80px;
     padding-left: 200px;
@@ -13,23 +13,31 @@
 
 }
 
+.profile-flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .post-actions-btn .hover{
     color:red;
 }
 
-.profile-header{
-    width:1269px;
-    height:250px;
-    background-color:white;
-    border:1px solid white;
-    box-shadow:0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius:.25rem;
-    margin-left:30px;
+.profile-header {
+    display: flex;
+    width: 70vw;
+    height: 250px;
+    background-color: white;
+    border: 1px solid white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: .25rem;
+    align-items: center;
+    justify-content: flex-start;
 }
-.post-user{
+/*.post-user{
     padding-left:35px;
 
-}
+}*/
 
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {

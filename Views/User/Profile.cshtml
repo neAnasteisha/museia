@@ -18,14 +18,14 @@
 </head>
 <body>
 
-    <div class="profile-header">
+    <div class="profile-header" style="margin-left: 5.5vw;">
         <div>
-            <h3 class="profile-username">@Model.User.UserName</h3>
-            <img src="@userAvatar" alt="Profile Photo" style="width: 125px; height: 125px; border-radius: 50%; margin-top: -35px; margin-left:50px;" />
-            <p class="profile-email"><strong>Email:</strong> @Model.User.Email</p>
+            <h3 class="profile-username" style="padding-left:16vw;">@Model.User.UserName</h3>
+            <img src="@userAvatar" alt="Profile Photo" style="width: 10vw; height: 10vw; border-radius: 50%; margin-top: -35px; margin-left:50px;" />
+            <p class="profile-email" style="padding-left:16vw;"><strong>Email:</strong> @Model.User.Email</p>
             @if (!string.IsNullOrEmpty(Model.User.UserDescription))
             {
-                <p style="padding-left: 200px; margin-top:-20px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
+                <p style="padding-left:16vw; margin-top:-20px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
             }
         </div>
     </div>
@@ -33,59 +33,68 @@
     <div class="profile-post">
         @if (Model.UserPosts.Count > 0 && Model.UserPosts.Any(post => !post.IsHidden))
         {
-            <h3 class="post-user">Дописи </h3>
-            <ul>
+            <h3 class="" style="margin-left: 5.5vw;">Дописи</h3>
+            <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column;">
                 @foreach (var post in Model.UserPosts.OrderByDescending(p => p.CreatedAt))
                 {
                     @if (!post.IsHidden)
                     {
-                        <div class="post mb-4 p-3 border rounded">
-                            <div class="post-content">
-                                <h4>@post.PostText</h4>
-                                <p><strong>#</strong> @post.PostTag</p>
-                                <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
-                                @* Якщо допис відредаговано, відобразити дату редагування *@
-                                @if (post.EditedAt.HasValue)
+                        <div class="post mb-4 p-3 border" style="height: fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
+                            <div class=" mb-2" style="display:flex; flex-direction: row; gap: 2vw; align-items: flex-start; justify-content: flex-start;">
+                                @if (!string.IsNullOrEmpty(post.PostPhoto))
                                 {
-                                    <p class="text-muted" style="font-size:0.8em; margin-top:0.5em;">
-                                        Відредаговано: @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
-                                    </p>
+                                    <div class="post-image">
+                                        <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height: 21vw;" />
+                                    </div>
                                 }
-                            </div>
-
-                            @if (!string.IsNullOrEmpty(post.PostPhoto))
-                            {
-                                <div class="post-image">
-                                    <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
-                                </div>
-                            }
-
-                            <div class="post-reactions">
-                                @if (post.Reactions != null && post.Reactions.Count > 0)
-                                {
-                                    <ul>
-                                        @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
+                                <div style="display: flex; flex-direction: column; gap: 2vw; height: fit-content; max-height: 20vw;">
+                                    <!-- Оскільки це профіль користувача, відображається його ім'я без посилання -->
+                                    <a class="nickname" style="color: black;">@Model.User.UserName</a>
+                                    <div class="post-content">
+                                        <h4 class="post-text">@post.PostText</h4>
+                                        <div class="post-meta">
+                                            <span class="post-tag"><strong>#</strong> @post.PostTag</span>
+                                            <span class="post-date">@post.CreatedAt.ToString("yyyy.MM.dd")</span>
+                                        </div>
+                                    </div>
+                                    @if (post.Reactions != null && post.Reactions.Count > 0)
+                                    {
+                                        <div class="post-reactions">
+                                            <ul style="display: flex; flex-direction: row; gap: 0.5vw;">
+                                                @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
+                                                {
+                                                    <li style="list-style: none; padding: 0; margin: 0;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    }
+                                    <div class="post-actions">
+                                        @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
                                         {
-                                            <li>@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                            <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
+                                            <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })" style="display:inline;">
+                                                <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
+                                            </form>
                                         }
-                                    </ul>
-                                }
-                            </div>
-
-                            <div class="post-actions">
-                                @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
-                                {
-                                    <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
-
-                                    <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })">
-                                        <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
-                                    </form>
-                                }
+                                    </div>
+                                    @if (post.EditedAt.HasValue)
+                                    {
+                                        <p class="text-muted" style="font-size: 0.8em; margin-top: 0.5em;">
+                                            Відредаговано @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
+                                        </p>
+                                    }
+                                </div>
                             </div>
                         </div>
                     }
                 }
-            </ul>
+            </div>
+        }
+        else
+        {
+            <div>
+                <h4>Нічого не вдалось знайти :(</h4>
+            </div>
         }
     </div>
 </body>

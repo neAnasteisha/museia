@@ -83,7 +83,7 @@ namespace museia.Tests
         [Fact]
         public async Task Register_ShouldProceed_WhenUserRegistersAndRulesAreAutomaticallyAccepted()
         {
-            // Arrange
+            
             string email = "newuser@example.com";
 
             _mockUserManager.Setup(u => u.FindByEmailAsync(It.IsAny<string>()))
@@ -95,10 +95,10 @@ namespace museia.Tests
             _mockSignInManager.Setup(s => s.SignInAsync(It.IsAny<User>(), false, null))
                               .Returns(Task.CompletedTask);
 
-            // Act
+            
             var result = await _accountController.Register("username", email, "Password123!", null) as RedirectToActionResult;
 
-            // Assert
+           
             Assert.NotNull(result);
             Assert.Equal("Index", result.ActionName);
             Assert.Equal("Post", result.ControllerName);

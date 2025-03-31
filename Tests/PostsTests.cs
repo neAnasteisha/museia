@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using museia.IRepository;
+using museia.IService;
 using museia.Models;
 using museia.Services;
 using Xunit;
@@ -270,5 +271,51 @@ namespace museia.Tests
 
             _postRepositoryMock.Verify(repo => repo.DeletePostAsync(postId), Times.Once);
         }
+        public class ComplaintsTests
+        {
+            private readonly Mock<IComplaintService> _complaintServiceMock;
+            private readonly Mock<IPostRepository> _postRepositoryMock;
+            private readonly Mock<UserManager<User>> _userManagerMock;
+
+            public ComplaintsTests()
+            {
+                _complaintServiceMock = new Mock<IComplaintService>();
+                _postRepositoryMock = new Mock<IPostRepository>();
+                _userManagerMock = new Mock<UserManager<User>>(
+                    new Mock<IUserStore<User>>().Object,
+                    null, null, null, null, null, null, null, null
+                );
+            }
+
+            [Fact]
+            public async Task CreateComplaint_ShouldAddComplaint_WhenValidDataProvided()
+            {
+                uint postId = 1;
+                var userId = "user-001";
+                var reason = "This post contains inappropriate content";
+                var complaint = new Complaint
+                {
+                    ComplaintID = 1,
+                    PostID = postId,
+                    UserID = userId,
+                    ComplaintReason = reason,
+                    ComplaintStatus = ComplaintStatus.Sent,
+                    IsAcknowledged = false
+                };
+
+                _complaintServiceMock.Setup(service => service.CreateComplaintAsync(reason, userId, postId))
+                    .Returns(Task.CompletedTask);
+
+                await _complaintServiceMock.Object.CreateComplaintAsync(reason, userId, postId);
+
+                
+                _complaintServiceMock.Verify(service => service.CreateComplaintAsync(
+                    It.Is<string>(r => r == reason),
+                    It.Is<string>(u => u == userId),
+                    It.Is<uint>(p => p == postId)
+                ), Times.Once);
+            }
+        }
+
     }
 }

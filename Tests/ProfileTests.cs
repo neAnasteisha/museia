@@ -96,7 +96,6 @@
         [Fact]
         public async Task EditProfile_ShouldUpdateUser()
         {
-            // Arrange
             var userId = "123";
             var user = new User { Id = userId, UserName = "OldName", UserDescription = "OldDescription", UserAvatar = "old.png" };
             var model = new EditProfileViewModel { Username = "NewName", Description = "NewDescription", AvatarUrl = "new.png" };
@@ -107,14 +106,12 @@
             _mockUserRepository.Setup(repo => repo.UpdateUserAsync(It.IsAny<User>()))
                                .Returns(Task.CompletedTask);
 
-            // Act
             user.UserName = model.Username;
             user.UserDescription = model.Description;
             user.UserAvatar = model.AvatarUrl;
 
             await _userService.UpdateUserAsync(user);
 
-            // Assert
             _mockUserRepository.Verify(repo => repo.UpdateUserAsync(It.Is<User>(u =>
                 u.UserName == model.Username &&
                 u.UserDescription == model.Description &&

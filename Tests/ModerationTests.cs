@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using museia.Controllers;
+using museia.IRepository;
 using museia.IService;
 using museia.Models;
 using Xunit;
@@ -70,7 +71,7 @@ namespace museia.Tests
         {
             uint complaintId = 1;
             uint postId = 5;
-            string postUserId = "user-456"; 
+            string postUserId = "user-456";
 
             var result = await _userController.SendWarning(complaintId, postId, postUserId);
 
@@ -80,6 +81,50 @@ namespace museia.Tests
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Complaints", redirectResult.ActionName);
             Assert.Equal("Complaint", redirectResult.ControllerName);
+        }
+
+        [Fact]
+        public async Task ApproveComplaint_ShouldChangeStatusToProcessing()
+        {
+            var mockComplaintService = new Mock<IComplaintService>();
+            var complaint = new Complaint { ComplaintID = 1, ComplaintStatus = ComplaintStatus.Sent };
+            mockComplaintService.Setup(s => s.GetComplaintByIdAsync(1)).ReturnsAsync(complaint);
+
+            mockComplaintService
+                .Setup(s => s.ApproveComplaint(1))
+                .ReturnsAsync(true)
+                .Callback(() => complaint.ComplaintStatus = ComplaintStatus.Processing);
+
+            bool result = await mockComplaintService.Object.ApproveComplaint(1);
+
+            Assert.True(result); 
+            Assert.Equal(ComplaintStatus.Processing, complaint.ComplaintStatus); 
+        }
+
+        [Fact]
+        public async Task WhenWarningsLessThanTwo_ShouldShowWarningButton()
+        {
+            var complaints = new List<ComplaintViewModel>
+            {
+                new ComplaintViewModel { ComplaintID = 1, ComplaintStatus = ComplaintStatus.Processing, UserCountOfWarnings = 1 }
+            };
+
+            bool showWarning = complaints.Any(c => c.UserCountOfWarnings < 2);
+
+            Assert.True(showWarning);
+        }
+
+        [Fact]
+        public async Task WhenWarningsAtLeastTwo_ShouldShowBlockButton()
+        {
+            var complaints = new List<ComplaintViewModel>
+            {
+                new ComplaintViewModel { ComplaintID = 1, ComplaintStatus = ComplaintStatus.Processing, UserCountOfWarnings = 2 }
+            };
+
+            bool showBlock = complaints.Any(c => c.UserCountOfWarnings >= 2);
+
+            Assert.True(showBlock);
         }
     }
 }

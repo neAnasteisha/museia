@@ -142,7 +142,6 @@ namespace museia.Controllers
                 return View(model);
             }
 
-            // Якщо і опис, і фото не заповнені, додаємо помилку в ModelState
             if (string.IsNullOrWhiteSpace(model.PostText) && model.PostPhoto == null)
             {
                 ModelState.AddModelError("", "Ви повинні заповнити принаймні одне з полів: опис або фото.");
@@ -164,7 +163,6 @@ namespace museia.Controllers
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/posts", post.UserID);
                 Directory.CreateDirectory(uploadsFolder);
 
-                // Видалення старого фото
                 if (!string.IsNullOrEmpty(post.PostPhoto))
                 {
                     string oldImagePath = Path.Combine("wwwroot", post.PostPhoto.TrimStart('/'));
@@ -184,6 +182,8 @@ namespace museia.Controllers
 
                 post.PostPhoto = $"/uploads/posts/{post.UserID}/{uniqueFileName}";
             }
+
+            post.EditedAt = DateTime.Now;
 
             await _postService.UpdatePost(post);
             return RedirectToAction("Profile", "User");

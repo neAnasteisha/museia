@@ -13,26 +13,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - museia</title>
-    <link rel="stylesheet" href="~/css/profile.css"/>
-    <link rel="stylesheet" href="~/css/post.css"/>
+    <link rel="stylesheet" href="~/css/profile.css" />
+    <link rel="stylesheet" href="~/css/post.css" />
 </head>
 <body>
 
     <div class="profile-header">
-        @* h2 style="margin-left:35px; padding-top:20px;">@ViewData["Title"]</h2> *@
-
         <div>
             <h3 class="profile-username">@Model.User.UserName</h3>
-            <img src="@userAvatar" alt="Profile Photo" style="width: 125px; height: 125px; border-radius: 50%; margin-top: -35px; margin-left:50px; " />
+            <img src="@userAvatar" alt="Profile Photo" style="width: 125px; height: 125px; border-radius: 50%; margin-top: -35px; margin-left:50px;" />
             <p class="profile-email"><strong>Email:</strong> @Model.User.Email</p>
             @if (!string.IsNullOrEmpty(Model.User.UserDescription))
             {
                 <p style="padding-left: 200px; margin-top:-20px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
             }
-
         </div>
     </div>
-    
 
     <div class="profile-post">
         @if (Model.UserPosts.Count > 0 && Model.UserPosts.Any(post => !post.IsHidden))
@@ -43,52 +39,56 @@
                 {
                     @if (!post.IsHidden)
                     {
-                    <div class="post mb-4 p-3 border rounded">
-                        <div class="post-content">
-                            <h4>@post.PostText</h4>
-                            <p><strong>#</strong> @post.PostTag</p>
-                            <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
-                        </div>
-
-                        @if (!string.IsNullOrEmpty(post.PostPhoto))
-                        {
-                            <div class="post-image">
-                                <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
+                        <div class="post mb-4 p-3 border rounded">
+                            <div class="post-content">
+                                <h4>@post.PostText</h4>
+                                <p><strong>#</strong> @post.PostTag</p>
+                                <p><strong>Дата публікації:</strong> @post.CreatedAt.ToString("yyyy-MM-dd")</p>
+                                @* Якщо допис відредаговано, відобразити дату редагування *@
+                                @if (post.EditedAt.HasValue)
+                                {
+                                    <p class="text-muted" style="font-size:0.8em; margin-top:0.5em;">
+                                        Відредаговано: @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
+                                    </p>
+                                }
                             </div>
-                        }
 
-                        <div class="post-reactions">
-                            @if (post.Reactions != null && post.Reactions.Count > 0)
+                            @if (!string.IsNullOrEmpty(post.PostPhoto))
                             {
-                                <ul>
-                                    @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
-                                    {
-                                        <li>@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
-                                    }
-                                </ul>
+                                <div class="post-image">
+                                    <img src="@post.PostPhoto" alt="Фото допису" style="max-width: 300px; max-height: 300px; border-radius: 10px;" />
+                                </div>
                             }
-                        </div>
 
-                        <div class="post-actions">
-                            @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
-                            {
-                                <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
+                            <div class="post-reactions">
+                                @if (post.Reactions != null && post.Reactions.Count > 0)
+                                {
+                                    <ul>
+                                        @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
+                                        {
+                                            <li>@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
 
-                                <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })">
-                                    <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
-                                </form>
-                            }
+                            <div class="post-actions">
+                                @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
+                                {
+                                    <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
+
+                                    <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })">
+                                        <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
+                                    </form>
+                                }
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
                 }
             </ul>
         }
     </div>
 </body>
-
-
-
 
 @functions {
     private string GetEmoji(Emoji reactionType)

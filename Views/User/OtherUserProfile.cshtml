@@ -80,6 +80,17 @@
                             </a>
                         }
                     </div>
+
+                        <div class="post-actions">
+                            @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
+                            {
+                                <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
+
+                                <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })">
+                                    <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
+                                </form>
+                            }
+                        </div>
                 </div>
                 }
             }

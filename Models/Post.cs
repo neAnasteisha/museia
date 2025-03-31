@@ -30,6 +30,7 @@ namespace museia.Models
         [DataType(DataType.Date)]
         public DateTime CreatedAt { get; set; }
         public bool IsHidden { get; set; } = false;
+        public DateTime? EditedAt { get; set; }
 
         [ForeignKey("UserID")]
         public User User { get; set; }

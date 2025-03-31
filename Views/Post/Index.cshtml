@@ -23,40 +23,37 @@
 </head>
 <body>
 
-    <form method="get" asp-action="Index" class="m-3" style=" padding-left:4.3vw;">
-        <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 20vw; color:#959ab1"  />
+    <form method="get" asp-action="Index" class="m-3" style="padding-left:4.3vw;">
+        <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 20vw; color:#959ab1" />
     </form>
 
-    <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column; ">
-
+    <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column;">
         @if (Model.Count != 0)
         {
             foreach (var post in Model)
             {
-                <div class="post mb-4 p-3 border " style="height:fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
+                <div class="post mb-4 p-3 border" style="height:fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
                     <div class="post-user mb-2" style="display:flex; flex-direction:row; gap:2vw; align-items: flex-start; justify-content: flex-start;">
                         @if (!string.IsNullOrEmpty(post.PostPhoto))
                         {
                             <div class="post-image">
-                                <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height:21vw; " />
+                                <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height:21vw;" />
                             </div>
                         }
                         <div style="display:flex; flex-direction:column; gap:2vw; height: fit-content; max-height:20vw;">
-                        @{
-                            var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
-                        }
-                        @if (post.UserID == currentUserId)
-                        {
-                            <a class="nickname" style="color: black;">
-                            @nickname
-                            </a>
-                        }
-                        else
-                        {
-                                <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link nickname" style="">
-                                @nickname
-                            </a>
-                        }
+                            @{
+                                var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
+                            }
+                            @if (post.UserID == currentUserId)
+                            {
+                                <a class="nickname" style="color: black;">@nickname</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link nickname">
+                                    @nickname
+                                </a>
+                            }
                             <div class="post-content">
                                 <h4 class="post-text">@post.PostText</h4>
                                 <div class="post-meta">
@@ -65,34 +62,38 @@
                                 </div>
                             </div>
 
-
-                            
-                                @if (post.Reactions != null && post.Reactions.Count > 0)
-                           {
+                            @if (post.Reactions != null && post.Reactions.Count > 0)
+                            {
                                 <div class="post-reactions">
                                     <ul style="display:flex; flex-direction:row; gap:0.5vw;">
                                         @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
                                         {
-                                            <li style="list-style:none; padding:0vw; margin:0vw;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
+                                            <li style="list-style:none; padding:0; margin:0;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
                                         }
                                     </ul>
-
                                 </div>
+                            }
 
-                                }
                             <div class="post-actions">
                                 @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
                                 {
-                                    <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0vw;">Поскаржитись</a>
+                                    <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">Поскаржитись</a>
 
                                     var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
                                     var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
 
-                                    <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post" style="padding:0vw;">
+                                    <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post" style="padding:0;">
                                         @reactionLabel (@post.Reactions?.Count)
                                     </a>
                                 }
                             </div>
+
+                            @if (post.EditedAt.HasValue)
+                            {
+                                <p class="text-muted" style="font-size:0.8em; margin-top:0.5em;">
+                                    Відредаговано @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
+                                </p>
+                            }
                         </div>
                     </div>
                 </div>

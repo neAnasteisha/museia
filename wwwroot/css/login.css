@@ -36,10 +36,10 @@ h2 {
     margin-bottom: 12px;
 }
 
-/*.btn-primary {
+.navbar .btn-primary {
     display: none;
 }
-*/
+
 
 .btn-primary.w-100 {
     background-color: #5a506a;

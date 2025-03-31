@@ -56,11 +56,9 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
             font-weight: bold;
         }
 
-
-.btn-primary {
+.navbar .btn-primary {
     display: none;
 }
-
 
 
 .btn-success.w-100 {

@@ -107,11 +107,6 @@ namespace museia.Tests
             _mockSignInManager.Verify(sm => sm.SignInAsync(It.IsAny<User>(), false, null), Times.Once);
         }
 
-
-
-
-        // тест входу за існуючими даними користувача
-
         [Fact]
         public async Task Login_ShouldLogInAndRedirectToHome_WhenCredentialsAreCorrect()
         {
@@ -132,7 +127,6 @@ namespace museia.Tests
             Assert.Equal("Post", result.ControllerName);
         }
 
-        // тест входу за неіснуючими даними користувача
         [Fact]
         public async Task Login_ShouldReturnError_WhenCredentialsAreIncorrect()
         {

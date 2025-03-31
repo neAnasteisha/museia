@@ -58,6 +58,10 @@ h2 {
         color: white;
     }
 
+.btn-primary {
+    display: none;
+}
+
 
 
 .text-center.mt-3 {

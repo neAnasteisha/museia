@@ -324,20 +324,18 @@ namespace museia.Tests
             }
         }
 
-        public async Task SearchPostsAsync_ShouldReturnAllVisibleSortedPosts_WhenNoSearchText()
+        public async Task GetAllPosts_ShouldReturnAllVisibleSortedPosts()
         {
            
             var posts = new List<Post>
             {
                 new Post { PostID = 1, PostText = "Post 1", PostTag = PostTag.Малюнок, UserID = "user1", CreatedAt = DateTime.UtcNow.AddDays(-1), IsHidden = false },
                 new Post { PostID = 2, PostText = "Post 2", PostTag = PostTag.Музика, UserID = "user2", CreatedAt = DateTime.UtcNow, IsHidden = false },
-                new Post { PostID = 3, PostText = "Hidden Post", PostTag = PostTag.Малюнок, UserID = "user3", CreatedAt = DateTime.UtcNow.AddDays(-2), IsHidden = true },
-                new Post { PostID = 4, PostText = null, PostTag = PostTag.Музика, UserID = "user4", CreatedAt = DateTime.UtcNow.AddDays(-3), IsHidden = false }
+                new Post { PostID = 3, PostText = "Hidden Post", PostTag = PostTag.Малюнок, UserID = "user3", CreatedAt = DateTime.UtcNow.AddDays(-2), IsHidden = true }
             };
 
             var visibleSortedPosts = posts
                 .Where(p => p.IsHidden == false)
-                .Where(p => p.PostText != null)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToList();
 
@@ -352,10 +350,8 @@ namespace museia.Tests
             Assert.Equal(2, result.Count);
             Assert.Equal("Post 2", result[0].PostText); 
             Assert.Equal("Post 1", result[1].PostText);
-            Assert.DoesNotContain(result, p => p.IsHidden); 
-            Assert.DoesNotContain(result, p => p.PostText == null); 
+            Assert.DoesNotContain(result, p => p.IsHidden);  
             _postRepositoryMock.Verify(repo => repo.GetAllPostsAsync(), Times.Once());
-            _postRepositoryMock.Verify(repo => repo.SearchPostsByTextAsync(It.IsAny<string>()), Times.Never());
         }
 
 

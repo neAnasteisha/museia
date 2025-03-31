@@ -40,7 +40,7 @@
 .btn-edit-post {
     width: 10vw;
     background-color: #5a506a;
-    border-color: #b3c7c9;
+    border-color: #0e0514;
     color: white;
 }
     .btn-edit-post:hover {
@@ -65,15 +65,15 @@
     .btn-delete-post:hover {
         background-color: #5a506a;
         border-color: #b3c7c9;
-        border-width: 0.25vw;
+        /*  border-width: 0.25vw;*/
         color: white;
     }
 
-/*    .btn-delete-post:focus, .btn-delete-post:active:focus {
+    .btn-delete-post:focus, .btn-delete-post:active:focus {
         background-color: #5a506a;
         border-color: #b3c7c9;
         color: white;
-}*/
+    }
 
 
 body {

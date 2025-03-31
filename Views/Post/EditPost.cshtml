@@ -4,6 +4,17 @@
     ViewData["Title"] = "Редагування допису";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - museia</title>
+    <link rel="stylesheet" href="~/css/edit.css" />
+    <style>.navbar .btn-success.me-2 { display: none; }</style>
+</head>
+<body>
+
 <h2>Редагування допису</h2>
 
 <form asp-action="EditPost" method="post" enctype="multipart/form-data">
@@ -25,7 +36,7 @@
         <label>Поточне зображення:</label>
         @if (!string.IsNullOrEmpty(Model.PostPhotoUrl))
         {
-            <img src="@Model.PostPhotoUrl" alt="Фото допису" style="max-width: 200px; display: block;" />
+                <img src="@Model.PostPhotoUrl" alt="Фото допису" style="max-width: 200px; display: block; margin-bottom: 12px;" />
         }
     </div>
 
@@ -35,9 +46,13 @@
         <span asp-validation-for="PostPhoto" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Зберегти</button>
-    <a asp-action="Profile" asp-controller="User" class="btn btn-secondary">Скасувати</a>
+    <button type="submit" class="btn btn-save-changes">Зберегти</button>
+    <a asp-action="Profile" asp-controller="User" class="btn btn-cancel-changes">Скасувати</a>
 </form>
+
+</body>
+</html>
+
 
 @* Якщо ModelState містить помилку для незаповненого поля (з ключем ""), відобразимо повідомлення *@
 @if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)

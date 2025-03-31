@@ -53,13 +53,13 @@ h2 {
 
     .btn-primary.w-100:hover {
         background-color: #5a506a;
-        border-color: #0e0514;
+        border-color: #b3c7c9;
         color: white;
     }
 
     .btn-primary.w-100:focus, .btn-primary.w-100:active:focus {
         background-color: #5a506a;
-        border-color: #0e0514;
+        border-color: #b3c7c9;
         color: white;
     }
 

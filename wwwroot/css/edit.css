@@ -16,6 +16,7 @@ h2 {
     border: 1px solid #0e0514;
     border-radius: 4px;
     width: 450px;
+    margin-bottom: 12px;
 }
 
 
@@ -42,6 +43,65 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     line-height: 2vw;
     
 }
+
+.btn-save-changes {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+    margin-right: 7px;
+    margin-top: 6px;
+}
+
+    .btn-save-changes:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-save-changes:focus, .save-changes:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+.btn-cancel-changes {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+    margin-right: 7px;
+    margin-top: 6px;
+}
+
+    .btn-cancel-changes:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-cancel-changes:focus, .btn-cancel-changes:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+
+.btn-primary {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-primary:focus, .btn-primary:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
 
 
 

@@ -36,6 +36,11 @@ h2 {
     margin-bottom: 12px;
 }
 
+/*.btn-primary {
+    display: none;
+}
+*/
+
 .btn-primary.w-100 {
     background-color: #5a506a;
     border-color: #0e0514;
@@ -57,10 +62,6 @@ h2 {
         border-color: #0e0514;
         color: white;
     }
-
-.btn-primary {
-    display: none;
-}
 
 
 

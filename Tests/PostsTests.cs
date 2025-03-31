@@ -17,6 +17,9 @@ namespace museia.Tests
         private readonly Mock<IPostRepository> _postRepositoryMock;
         private readonly Mock<UserManager<User>> _userManagerMock;
         private readonly PostService _postService;
+        private readonly Mock<IReactionRepository> _reactionRepositoryMock;
+        private readonly ReactionService _reactionService;
+
 
         public PostsTests()
         {
@@ -26,6 +29,10 @@ namespace museia.Tests
                 null, null, null, null, null, null, null, null
             );
             _postService = new PostService(_postRepositoryMock.Object);
+
+            _reactionRepositoryMock = new Mock<IReactionRepository>();
+            _reactionService = new ReactionService(_reactionRepositoryMock.Object);
+
         }
 
         private async Task<(Mock<UserManager<User>> userManagerMock, PostService postService, User user)> CreateTestContext()
@@ -317,5 +324,93 @@ namespace museia.Tests
             }
         }
 
+        public async Task SearchPostsAsync_ShouldReturnAllVisibleSortedPosts_WhenNoSearchText()
+        {
+           
+            var posts = new List<Post>
+            {
+                new Post { PostID = 1, PostText = "Post 1", PostTag = PostTag.Малюнок, UserID = "user1", CreatedAt = DateTime.UtcNow.AddDays(-1), IsHidden = false },
+                new Post { PostID = 2, PostText = "Post 2", PostTag = PostTag.Музика, UserID = "user2", CreatedAt = DateTime.UtcNow, IsHidden = false },
+                new Post { PostID = 3, PostText = "Hidden Post", PostTag = PostTag.Малюнок, UserID = "user3", CreatedAt = DateTime.UtcNow.AddDays(-2), IsHidden = true },
+                new Post { PostID = 4, PostText = null, PostTag = PostTag.Музика, UserID = "user4", CreatedAt = DateTime.UtcNow.AddDays(-3), IsHidden = false }
+            };
+
+            var visibleSortedPosts = posts
+                .Where(p => p.IsHidden == false)
+                .Where(p => p.PostText != null)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToList();
+
+          
+            _postRepositoryMock.Setup(repo => repo.GetAllPostsAsync()).ReturnsAsync(visibleSortedPosts);
+
+            
+            var result = await _postService.SearchPostsAsync(null);
+
+           
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal("Post 2", result[0].PostText); 
+            Assert.Equal("Post 1", result[1].PostText);
+            Assert.DoesNotContain(result, p => p.IsHidden); 
+            Assert.DoesNotContain(result, p => p.PostText == null); 
+            _postRepositoryMock.Verify(repo => repo.GetAllPostsAsync(), Times.Once());
+            _postRepositoryMock.Verify(repo => repo.SearchPostsByTextAsync(It.IsAny<string>()), Times.Never());
+        }
+
+
+        [Fact]
+        public async Task AddReactionAsync_ShouldCallAddOrUpdateReactionAsync_WithCorrectParameters()
+        {
+            var reactionType = Emoji.Heart;
+            var userId = "test-user-id";
+            uint postId = 1;
+            var expectedReaction = new Reaction
+            {
+                ReactionType = reactionType,
+                UserID = userId,
+                PostID = postId
+            };
+            await _reactionService.AddReactionAsync(reactionType, userId, postId);
+
+            _reactionRepositoryMock.Verify(
+                repo => repo.AddOrUpdateReactionAsync(It.Is<Reaction>(
+                    r => r.ReactionType == reactionType &&
+                         r.UserID == userId &&
+                         r.PostID == postId)),
+                Times.Once);
+        }
+
+        [Fact]
+        public async Task GetReactionsByUserIdAsync_ShouldReturnListOfReactions()
+        {
+
+            var userId = "test-user-id";
+            var expectedReactions = new List<Reaction>
+        {
+            new Reaction { ReactionType = Emoji.ThumbsUp, UserID = userId, PostID = 1 },
+            new Reaction { ReactionType = Emoji.Heart, UserID = userId, PostID = 2 }
+        };
+            _reactionRepositoryMock
+                .Setup(repo => repo.GetReactionsByUserIdAsync(userId))
+                .ReturnsAsync(expectedReactions);
+
+            var result = await _reactionService.GetReactionsByUserIdAsync(userId);
+
+            Assert.Equal(expectedReactions, result);
+            _reactionRepositoryMock.Verify(repo => repo.GetReactionsByUserIdAsync(userId), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteReactionAsync_ShouldCallDeleteReactionAsync_WithCorrectId()
+        {
+
+            uint reactionId = 1;
+
+            await _reactionService.DeleteReactionAsync(reactionId);
+
+            _reactionRepositoryMock.Verify(repo => repo.DeleteReactionAsync(reactionId), Times.Once);
+        }
     }
+
 }

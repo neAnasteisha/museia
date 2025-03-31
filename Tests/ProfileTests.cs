@@ -119,6 +119,45 @@
             )), Times.Once);
         }
 
+        [Fact]
+        public async Task GetProfileViewModelByIdAsync_ShouldReturnOwnProfile_WhenUserExists()
+        {
+            var userId = "i-am-user-123";
+            var user = new User { Id = userId, UserName = "IAmUser", Email = "myuser@example.com" };
+            var userPosts = new List<Post>
+            {
+                new Post { PostID = 1, PostText = "My first post", UserID = userId, CreatedAt = DateTime.UtcNow }
+            };
+
+            _mockUserRepository.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            _mockUserRepository.Setup(repo => repo.GetPostsByUserIdAsync(userId)).ReturnsAsync(userPosts);
+
+            var result = await _userService.GetProfileViewModelByIdAsync(userId);
+
+            Assert.NotNull(result);
+            Assert.Equal(user, result.User);
+            Assert.Equal("IAmUser", result.User.UserName);
+            Assert.Single(result.UserPosts);
+            Assert.Equal("My first post", result.UserPosts[0].PostText);
+            _mockUserRepository.Verify(repo => repo.GetUserByIdAsync(userId), Times.Once());
+            _mockUserRepository.Verify(repo => repo.GetPostsByUserIdAsync(userId), Times.Once());
+        }
+
+        [Fact]
+        public async Task GetProfileViewModelByIdAsync_ShouldReturnNull_WhenUserDoesNotExist()
+        {
+            var userId = "non-existent-user";
+
+            _mockUserRepository.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync((User)null);
+
+            var result = await _userService.GetProfileViewModelByIdAsync(userId);
+
+            Assert.Null(result);
+            _mockUserRepository.Verify(repo => repo.GetUserByIdAsync(userId), Times.Once());
+            _mockUserRepository.Verify(repo => repo.GetPostsByUserIdAsync(It.IsAny<string>()), Times.Never());
+        }
 
     }
 }
+
+

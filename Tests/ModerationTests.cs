@@ -64,5 +64,22 @@ namespace museia.Tests
             Assert.Equal("Complaints", redirectResult.ActionName);
             Assert.Equal("Complaint", redirectResult.ControllerName);
         }
+
+        [Fact]
+        public async Task SendWarning_ShouldCallServicesAndRedirectToComplaints()
+        {
+            uint complaintId = 1;
+            uint postId = 5;
+            string postUserId = "user-456"; 
+
+            var result = await _userController.SendWarning(complaintId, postId, postUserId);
+
+            _mockComplaintService.Verify(cs => cs.AcceptComplaint(complaintId), Times.Once);
+            _mockPostService.Verify(ps => ps.MakePostHiddenAsync(postId), Times.Once);
+
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Complaints", redirectResult.ActionName);
+            Assert.Equal("Complaint", redirectResult.ControllerName);
+        }
     }
 }

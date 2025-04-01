@@ -258,7 +258,7 @@ namespace museia.Tests
 
         // тест видалення допису
         [Fact]
-        public async Task DeletePost_ShouldRemovePost_WhenPostExists()
+        public async Task DeletePost_ShouldRemovePost()
         {
             uint postId = 1;
             var testUser = new User { Id = "user-001", UserName = "Test" };

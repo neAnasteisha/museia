@@ -50,24 +50,39 @@ if (!app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var users = userManager.Users.ToList();
-
-    Console.WriteLine("🔥 Registered Users in Database:");
-    foreach (var user in users)
+    try
     {
-        Console.WriteLine($"📌 Email: {user.Email}, Username: {user.UserName}, Role: {user.UserType}, user id = {user.Id}");
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        // ❗️Перевіримо, чи база існує
+        if (context.Database.CanConnect())
+        {
+            context.Database.Migrate();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            var users = userManager.Users.ToList();
+
+            Console.WriteLine("🔥 Registered Users in Database:");
+            foreach (var user in users)
+            {
+                Console.WriteLine($"📌 Email: {user.Email}, Username: {user.UserName}, Role: {user.UserType}, user id = {user.Id}");
+            }
+
+            var reactions = context.Reactions.ToList();
+            Console.WriteLine("🔥 Reactions in Database:");
+            foreach (var reaction in reactions)
+            {
+                Console.WriteLine($"Reaction: {reaction.ReactionType}, Post: {reaction.PostID}, User: {reaction.UserID}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("⚠️ База даних недоступна. Пропускаємо завантаження даних.");
+        }
     }
-
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
-
-    // Print all reactions
-    var reactions = context.Reactions.ToList(); // Ensure you have a DbSet<Reaction> Reactions in AppDbContext
-    Console.WriteLine("🔥 Reactions in Database:");
-    foreach (var reaction in reactions)
+    catch (Exception ex)
     {
-        Console.WriteLine($"Reaction: {reaction.ReactionType}, Post: {reaction.PostID}, User: {reaction.UserID}");
+        Console.WriteLine("❌ Помилка підключення до бази або міграції: " + ex.Message);
     }
 }
 

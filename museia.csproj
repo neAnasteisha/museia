@@ -32,4 +32,10 @@
     <Folder Include="Views\Shared\NewFolder\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Museia.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

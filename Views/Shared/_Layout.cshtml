@@ -25,6 +25,7 @@
                     if (userType == UserType.Moderator)
                     {
                         <a href="/Complaint/Complaints" class="btn btn-outline-primary ms-2">Нерозглянуті скарги</a>
+                        <a href="/User/Analytics" class="btn btn-outline-primary ms-2">Аналітика</a>
                     }
                     else
                     {
@@ -96,3 +97,20 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+    .custom-btn {
+        background-color: transparent;
+        border: 1px solid #5a506a;
+        color: #5a506a;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: 0.3s ease-in-out;
+    }
+
+        .custom-btn:hover {
+            background-color: #5a506a;
+            border-color: #b3c7c9;
+            color: white;
+        }
+</style>

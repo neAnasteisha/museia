@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using museia.Data;
 using museia.IService;
 using museia.Models;
@@ -90,6 +91,24 @@ namespace museia.Controllers
             return RedirectToAction("Complaints", "Complaint");
         }
 
+        [Authorize]
+        public async Task<IActionResult> Analytics()
+        {
+            var allUsers = await _userManager.Users.ToListAsync();
+            var result = new List<User>();
+
+            foreach (var user in allUsers)
+            {
+                int count = await _complaintService.GetAcceptedComplaintsCountForUser(user.Id);
+                if (count > 0)
+                {
+                    user.CountOfWarnings = count; // тимчасово використаємо це поле
+                    result.Add(user);
+                }
+            }
+
+            return View(result);
+        }
 
         public async Task<IActionResult> BlockUser(uint complaintId, uint postId, string postUserId)
         {
@@ -119,5 +138,6 @@ namespace museia.Controllers
             return RedirectToAction("Complaints", "Complaint");
         }
     }
+
 
 }

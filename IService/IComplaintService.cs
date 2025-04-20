@@ -16,7 +16,5 @@ namespace museia.IService
         Task<bool> RejectComplaint(uint id);
         Task<bool> AcceptComplaint(uint id);
         Task<int> GetAcceptedComplaintsCountForUser(string userId);
-
-        
     }
 }

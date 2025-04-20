@@ -118,7 +118,5 @@ namespace museia.Services
             await _complaintRepository.AcceptComplaint(id);
             return true;
         }
-
-
     }
 }

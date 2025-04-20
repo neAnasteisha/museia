@@ -1,0 +1,36 @@
+﻿@model List<museia.Models.User>
+
+@{
+    ViewData["Title"] = "Аналітика користувачів";
+    var filteredUsers = Model
+        .Where(u => u.CountOfWarnings <= 3)
+        .OrderByDescending(u => u.CountOfWarnings)
+        .ToList();
+}
+
+<h2 style="padding-bottom:1vw;">Аналітика скарг</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ім'я користувача</th>
+            <th>Email</th>
+            <th>Кількість прийнятих скарг</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in filteredUsers)
+        {
+            var userAvatar = string.IsNullOrEmpty(user.UserAvatar) ? "/uploads/avatar.jpg" : user.UserAvatar;
+
+            <tr>
+                <td>
+                    <img src="@userAvatar" alt="Аватар" style="width: 50px; height: 50px; border-radius: 50%;" />
+                    @user.UserName
+                </td>
+                <td>@user.Email</td>
+                <td>@user.CountOfWarnings</td>
+            </tr>
+        }
+    </tbody>
+</table>

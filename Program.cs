@@ -50,39 +50,24 @@ if (!app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    try
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    context.Database.Migrate();
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var users = userManager.Users.ToList();
+
+    Console.WriteLine("🔥 Registered Users in Database:");
+    foreach (var user in users)
     {
-        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        // ❗️Перевіримо, чи база існує
-        if (context.Database.CanConnect())
-        {
-            context.Database.Migrate();
-
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-            var users = userManager.Users.ToList();
-
-            Console.WriteLine("🔥 Registered Users in Database:");
-            foreach (var user in users)
-            {
-                Console.WriteLine($"📌 Email: {user.Email}, Username: {user.UserName}, Role: {user.UserType}, user id = {user.Id}");
-            }
-
-            var reactions = context.Reactions.ToList();
-            Console.WriteLine("🔥 Reactions in Database:");
-            foreach (var reaction in reactions)
-            {
-                Console.WriteLine($"Reaction: {reaction.ReactionType}, Post: {reaction.PostID}, User: {reaction.UserID}");
-            }
-        }
-        else
-        {
-            Console.WriteLine("⚠️ База даних недоступна. Пропускаємо завантаження даних.");
-        }
+        Console.WriteLine($"📌 Email: {user.Email}, Username: {user.UserName}, Role: {user.UserType}, user id = {user.Id}");
     }
-    catch (Exception ex)
+
+    var reactions = context.Reactions.ToList();
+    Console.WriteLine("🔥 Reactions in Database:");
+    foreach (var reaction in reactions)
     {
-        Console.WriteLine("❌ Помилка підключення до бази або міграції: " + ex.Message);
+        Console.WriteLine($"Reaction: {reaction.ReactionType}, Post: {reaction.PostID}, User: {reaction.UserID}");
     }
 }
 

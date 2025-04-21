@@ -53,7 +53,7 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string email, string password, IFormFile avatar)
+        public async Task<IActionResult> Register(string username, string email, string password, string confirmPassword, IFormFile avatar)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
 
@@ -66,6 +66,12 @@ namespace museia.Controllers
                 }
 
                 ModelState.AddModelError("", "Користувач із таким email вже існує!");
+                return View();
+            }
+
+            if(password != confirmPassword)
+            {
+                ModelState.AddModelError("", "Паролі не співпадають!");
                 return View();
             }
 

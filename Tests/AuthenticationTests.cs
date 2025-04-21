@@ -38,7 +38,7 @@ namespace museia.Tests
             _mockUserManager.Setup(u => u.FindByEmailAsync(email))
                             .ReturnsAsync(new User { Email = email });
 
-            var result = await _accountController.Register("username", email, "Password123!", null) as ViewResult;
+            var result = await _accountController.Register("username", email, "Password123!", null, null) as ViewResult;
 
             Assert.NotNull(result);
             Assert.False(result.ViewData.ModelState.IsValid);
@@ -57,7 +57,7 @@ namespace museia.Tests
             _mockSignInManager.Setup(s => s.SignInAsync(It.IsAny<User>(), false, null))
                               .Returns(Task.CompletedTask);
 
-            var result = await _accountController.Register("username", "new@example.com", "Password123!", null) as RedirectToActionResult;
+            var result = await _accountController.Register("username", "new@example.com", "Password123!", null, null) as RedirectToActionResult;
 
             Assert.NotNull(result);
             Assert.Equal("Index", result.ActionName);
@@ -96,7 +96,7 @@ namespace museia.Tests
                               .Returns(Task.CompletedTask);
 
             
-            var result = await _accountController.Register("username", email, "Password123!", null) as RedirectToActionResult;
+            var result = await _accountController.Register("username", email, "Password123!", null, null) as RedirectToActionResult;
 
            
             Assert.NotNull(result);

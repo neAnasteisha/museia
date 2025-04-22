@@ -22,10 +22,11 @@
     <link rel="stylesheet" href="~/css/post.css" />
 </head>
 <body>
-
-    <form method="get" asp-action="Index" class="m-3" style="padding-left:4.3vw;">
+    <div style="width: 70vw; margin: 0 auto;">
+    <form method="get" asp-action="Index" class="m-3" style="padding-left:1.5vw;">
         <input type="text" name="searchText" class="form-control" placeholder="Пошук" style="width: 20vw; color:#959ab1" />
     </form>
+    </div>
 
     <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column;">
         @if (Model.Count != 0)

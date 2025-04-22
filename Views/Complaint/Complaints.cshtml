@@ -40,13 +40,13 @@
                         <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                         <input type="hidden" name="action" value="approve" />
                         <input type="hidden" name="userId" value="@complaint.PostsUserId" />
-                        <button type="submit" class="btn btn-success">Прийняти</button>
+                        <button type="submit" class=" btn btn-success-complaint">Прийняти</button>
                     </form>
                     <form method="post" action="@Url.Action("UpdateComplaintStatus", "Complaint")">
                         <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                         <input type="hidden" name="action" value="reject" />
                         <input type="hidden" name="userId" value="@complaint.UserId" />
-                        <button type="submit" class="btn btn-danger">Відхилити</button>
+                        <button type="submit" class="btn btn-danger-complaint">Відхилити</button>
                     </form>
                 }
                 else if (complaint.ComplaintStatus == ComplaintStatus.Processing)
@@ -57,7 +57,7 @@
                             <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                             <input type="hidden" name="postId" value="@complaint.PostId" />
                             <input type="hidden" name="postsUserId" value="@complaint.PostsUserId" />
-                            <button type="submit" class="btn btn-warning mt-2">Надіслати попередження</button>
+                            <button type="submit" class="btn btn-warning-complaint">Надіслати попередження</button>
                         </form>
                     }
                     else
@@ -66,7 +66,7 @@
                             <input type="hidden" name="complaintId" value="@complaint.ComplaintID" />
                             <input type="hidden" name="postId" value="@complaint.PostId" />
                             <input type="hidden" name="postsUserId" value="@complaint.PostsUserId" />
-                            <button type="submit" class="btn btn-danger">Заблокувати користувача</button>
+                            <button type="submit" class="btn btn-danger-block">Заблокувати користувача</button>
                         </form>
                     }
                 }

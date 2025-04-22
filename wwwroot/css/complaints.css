@@ -8,3 +8,79 @@
 }
 
 
+.btn-success-complaint {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+}
+
+    .btn-success-complaint:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-success-complaint:focus, .btn-success-complaint:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+
+.btn-danger-complaint {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+}
+
+.btn-danger-complaint:hover {
+    background-color: #5a506a;
+    border-color: #fffaf1;
+    color: white;
+}
+
+.btn-danger-complaint:focus, .btn-danger-complaint:active:focus {
+    background-color: #5a506a;
+    border-color: #fffaf1;
+    color: white;
+}
+
+
+.btn-warning-complaint {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+}
+
+    .btn-warning-complaint:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-warning-complaint:focus, .btn-warning-complaint:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+
+.btn-danger-block {
+    background-color: #5a506a;
+    border-color: #0e0514;
+    color: white;
+}
+
+    .btn-danger-block:hover {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+    .btn-danger-block:focus, .btn-danger-block:active:focus {
+        background-color: #5a506a;
+        border-color: #fffaf1;
+        color: white;
+    }
+
+

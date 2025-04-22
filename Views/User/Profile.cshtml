@@ -18,23 +18,27 @@
 </head>
 <body>
 
-    <div class="profile-header" style="margin-left: 5.5vw;">
-        <div>
-            <h3 class="profile-username" style="padding-left:16vw;">@Model.User.UserName</h3>
-            <img src="@userAvatar" alt="Profile Photo" style="width: 10vw; height: 10vw; border-radius: 50%; margin-top: -35px; margin-left:50px;" />
-            <p class="profile-email" style="padding-left:16vw;"><strong>Email:</strong> @Model.User.Email</p>
+    <div class="profile-header">
+        <div class="profile-info">
+            <img src="@userAvatar" alt="Profile Photo" class="profile-avatar" />
+            <div class="profile-details">
+                <h3 class="profile-username">@Model.User.UserName</h3>
+                <p class="profile-email"><strong>Email:</strong> @Model.User.Email</p>
             @if (!string.IsNullOrEmpty(Model.User.UserDescription))
             {
-                <p style="padding-left:16vw; margin-top:-20px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
+                    <p class="profile-description"><strong>Опис:</strong> @Model.User.UserDescription</p>
             }
+            </div>
         </div>
     </div>
 
-    <div class="profile-post">
+    <div class="profile-posts-section">
         @if (Model.UserPosts.Count > 0 && Model.UserPosts.Any(post => !post.IsHidden))
         {
-            <h3 class="" style="margin-left: 5.5vw;">Дописи</h3>
-            <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column;">
+            <div style="width: 70vw; margin: 0 auto;">
+                <h3 class="posts-title">Дописи</h3>
+            </div>
+            <div class="posts">
                 @foreach (var post in Model.UserPosts.OrderByDescending(p => p.CreatedAt))
                 {
                     @if (!post.IsHidden)

@@ -103,5 +103,13 @@
             }
         }
 
+        public async Task<List<User>> GetTopUsersByComplaintsAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Complaints)
+                .OrderByDescending(u => u.Complaints.Count())
+                .Take(10)
+                .ToListAsync();
+        }
     }
 }

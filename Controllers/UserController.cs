@@ -107,7 +107,15 @@ namespace museia.Controllers
                 }
             }
 
-            return View(result);
+            var topTen = await _complaintService.GetTopUsersByComplaintsAsync();
+
+            var viewModel = new AnalyticsViewModel
+            {
+                FilteredUsers = result,
+                TopTen = topTen
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> BlockUser(uint complaintId, uint postId, string postUserId)

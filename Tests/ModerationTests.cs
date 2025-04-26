@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using MockQueryable.Moq;
 using museia.Controllers;
 using museia.IRepository;
 using museia.IService;
 using museia.Models;
 using Xunit;
+using MockQueryable;
 
 namespace museia.Tests
 {
@@ -125,6 +127,57 @@ namespace museia.Tests
             bool showBlock = complaints.Any(c => c.UserCountOfWarnings >= 2);
 
             Assert.True(showBlock);
+        }
+
+        [Fact]
+        public async Task Analytics_ReturnsViewResult_WithCorrectViewModelData()
+        {
+            var users = new List<User>
+            {
+                new User { Id = "user1", UserName = "User One" },
+                new User { Id = "user2", UserName = "User Two With Complaints" },
+                new User { Id = "user3", UserName = "User Three" },
+                new User { Id = "user4", UserName = "User Four With Complaints" }
+            };
+
+
+            var topUsers = new List<User>
+            {
+                users[1],
+                users[3] 
+            };
+
+            var mockUsersQueryable = users.AsQueryable().BuildMock();
+            _mockUserManager.Setup(um => um.Users).Returns(mockUsersQueryable);
+
+            _mockComplaintService.Setup(cs => cs.GetAcceptedComplaintsCountForUser("user1")).ReturnsAsync(0);
+            _mockComplaintService.Setup(cs => cs.GetAcceptedComplaintsCountForUser("user2")).ReturnsAsync(5); 
+            _mockComplaintService.Setup(cs => cs.GetAcceptedComplaintsCountForUser("user3")).ReturnsAsync(0);
+            _mockComplaintService.Setup(cs => cs.GetAcceptedComplaintsCountForUser("user4")).ReturnsAsync(3); 
+
+            _mockComplaintService.Setup(cs => cs.GetTopUsersByComplaintsAsync()).ReturnsAsync(topUsers);
+
+            var result = await _userController.Analytics();
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            var model = Assert.IsAssignableFrom<AnalyticsViewModel>(viewResult.Model);
+
+            Assert.NotNull(model.FilteredUsers);
+            Assert.Equal(2, model.FilteredUsers.Count); 
+            Assert.Contains(model.FilteredUsers, u => u.Id == "user2");
+            Assert.Contains(model.FilteredUsers, u => u.Id == "user4");
+            Assert.DoesNotContain(model.FilteredUsers, u => u.Id == "user1");
+            Assert.DoesNotContain(model.FilteredUsers, u => u.Id == "user3");
+
+            var user2FromModel = model.FilteredUsers.First(u => u.Id == "user2");
+            var user4FromModel = model.FilteredUsers.First(u => u.Id == "user4");
+            Assert.Equal(5, user2FromModel.CountOfWarnings); 
+            Assert.Equal(3, user4FromModel.CountOfWarnings); 
+            Assert.NotNull(model.TopTen);
+            Assert.Equal(topUsers.Count, model.TopTen.Count); 
+            Assert.Equal(topUsers, model.TopTen); 
+
         }
     }
 }

@@ -118,5 +118,10 @@ namespace museia.Services
             await _complaintRepository.AcceptComplaint(id);
             return true;
         }
+
+        public async Task<List<User>> GetTopUsersByComplaintsAsync()
+        {
+            return await _complaintRepository.GetTopUsersByComplaintsAsync();
+        }
     }
 }

@@ -163,17 +163,17 @@ h2 {
         color: #0e0514;
     }
 
-    .post-text {
-        font-family: 'IBM Plex Serif', serif;
-        font-size: 1.1vw;
-        width: 100%;
-        max-height: 10vw;
-        overflow-y: scroll;
-        scrollbar-width: none;
-    }
+.post-text {
+    font-family: 'Montserrat', serif;
+    font-size: 1.1vw;
+    width: 100%;
+    max-height: 10vw;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
-    font-family: "Montserrat", serif !important;
+    font-family: 'Montserrat', serif !important;
     line-height: 2vw;
 }
 

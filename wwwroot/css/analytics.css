@@ -3,7 +3,7 @@
 }
 
 body, th, h2, tr {
-    font-family: 'Montserrat', serif !important;
+    font-family: 'Montserrat'/*, serif !important*/;
     line-height: 2vw;
 }
 

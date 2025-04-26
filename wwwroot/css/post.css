@@ -150,10 +150,10 @@ h2 {
     padding: 0vw;
     color: #69bacb;
     text-decoration: none;
-    font-family: 'IBM Plex Serif', serif;
+    font-family: 'Montserrat' /*'IBM Plex Serif', serif*/;
     font-size: 1.3vw;
     font-weight: 600;
-    margin-bottom:-15px;
+    margin-bottom: -15px;
 }
     .nickname:hover {
         color: #0e0514;
@@ -164,7 +164,7 @@ h2 {
     }
 
 .post-text {
-    font-family: 'Montserrat', serif;
+    font-family: 'Montserrat'/*, serif*/;
     font-size: 1.1vw;
     width: 100%;
     max-height: 10vw;
@@ -173,7 +173,7 @@ h2 {
 }
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
-    font-family: 'Montserrat', serif !important;
+    font-family: 'Montserrat'/*, serif !important*/;
     line-height: 2vw;
 }
 

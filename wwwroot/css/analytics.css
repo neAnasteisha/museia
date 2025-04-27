@@ -32,6 +32,13 @@ body, th, h2, tr {
         background-color: #fffaf1;
         transition: background-color 0.3s ease;
     }
-
-    
+.email-th{
+    width:250px;
+}
+.username-th{
+    width:250px;
+}
+.complaint-th{
+    width:130px;
+}
 

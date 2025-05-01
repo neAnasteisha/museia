@@ -19,10 +19,22 @@
             margin-bottom: 10px;
         }
 
+
+        .cropper-bg {
+            background: none !important;
+        }
+
+        .cropper-modal {
+            background-color: none !important;
+            opacity: 0 !important;
+        }
+
         #croppedResult {
             max-width: 100%;
             max-height: 300px;
             margin-top: 10px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .avatar-buttons {
@@ -58,14 +70,17 @@
             <div class="mb-3">
                 <label class="form-label">Аватар (необов'язково)</label>
                 <input type="file" class="form-control" id="avatarInput" accept="image/*" />
-                <img id="imagePreview" />
+                <img id="imagePreview" style="display: none;" />
                 <input type="hidden" name="avatarCropped" id="avatarCropped" />
 
                 <div class="avatar-buttons" id="avatarActions" style="display: none;">
                     <button type="button" id="cancelButton" class="btn btn-outline-danger btn-sm">Скасувати</button>
                 </div>
 
-                <img id="croppedResult" />
+                <div id="croppedWrapper" style="display: none; flex-direction:column; margin-top: 1vw;">
+                    <span class="preview-label" style="font-weight: 500; display: block; margin-bottom: 4px;">Попередній перегляд:</span>
+                    <img id="croppedResult" style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc;" />
+                </div>
             </div>
 
             <div class="mb-3 form-check">
@@ -128,7 +143,7 @@
             reader.readAsDataURL(file);
         });
 
-        function updateCroppedImage() {
+               function updateCroppedImage() {
             if (!cropper) return;
 
             const canvas = cropper.getCroppedCanvas({
@@ -141,8 +156,9 @@
             const base64 = canvas.toDataURL('image/png');
             hiddenInput.value = base64;
             croppedResult.src = base64;
-            croppedResult.style.display = 'block';
+            document.getElementById('croppedWrapper').style.display = 'flex';
         }
+
 
         cancelButton.addEventListener('click', () => {
             if (cropper) {
@@ -152,7 +168,7 @@
             imagePreview.src = "";
             imagePreview.style.display = "block";
             croppedResult.src = "";
-            croppedResult.style.display = "block";
+            croppedResult.style.display = "none";
             avatarInput.value = "";
             hiddenInput.value = "";
             avatarActions.style.display = "none";

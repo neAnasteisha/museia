@@ -63,29 +63,32 @@
                                 </div>
                             </div>
 
-                            @if (post.Reactions != null && post.Reactions.Count > 0)
-                            {
-                                <div class="post-reactions">
-                                    <ul style="display:flex; flex-direction:row; gap:0.5vw;">
-                                        @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
-                                        {
-                                            <li style="list-style:none; padding:0; margin:0;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
-                                        }
-                                    </ul>
-                                </div>
-                            }
-
                             <div class="post-actions">
                                 @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
                                 {
-                                    <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">Поскаржитись</a>
+                                    <form asp-controller="Reaction" asp-action="AddReaction" method="post" style="display:flex; gap: 0.8vw; align-items:center; flex-wrap: wrap;">
+                                        <input type="hidden" name="postId" value="@post.PostID" />
 
-                                    var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
-                                    var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
+                                        @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
+                                        {
+                                            var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
 
-                                    <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post" style="padding:0;">
-                                        @reactionLabel (@post.Reactions?.Count)
-                                    </a>
+                                            <button type="submit" name="reactionType" value="@((int)emoji)"
+                                                    class="btn btn-link"
+                                                    style="font-size: 1.5em; padding: 0; position: relative; text-decoration: none; border: none; box-shadow: none;">
+                                                <span>@GetEmoji(emoji)</span>
+                                                @if (count > 0)
+                                                {
+                                                    <span style="font-size: 0.8em; position: absolute; top: -0.5em; right: -0.7em; background-color: #e0e0e0; border-radius: 50%; padding: 0.1em 0.4em; line-height: 1;">
+                                                        @count
+                                                    </span>
+                                                }
+                                            </button>
+                                        }
+                                    </form>
+                                    <div style="margin-top: 0.8em;">
+                                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">Поскаржитись</a>
+                                    </div>
                                 }
                             </div>
 

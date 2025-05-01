@@ -34,10 +34,18 @@
             var userAvatar = string.IsNullOrEmpty(user.UserAvatar) ? "/uploads/avatar.jpg" : user.UserAvatar;
 
             <tr>
-                <td>
+
+                    <td>
+                        <a href="@Url.Action("OtherUserProfile", "User", new { id = user.Id })" style="text-decoration: none; color: inherit;">
+                            <img src="@userAvatar" alt="Аватар" style="width: 50px; height: 50px; border-radius: 50%;" />
+                            @user.UserName
+                        </a>
+                    </td>
+
+            @*     <td>
                     <img src="@userAvatar" alt="Аватар" style="width: 50px; height: 50px; border-radius: 50%;" />
                     @user.UserName
-                </td>
+                </td> *@
                 <td>@user.Email</td>
                 <td>@user.CountOfWarnings</td>
             </tr>
@@ -66,6 +74,7 @@
 
                     <tr>
                         <td>
+                            <a href="@Url.Action("OtherUserProfile", "User", new { id = user.Id })" style="text-decoration: none; color: inherit;">
                             <img src="@userAvatar" alt="Аватар" style="width: 50px; height: 50px; border-radius: 50%;" />
                             @user.UserName
                         </td>

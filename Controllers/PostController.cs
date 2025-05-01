@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace museia.Controllers
@@ -83,31 +84,45 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(Post model, IFormFile photoFile)
+        public async Task<IActionResult> CreatePost(Post model, string photoCropped)
         {
             string photoPath = null;
 
-            if (photoFile != null && photoFile.Length > 0)
+            if (!string.IsNullOrEmpty(photoCropped))
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                Directory.CreateDirectory(uploadsFolder); 
-                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(photoFile.FileName);
-                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    await photoFile.CopyToAsync(stream);
-                }
+                    var base64Data = Regex.Match(photoCropped, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+                    var imageBytes = Convert.FromBase64String(base64Data);
 
-                photoPath = "/uploads/" + uniqueFileName; 
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/posts");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + ".png";
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
+
+                    photoPath = "/uploads/posts/" + uniqueFileName;
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Помилка при обробці зображення.");
+                    return View(model);
+                }
             }
 
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             await _postService.CreatePostAsync(model.PostText, photoPath, model.PostTag, userId);
 
             return RedirectToAction("Index", "Post");
         }
+
 
 
         [HttpGet]
@@ -142,7 +157,7 @@ namespace museia.Controllers
                 return View(model);
             }
 
-            if (string.IsNullOrWhiteSpace(model.PostText) && model.PostPhoto == null)
+            if (string.IsNullOrWhiteSpace(model.PostText) && string.IsNullOrWhiteSpace(model.PostPhotoCropped))
             {
                 ModelState.AddModelError("", "Ви повинні заповнити принаймні одне з полів: опис або фото.");
                 ViewBag.PostTags = _postService.GetPostTags();
@@ -156,13 +171,19 @@ namespace museia.Controllers
             }
 
             post.PostText = model.PostText;
-            post.PostTag = model.PostTag.Value;
+            post.PostTag = model.PostTag ?? post.PostTag;
+            post.EditedAt = DateTime.Now;
 
-            if (model.PostPhoto != null)
+            // Якщо є обрізане фото (base64)
+            if (!string.IsNullOrEmpty(model.PostPhotoCropped))
             {
+                var base64Data = Regex.Match(model.PostPhotoCropped, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+                var imageBytes = Convert.FromBase64String(base64Data);
+
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/posts", post.UserID);
                 Directory.CreateDirectory(uploadsFolder);
 
+                // Видалити старе фото
                 if (!string.IsNullOrEmpty(post.PostPhoto))
                 {
                     string oldImagePath = Path.Combine("wwwroot", post.PostPhoto.TrimStart('/'));
@@ -172,22 +193,18 @@ namespace museia.Controllers
                     }
                 }
 
-                string uniqueFileName = $"post_{Guid.NewGuid()}{Path.GetExtension(model.PostPhoto.FileName)}";
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                string fileName = $"post_{Guid.NewGuid()}.png";
+                string filePath = Path.Combine(uploadsFolder, fileName);
+                await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.PostPhoto.CopyToAsync(stream);
-                }
-
-                post.PostPhoto = $"/uploads/posts/{post.UserID}/{uniqueFileName}";
+                post.PostPhoto = $"/uploads/posts/{post.UserID}/{fileName}";
             }
-
-            post.EditedAt = DateTime.Now;
 
             await _postService.UpdatePost(post);
             return RedirectToAction("Profile", "User");
         }
+
+
 
 
 

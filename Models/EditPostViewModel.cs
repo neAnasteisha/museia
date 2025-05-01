@@ -6,6 +6,7 @@
         public string? PostText { get; set; }
         public PostTag? PostTag { get; set; }
         public string? PostPhotoUrl { get; set; }
-        public IFormFile? PostPhoto { get; set; }
+        public string? PostPhotoCropped { get; set; } 
+
     }
 }

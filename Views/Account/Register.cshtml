@@ -19,7 +19,6 @@
             margin-bottom: 10px;
         }
 
-
         .cropper-bg {
             background: none !important;
         }
@@ -116,7 +115,6 @@
                 return;
             }
 
-            // Очистити попередній стан
             if (cropper) {
                 cropper.destroy();
                 cropper = null;
@@ -137,7 +135,7 @@
                     aspectRatio: 1,
                     viewMode: 1,
                     autoCropArea: 1,
-                    cropend: updateCroppedImage // 👈 автоматичне обрізання
+                    cropend: updateCroppedImage 
                 });
             };
             reader.readAsDataURL(file);

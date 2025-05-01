@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using museia.Models;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace museia.Controllers
@@ -53,7 +54,7 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string email, string password, string confirmPassword, IFormFile avatar)
+        public async Task<IActionResult> Register(string username, string email, string password, string confirmPassword, string avatarCropped)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
 
@@ -69,7 +70,7 @@ namespace museia.Controllers
                 return View();
             }
 
-            if(password != confirmPassword)
+            if (password != confirmPassword)
             {
                 ModelState.AddModelError("", "Паролі не співпадають!");
                 return View();
@@ -77,20 +78,28 @@ namespace museia.Controllers
 
             string avatarPath = "/uploads/avatar.jpg";
 
-            if(avatar != null && avatar.Length > 0)
+            if (!string.IsNullOrEmpty(avatarCropped))
             {
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/avatars");
-                Directory.CreateDirectory(uploadsFolder);
-
-                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(avatar.FileName);
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    await avatar.CopyToAsync(stream);
-                }
+                    var base64Data = Regex.Match(avatarCropped, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+                    var imageBytes = Convert.FromBase64String(base64Data);
 
-                avatarPath = "/uploads/avatars/" + uniqueFileName;
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/avatars");
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + ".png";
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
+
+                    avatarPath = "/uploads/avatars/" + uniqueFileName;
+                }
+                catch
+                {
+                    ModelState.AddModelError("", "Помилка при обробці зображення.");
+                    return View();
+                }
             }
 
             var user = new User
@@ -116,6 +125,7 @@ namespace museia.Controllers
 
             return View();
         }
+
 
         [HttpGet]
         public async Task<IActionResult> EditProfile()
@@ -150,52 +160,36 @@ namespace museia.Controllers
             }
 
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            if (userId == null) return RedirectToAction("Login", "Account");
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             user.UserName = model.Username;
             user.UserDescription = model.Description;
 
-            if (model.Avatar != null && model.Avatar.Length > 0)
+            if (!string.IsNullOrEmpty(model.AvatarCropped))
             {
-                // Створюємо шлях для аватара користувача
+                var base64Data = Regex.Match(model.AvatarCropped, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+                var imageBytes = Convert.FromBase64String(base64Data);
+
                 string userFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/avatars", user.Id);
                 string avatarFolder = Path.Combine(userFolder, "avatar");
 
-                // Очищуємо папку avatar
                 if (Directory.Exists(avatarFolder))
                 {
                     foreach (var file in Directory.GetFiles(avatarFolder))
-                    {
                         System.IO.File.Delete(file);
-                    }
                 }
                 else
                 {
                     Directory.CreateDirectory(avatarFolder);
                 }
 
-                // Генеруємо унікальне ім'я файлу
-                string fileExtension = Path.GetExtension(model.Avatar.FileName);
-                string uniqueFileName = $"avatar{fileExtension}"; // avatar.png / avatar.jpg
-                string filePath = Path.Combine(avatarFolder, uniqueFileName);
+                string filePath = Path.Combine(avatarFolder, "avatar.png");
+                await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
 
-                // Зберігаємо новий файл
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.Avatar.CopyToAsync(stream);
-                }
-
-                // Оновлюємо шлях у базі
-                user.UserAvatar = $"/uploads/avatars/{user.Id}/avatar/{uniqueFileName}";
+                user.UserAvatar = $"/uploads/avatars/{user.Id}/avatar/avatar.png";
             }
 
             await _userManager.UpdateAsync(user);

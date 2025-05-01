@@ -8,5 +8,7 @@ namespace museia.Models
         public string? Description { get; set; }
         public string? AvatarUrl { get; set; }
         public IFormFile? Avatar { get; set; }
+
+        public string? AvatarCropped { get; set; }
     }
 }

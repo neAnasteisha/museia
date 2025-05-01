@@ -1,40 +1,78 @@
 ﻿@model Post
+@using museia.Models
 @{
     ViewData["Title"] = "Створити допис";
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - museia</title>
+
     <link rel="stylesheet" href="~/css/post.css" />
-    <style>.navbar .btn-success.me-2 { display: none; }</style>
+    <link rel="stylesheet" href="~/css/cropper.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+
+    <style>
+        .navbar .btn-success.me-2 {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<form method="post" enctype="multipart/form-data">
-    <div>
-        <h2 class="text">@* 📝 *@ Створення допису</h2>
+    <form method="post" enctype="multipart/form-data">
         <div>
-            <label class="form-label">Опис</label>
-            <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
-        </div>
-        <div>
-            <label class="form-label">Тег</label>
-            <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
-        </div>
-        <div>
-            <label class="form-label">Фото</label>
-            <input type="file" name="photoFile" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-success-publish">Опублікувати</button>
+            <h2 class="text">📝 Створення допису</h2>
 
-        @* <div class="text-center mt-3">
-            <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
-        </div> *@
-    </div>
-</form>
+            <div>
+                <label class="form-label">Опис</label>
+                <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
+            </div>
+
+            <div>
+                <label class="form-label">Тег</label>
+                <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
+            </div>
+
+            <div class="photo-section">
+                @Html.Partial("_CropperPartial", new CropperConfig
+           {
+               InputId = "photoInput",
+               PreviewImageId = "imagePreview",
+               CroppedImageId = "croppedResult",
+               HiddenFieldName = "photoCropped",
+               HiddenFieldId = "photoCropped",
+               CancelButtonId = "cancelButton",
+               ActionWrapperId = "photoActions",
+               CroppedWrapperId = "croppedWrapper",
+               Label = "Фото (необов'язково)"
+           })
+            </div>
+
+            <button type="submit" class="btn btn-success-publish mt-3">Опублікувати</button>
+        </div>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="~/js/cropper-handler.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            initCropper({
+                inputId: "photoInput",
+                previewImageId: "imagePreview",
+                croppedImageId: "croppedResult",
+                hiddenFieldId: "photoCropped",
+                cancelButtonId: "cancelButton",
+                actionWrapperId: "photoActions",
+                croppedWrapperId: "croppedWrapper"
+            });
+        });
+    </script>
+
 </body>
 </html>
+
+

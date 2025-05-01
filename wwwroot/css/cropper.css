@@ -1,0 +1,37 @@
+﻿body {
+}
+
+.photo-preview-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cropper-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
+.avatar-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preview-label {
+    font-weight: 500;
+    margin-bottom: 4px;
+    margin-top: 0;
+}
+
+.cropper-bg {
+    background: none !important;
+}
+
+.cropper-modal {
+    background-color: none !important;
+    opacity: 0 !important;
+}

@@ -23,7 +23,6 @@
             max-width: 100%;
             max-height: 300px;
             margin-top: 10px;
-            display: none;
         }
 
         .avatar-buttons {
@@ -107,8 +106,8 @@
                 cropper.destroy();
                 cropper = null;
             }
-            imagePreview.style.display = "none";
-            croppedResult.style.display = "none";
+            imagePreview.style.display = "block";
+            croppedResult.style.display = "block";
             croppedResult.src = "";
             hiddenInput.value = "";
             avatarActions.style.display = "none";
@@ -151,9 +150,9 @@
                 cropper = null;
             }
             imagePreview.src = "";
-            imagePreview.style.display = "none";
+            imagePreview.style.display = "block";
             croppedResult.src = "";
-            croppedResult.style.display = "none";
+            croppedResult.style.display = "block";
             avatarInput.value = "";
             hiddenInput.value = "";
             avatarActions.style.display = "none";

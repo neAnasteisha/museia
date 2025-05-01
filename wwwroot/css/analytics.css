@@ -3,7 +3,7 @@
 }
 
 body, th, h2, tr {
-    font-family: 'Montserrat'/*, serif !important*/;
+    font-family: 'Noto Sans', Arial, Helvetica, sans-serif !important;
     line-height: 2vw;
 }
 

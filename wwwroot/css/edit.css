@@ -82,6 +82,26 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
         color: white;
     }
 
+.btn-outline-danger.btn-sm {
+    background-color: #fffaf1;
+    border-color: #0e0514;
+    color: #0e0514;
+    margin-right: 7px;
+    margin-top: 6px;
+}
+
+    .btn-outline-danger.btn-sm:hover {
+        background-color: #fffaf1;
+        border-color: #fffaf1;
+        color: #0e0514;
+    }
+
+    .btn-outline-danger.btn-sm:focus,
+    .btn-outline-danger.btn-sm:active:focus {
+        background-color: #fffaf1;
+        border-color: #0e0514;
+        color: #0e0514;
+    }
 
 .btn-primary {
     background-color: #5a506a;

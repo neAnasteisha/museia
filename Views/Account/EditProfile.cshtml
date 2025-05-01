@@ -1,49 +1,83 @@
 ﻿@model museia.Models.EditProfileViewModel
-
+@using museia.Models
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - museia</title>
+
     <link rel="stylesheet" href="~/css/edit.css" />
-    <style>.navbar .btn-success.me-2 { display: none; }</style>
+    <link rel="stylesheet" href="~/css/cropper.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+
+    <style>
+        .navbar .btn-success.me-2 {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Редагування профілю</h2>
+    <h2>Редагування профілю</h2>
 
-<form method="post" enctype="multipart/form-data">
-    <div class="form-label">
-        <label for="username">Ім'я користувача</label>
-        <input type="text" class="form-control" asp-for="Username" placeholder="Вкажіть тут нове ім'я.">
-    </div>
-
-    <div class="form-label">
-        <label for="description">Опис</label>
-        <textarea class="form-control" asp-for="Description" rows="3" placeholder="Вкажіть тут новий опис."></textarea>
-    </div>
-
-    <div class="form-label">
-        <label for="avatar">Аватар</label>
-        <input type="file" class="form-control" asp-for="Avatar">
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.AvatarUrl))
-    {
-            <div class ="form-label">
-            <p>Поточний аватар:</p>
-            <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 220px; max-height:250px;margin-top:-15px;margin-bottom:6px;">
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-label">
+            <label for="username">Ім'я користувача</label>
+            <input type="text" class="form-control" asp-for="Username" placeholder="Вкажіть тут нове ім'я.">
         </div>
-    }
 
-    <button type="submit" class="btn btn-primary">Зберегти</button>
-</form>
+        <div class="form-label">
+            <label for="description">Опис</label>
+            <textarea class="form-control" asp-for="Description" rows="3" placeholder="Вкажіть тут новий опис."></textarea>
+        </div>
 
-<form method="post" asp-action="DeleteProfile">
-    <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
-</form>
+        @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+        {
+            <div class="form-label">
+                <p>Поточний аватар:</p>
+                <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 220px; max-height: 250px; object-fit: cover; margin-bottom: 8px;" />
+            </div>
+        }
+
+        <div class="photo-section">
+            @Html.Partial("_CropperPartial", new CropperConfig
+       {
+           InputId = "avatarInput",
+           PreviewImageId = "imagePreview",
+           CroppedImageId = "croppedResult",
+           HiddenFieldName = "avatarCropped",
+           HiddenFieldId = "avatarCropped",
+           CancelButtonId = "cancelButton",
+           ActionWrapperId = "avatarActions",
+           CroppedWrapperId = "croppedWrapper",
+           Label = "Новий аватар (необов'язково)"
+       })
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
+    </form>
+
+    <form method="post" asp-action="DeleteProfile">
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="~/js/cropper-handler.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            initCropper({
+                inputId: "avatarInput",
+                previewImageId: "imagePreview",
+                croppedImageId: "croppedResult",
+                hiddenFieldId: "avatarCropped",
+                cancelButtonId: "cancelButton",
+                actionWrapperId: "avatarActions",
+                croppedWrapperId: "croppedWrapper"
+            });
+        });
+    </script>
 
 </body>
 </html>

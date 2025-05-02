@@ -95,6 +95,26 @@
                                         <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">Поскаржитись</a>
                                     </div>
                                 }
+                                else
+                                {
+                                    <div style="display: flex; gap: 0.8vw; align-items: center; flex-wrap: wrap;">
+                                        @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
+                                        {
+                                            var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
+                                            if (count > 0)
+                                            {
+                                                <div style="position: relative; font-size: 1.5em;">
+                                                    <span>@GetEmoji(emoji)</span>
+                                                    <span class="reaction-count"
+                                                          style="font-size: 0.8em; position: absolute; top: -0.5em; right: -0.7em;
+                                     background-color: #c9e2f5; border-radius: 50%; padding: 0.1em 0.4em; line-height: 1;">
+                                                        @count
+                                                    </span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
                             </div>
 
                             <style>

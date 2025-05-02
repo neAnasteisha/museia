@@ -92,6 +92,7 @@
             return await _context.Posts
                 .Where(p => p.UserID == userId)
                 .OrderByDescending(p => p.CreatedAt)
+                .Include(p => p.Reactions)
                 .ToListAsync();
         }
 

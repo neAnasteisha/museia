@@ -61,17 +61,30 @@
                                             <span class="post-date">@post.CreatedAt.ToString("yyyy.MM.dd")</span>
                                         </div>
                                     </div>
-                                    @if (post.Reactions != null && post.Reactions.Count > 0)
-                                    {
-                                        <div class="post-reactions">
-                                            <ul style="display: flex; flex-direction: row; gap: 0.5vw;">
-                                                @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
-                                                {
-                                                    <li style="list-style: none; padding: 0; margin: 0;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }
+                                    <div style="display: flex; gap: 0.8vw; align-items: center; flex-wrap: wrap;">
+                                        @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
+                                        {
+                                            var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
+
+                                            @if (count > 0)
+                                            {
+                                                <div style="position: relative; font-size: 1.5em;">
+                                                    <span>@GetEmoji(emoji)</span>
+                                                    <span class="reaction-count"
+                                                          style="font-size: 0.8em; position: absolute; top: -0.5em; right: -0.7em;
+                                     background-color: #c9e2f5; border-radius: 50%; padding: 0.1em 0.4em; line-height: 1;">
+                                                        @count
+                                                    </span>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <style>
+                                        .reaction-count {
+                                            background-color: #c9e2f5;
+                                            color: black;
+                                        }
+                                    </style>
                                     <div class="post-actions">
                                         @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
                                         {

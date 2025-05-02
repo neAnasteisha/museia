@@ -27,16 +27,27 @@ namespace museia.Repositories
 
             if (existingReaction != null)
             {
-                existingReaction.ReactionType = reaction.ReactionType;
-                _context.Reactions.Update(existingReaction);
+                if (existingReaction.ReactionType == reaction.ReactionType)
+                {
+                    // Якщо реакція така ж сама — видалити
+                    _context.Reactions.Remove(existingReaction);
+                }
+                else
+                {
+                    // Якщо інша — оновити
+                    existingReaction.ReactionType = reaction.ReactionType;
+                    _context.Reactions.Update(existingReaction);
+                }
             }
             else
             {
+                // Якщо реакції ще не було — додати
                 _context.Reactions.Add(reaction);
             }
 
             await _context.SaveChangesAsync();
         }
+
 
         public async Task<List<Reaction>> GetReactionsByUserIdAsync(string userId)
         {

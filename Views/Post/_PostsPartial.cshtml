@@ -39,10 +39,10 @@
                         }
 
                         <div class="post-content">
-                            <h4>@post.PostText</h4>
+                            <p>@post.PostText</p>
                             <div class="post-meta">
                                 <span><strong>#</strong> @post.PostTag</span>
-                                <span>@post.CreatedAt:yyyy.MM.dd</span>
+                                <span>@post.CreatedAt</span>
                             </div>
                         </div>
 
@@ -79,7 +79,7 @@
                                         var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
                                         if (count > 0)
                                         {
-                                            <div style="position:relative; font-size:1.5em;">
+                                            <div style="position:relative; ">
                                                 <span>@GetEmoji(emoji)</span>
                                                 <span class="reaction-count" style="font-size:0.8em;position:absolute;top:-0.5em;right:-0.7em;background-color:#c9e2f5;border-radius:50%;padding:0.1em 0.4em;line-height:1;">
                                                     @count

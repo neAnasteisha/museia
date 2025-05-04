@@ -81,9 +81,9 @@
                                         var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
                                         if (count > 0)
                                         {
-                                            <div style="position:relative; ">
+                                            <div style="position:relative; font-size:1.5em;">
                                                 <span>@GetEmoji(emoji)</span>
-                                                <span class="reaction-count" style="font-size:0.8em;position:absolute;top:-0.5em;right:-0.7em;background-color:#c9e2f5;border-radius:50%;padding:0.1em 0.4em;line-height:1;">
+                                                <span class="reaction-count" style="font-size:0.8em; position:absolute; top:-0.5em; right:-0.7em; border-radius:50%; padding:0.1em 0.4em; line-height:1;">
                                                     @count
                                                 </span>
                                             </div>

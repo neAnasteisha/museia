@@ -97,3 +97,13 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
             color: #5a506a;
             font-weight: bold;
         }
+
+.text-note {
+    color: #ff006e;
+    font-size: 12px;
+    font-weight: 499;
+}
+
+.highlight {
+    color: crimson;
+}

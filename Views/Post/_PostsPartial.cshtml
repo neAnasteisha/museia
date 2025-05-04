@@ -13,7 +13,7 @@
 <div class="posts m-3" style="display:flex; flex-direction:column; align-items:center;">
     @if (Model.Any())
     {
-        foreach (var post in Model)
+        foreach (var post in Model.OrderByDescending(p => p.CreatedAt))
         {
             <div id="post-@post.PostID" class="post mb-4 p-3 border" style="width:70vw; border-radius:1vw; padding:2vw;">
                 <div style="display:flex; gap:2vw;">
@@ -106,7 +106,7 @@
     }
     else
     {
-        <h4>Нічого не вдалось знайти :(</h4>
+        <h4>Створені вами дописи відображатимуться тут 😊</h4>
     }
 </div>
 

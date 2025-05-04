@@ -22,12 +22,27 @@
     <link rel="stylesheet" href="~/css/profile.css" />
     <link rel="stylesheet" href="~/css/post.css" />
     <style>
-        /* Прибираємо підкреслення */
-        .btn-link, .btn-link span {
-            text-decoration: none !important;
-            color: inherit;
+        /* Override Bootstrap focus/active shadows and outlines globally */
+        .btn:focus,
+        .btn:active:focus,
+        .btn-link.nav-link:focus,
+        .form-control:focus,
+        .form-check-input:focus,
+        .btn-check:focus + .btn {
+            outline: none !important;
+            box-shadow: none !important;
         }
 
+        /* Remove underline from btn-link in all states */
+        .btn-link,
+        .btn-link:hover,
+        .btn-link:focus,
+        .btn-link:active {
+            text-decoration: none !important;
+            color: inherit !important;
+        }
+
+        /* Reaction count badges */
         .reaction-count.my-reaction {
             background-color: #a3cde1;
             color: black;

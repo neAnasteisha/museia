@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using museia.Data;
 using museia.IService;
 using museia.Models;
-using museia.Services;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace museia.Controllers
 {
@@ -19,33 +20,41 @@ namespace museia.Controllers
             _reactionService = reactionService;
         }
 
-        [HttpGet]
-        public IActionResult AddReaction(uint postId)
-        {
-            ViewBag.PostId = postId;
-            return View("~/Views/Reaction/AddReaction.cshtml");
-        }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]  // перевіряємо токен
         public async Task<IActionResult> AddReaction(uint postId, Emoji reactionType)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
-            {
-                ModelState.AddModelError(string.Empty, "User is not authenticated.");
-                return View("~/Views/Reaction/AddReaction.cshtml");
-            }
+                return Unauthorized();
 
-            try
+            // додаємо або оновлюємо реакцію
+            await _reactionService.AddReactionAsync(reactionType, userId, postId);
+
+            // забираємо всі реакції поточного поста
+            var reactions = await _context.Reactions
+                .Where(r => r.PostID == postId)
+                .ToListAsync();
+
+            // групуємо по типу
+            var counts = reactions
+                .GroupBy(r => r.ReactionType)
+                .ToDictionary(
+                    g => ((int)g.Key).ToString(),
+                    g => g.Count()
+                );
+
+            // визначаємо вашу поточну реакцію
+            var my = reactions.FirstOrDefault(r => r.UserID == userId)?.ReactionType;
+            int? myReaction = my.HasValue ? (int?)my.Value : null;
+
+            // повертаємо JSON
+            return Json(new
             {
-                await _reactionService.AddReactionAsync(reactionType, userId, postId);
-                return RedirectToAction("Index", "Post");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
-                return View("~/Views/Reaction/AddReaction.cshtml");
-            }
+                PostId = postId,
+                Counts = counts,
+                MyReaction = myReaction
+            });
         }
     }
 }

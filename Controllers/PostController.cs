@@ -34,17 +34,25 @@ namespace museia.Controllers
         }
 
 
+        [HttpGet]
         public async Task<IActionResult> Index(string searchText)
         {
+            // 1) пошук
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // 2) перевірка активної скарги
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
             bool hasActiveComplaint = false;
+
             foreach (var post in userPosts)
             {
-                var complaints = await _complaintService.GetComplaintsByPostIdAsync(post.PostID);
-                if (complaints.Any(c => c.ComplaintStatus == ComplaintStatus.Accepted && !c.IsAcknowledged))
+                var complaints = await _complaintService
+                    .GetComplaintsByPostIdAsync(post.PostID);
+
+                if (complaints
+                    .Any(c => c.ComplaintStatus == ComplaintStatus.Accepted
+                           && !c.IsAcknowledged))
                 {
                     hasActiveComplaint = true;
                     break;
@@ -52,13 +60,41 @@ namespace museia.Controllers
             }
 
             if (hasActiveComplaint)
-            {
                 return RedirectToAction("WarningView", "Complaint");
-            }
 
             return View(posts);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> PostsPartial(string searchText)
+        {
+            // повторюємо ту ж саму валідацію скарг
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
+            bool hasActiveComplaint = false;
+
+            foreach (var post in userPosts)
+            {
+                var complaints = await _complaintService
+                    .GetComplaintsByPostIdAsync(post.PostID);
+
+                if (complaints
+                    .Any(c => c.ComplaintStatus == ComplaintStatus.Accepted
+                           && !c.IsAcknowledged))
+                {
+                    hasActiveComplaint = true;
+                    break;
+                }
+            }
+
+            if (hasActiveComplaint)
+                // Якщо AJAX – fetch побачить цей редирект, ми примусимо браузер перейти
+                return RedirectToAction("WarningView", "Complaint");
+
+            // тут — той самий пошук, що й у Index
+            List<Post> posts = await _postService.SearchPostsAsync(searchText);
+            return PartialView("_PostsPartial", posts);
+        }
 
         public IActionResult Privacy()
         {

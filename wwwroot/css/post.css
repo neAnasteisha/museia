@@ -27,6 +27,12 @@
 
 }
 
+.reaction-button,
+.reaction-button span,
+.btn-link {
+    text-decoration: none !important;
+}
+
 .post-tag {
     color: #0e0514;
     font-weight: 499;

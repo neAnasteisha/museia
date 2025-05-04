@@ -1,134 +1,111 @@
 ﻿@using System.Security.Claims
+@using System.Linq
 @model museia.Models.ProfileViewModel
+
+@inject museia.Services.CurrentUserService CurrentUserService
 
 @{
     ViewData["Title"] = "Профіль";
-    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    // Якщо аватар відсутній, використовується зображення за замовчуванням
-    var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar) ? "/uploads/avatar.jpg" : Model.User.UserAvatar;
+    var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar)
+        ? "/uploads/avatar.jpg"
+        : Model.User.UserAvatar;
+    var userType = await CurrentUserService.GetCurrentUserTypeAsync();
 }
 
 <!DOCTYPE html>
+<html lang="uk">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - museia</title>
     <link rel="stylesheet" href="~/css/profile.css" />
     <link rel="stylesheet" href="~/css/post.css" />
+    <style>
+        /* Прибираємо підкреслення */
+        .btn-link, .btn-link span {
+            text-decoration: none !important;
+            color: inherit;
+        }
+
+        .reaction-count.my-reaction {
+            background-color: #a3cde1;
+            color: black;
+        }
+
+        .reaction-count {
+            background-color: #c9e2f5;
+            color: black;
+        }
+    </style>
 </head>
 <body>
-
     <div class="profile-header">
         <div class="profile-info">
             <img src="@userAvatar" alt="Profile Photo" class="profile-avatar" />
             <div class="profile-details">
                 <h3 class="profile-username">@Model.User.UserName</h3>
                 <p class="profile-email"><strong>Email:</strong> @Model.User.Email</p>
-            @if (!string.IsNullOrEmpty(Model.User.UserDescription))
-            {
+                @if (!string.IsNullOrEmpty(Model.User.UserDescription))
+                {
                     <p class="profile-description"><strong>Опис:</strong> @Model.User.UserDescription</p>
-            }
+                }
             </div>
         </div>
     </div>
 
-    <div class="profile-posts-section">
-        @if (Model.UserPosts.Count > 0 && Model.UserPosts.Any(post => !post.IsHidden))
-        {
-            <div style="width: 70vw; margin: 0 auto;">
-                <h3 class="posts-title">Дописи</h3>
-            </div>
-            <div class="posts">
-                @foreach (var post in Model.UserPosts.OrderByDescending(p => p.CreatedAt))
-                {
-                    @if (!post.IsHidden)
-                    {
-                        <div class="post mb-4 p-3 border" style="height: fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
-                            <div class=" mb-2" style="display:flex; flex-direction: row; gap: 2vw; align-items: flex-start; justify-content: flex-start;">
-                                @if (!string.IsNullOrEmpty(post.PostPhoto))
-                                {
-                                    <div class="post-image">
-                                        <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height: 21vw;" />
-                                    </div>
-                                }
-                                <div style="display: flex; flex-direction: column; gap: 2vw; height: fit-content; max-height: 20vw;">
-                                    <!-- Оскільки це профіль користувача, відображається його ім'я без посилання -->
-                                    <a class="nickname" style="color: black;">@Model.User.UserName</a>
-                                    <div class="post-content">
-                                        <h4 class="post-text">@post.PostText</h4>
-                                        <div class="post-meta">
-                                            <span class="post-tag"><strong>#</strong> @post.PostTag</span>
-                                            <span class="post-date">@post.CreatedAt.ToString("yyyy.MM.dd")</span>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 0.8vw; align-items: center; flex-wrap: wrap;">
-                                        @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
-                                        {
-                                            var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
-
-                                            @if (count > 0)
-                                            {
-                                                <div style="position: relative; font-size: 1.5em;">
-                                                    <span>@GetEmoji(emoji)</span>
-                                                    <span class="reaction-count"
-                                                          style="font-size: 0.8em; position: absolute; top: -0.5em; right: -0.7em;
-                                     background-color: #c9e2f5; border-radius: 50%; padding: 0.1em 0.4em; line-height: 1;">
-                                                        @count
-                                                    </span>
-                                                </div>
-                                            }
-                                        }
-                                    </div>
-                                    <style>
-                                        .reaction-count {
-                                            background-color: #c9e2f5;
-                                            color: black;
-                                        }
-                                    </style>
-                                    <div class="post-actions">
-                                        @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
-                                        {
-                                            <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" class="btn btn-edit-post post-actions-btn">Редагувати</a>
-                                            <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })" style="display:inline;">
-                                                <button type="submit" class="btn btn-delete-post post-actions-btn" onclick="return confirm('Ви впевнені, що хочете видалити цей допис?')">Видалити</button>
-                                            </form>
-                                        }
-                                    </div>
-                                    @if (post.EditedAt.HasValue)
-                                    {
-                                        <p class="text-muted" style="font-size: 0.8em; margin-top: 0.5em;">
-                                            Відредаговано @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
-                                        </p>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-            </div>
-        }
-        else
-        {
-            <div>
-                <h4>Нічого не вдалось знайти :(</h4>
-            </div>
-        }
+    <div style="width:70vw; margin:0 auto;">
+        <div id="postsContainer">
+            @await Html.PartialAsync("~/Views/Post/_PostsPartial.cshtml", Model.UserPosts)
+        </div>
     </div>
+
+    <script>
+        // Прив'язуємо AJAX-обробники до кожної форми реакції
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.reaction-form').forEach(form => {
+                form.addEventListener('submit', async e => {
+                    e.preventDefault();
+                    const postId = form.querySelector('input[name="postId"]').value;
+                    const reactionType = e.submitter.value;
+                    const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+                    const fd = new FormData();
+                    fd.append('postId', postId);
+                    fd.append('reactionType', reactionType);
+                    if (token) fd.append('__RequestVerificationToken', token);
+
+                    try {
+                        const res = await fetch(form.action, {
+                            method: 'POST',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            body: fd
+                        });
+                        if (res.ok) {
+                            // Перезавантажуємо сторінку, щоб побачити оновлені емоджі
+                            window.location.reload();
+                        } else {
+                            form.submit();
+                        }
+                    } catch {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 @functions {
-    private string GetEmoji(Emoji reactionType)
+    private string GetEmoji(Emoji reactionType) => reactionType switch
     {
-        return reactionType switch
-        {
-            Emoji.Heart => "❤️",
-            Emoji.ThumbsUp => "👍",
-            Emoji.Cry => "😢",
-            Emoji.Dragon => "🐉",
-            Emoji.Laughing => "😹",
-            Emoji.Throwing_Up => "🤮",
-            Emoji.Sparkle => "✨",
-            _ => string.Empty,
-        };
-    }
+        Emoji.Heart => "❤️",
+        Emoji.ThumbsUp => "👍",
+        Emoji.Cry => "😢",
+        Emoji.Dragon => "🐉",
+        Emoji.Laughing => "😹",
+        Emoji.Throwing_Up => "🤮",
+        Emoji.Sparkle => "✨",
+        _ => string.Empty
+    };
 }

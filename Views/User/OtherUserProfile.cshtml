@@ -1,16 +1,15 @@
 ﻿@using System.Security.Claims
+@using System.Linq
 @model museia.Models.ProfileViewModel
+
+@inject museia.Services.CurrentUserService CurrentUserService
 
 @{
     ViewData["Title"] = "Профіль " + Model.User.UserName;
-    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar) ? "/uploads/avatar.jpg" : Model.User.UserAvatar;
-}
-
-@inject museia.Services.CurrentUserService CurrentUserService
-@inject museia.IService.IPostService postService
-
-@{
+    var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var userAvatar = string.IsNullOrEmpty(Model.User.UserAvatar)
+        ? "/uploads/avatar.jpg"
+        : Model.User.UserAvatar;
     var userType = await CurrentUserService.GetCurrentUserTypeAsync();
 }
 
@@ -23,117 +22,85 @@
     <link rel="stylesheet" href="~/css/post.css" />
 </head>
 <body>
-    <!-- Шапка профілю -->
+    <!-- Шапка чужого профілю -->
     <div class="profile-header" style="text-align:center; margin-bottom:5vw;">
         <img src="@userAvatar" alt="Avatar" style="width:150px; height:150px; border-radius:50%; margin-bottom:10px;" />
         <h1>@Model.User.UserName</h1>
         @if (!string.IsNullOrEmpty(Model.User.UserDescription))
         {
-            <p style="margin-top: 16px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
+            <p style="margin-top:16px;"><strong>Опис:</strong> @Model.User.UserDescription</p>
         }
     </div>
 
-    <!-- Список дописів профілю -->
-    <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column; gap:1vw;">
-        @if (Model.UserPosts != null && Model.UserPosts.Count != 0 && Model.UserPosts.Any(post => !post.IsHidden))
-        {
-            <h3>Дописи</h3>
-            @foreach (var post in Model.UserPosts.OrderByDescending(p => p.CreatedAt))
-            {
-                @if (!post.IsHidden)
-                {
-                    <div class="post mb-4 p-3 border" style="height:fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
-                        <div class="mb-2" style="display:flex; flex-direction:row; gap:2vw; align-items: flex-start; justify-content: flex-start;">
-                            @if (!string.IsNullOrEmpty(post.PostPhoto))
-                            {
-                                <div class="post-image">
-                                    <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height:21vw;" />
-                                </div>
-                            }
-                            <div style="display:flex; flex-direction:column; gap:2vw; height: fit-content; max-height:20vw;">
-                                @{
-                                    var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
-                                }
-                                @if (post.UserID == currentUserId)
-                                {
-                                    <a class="nickname" style="color: black;">@nickname</a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link nickname">
-                                        @nickname
-                                    </a>
-                                }
-                                <div class="post-content">
-                                    <h4 class="post-text">@post.PostText</h4>
-                                    <div class="post-meta">
-                                        <span class="post-tag"><strong>#</strong> @post.PostTag</span>
-                                        <span class="post-date"> @post.CreatedAt.ToString("yyyy.MM.dd")</span>
-                                    </div>
-                                </div>
-
-                                @if (post.Reactions != null && post.Reactions.Count > 0)
-                                {
-                                    <div class="post-reactions">
-                                        <ul style="display:flex; flex-direction:row; gap:0.5vw;">
-                                            @foreach (var reactionGroup in post.Reactions.GroupBy(r => r.ReactionType))
-                                            {
-                                                <li style="list-style:none; padding:0; margin:0;">@GetEmoji(reactionGroup.Key) @reactionGroup.Count()</li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-
-                                <div class="post-actions">
-                                    @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
-                                    {
-                                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">
-                                            Поскаржитись
-                                        </a>
-                                            var userReaction = post?.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
-                                            var reactionLabel = userReaction != null ? GetEmoji(userReaction.ReactionType) : "Реагувати";
-                                        
-                                        <a href="@Url.Action("AddReaction", "Reaction", new { postId = post.PostID })" class="btn btn-reaction-post" style="padding:0;">
-                                            @reactionLabel (@post.Reactions?.Count)
-                                        </a>
-                                    }
-                                </div>
-
-                                @if (post.EditedAt.HasValue)
-                                {
-                                    <p class="text-muted" style="font-size:0.8em; margin-top:0.5em;">
-                                        Відредаговано @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
-                                    </p>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-        }
-        else
-        {
-            <div>
-                <h4>Нічого не вдалось знайти :(</h4>
-            </div>
-        }
+    <!-- Список дописів користувача -->
+    <div style="width:70vw; margin:0 auto;">
+        <div id="postsContainer">
+            @await Html.PartialAsync("~/Views/Post/_PostsPartial.cshtml", Model.UserPosts)
+        </div>
     </div>
+
+    <script>
+        // Для простого перезавантаження сторінки після додавання реакції
+        function attachReactionHandlers() {
+            document.querySelectorAll('.reaction-form').forEach(form => {
+                form.addEventListener('submit', async e => {
+                    e.preventDefault();
+                    const postId = form.querySelector('input[name="postId"]').value;
+                    const reactionType = e.submitter.value;
+                    const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
+
+                    const fd = new FormData();
+                    fd.append('postId', postId);
+                    fd.append('reactionType', reactionType);
+                    if (token) fd.append('__RequestVerificationToken', token);
+
+                    try {
+                        const res = await fetch(form.action, {
+                            method: 'POST',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            body: fd
+                        });
+                        if (res.ok) {
+                            // Повне перезавантаження сторінки
+                            window.location.reload();
+                        } else {
+                            form.submit();
+                        }
+                    } catch {
+                        form.submit();
+                    }
+                });
+            });
+        }
+
+        // Стартова ініціалізація обробників
+        document.addEventListener('DOMContentLoaded', attachReactionHandlers);
+    </script>
+
+    <style>
+        .reaction-count.my-reaction {
+            background-color: #a3cde1;
+            color: black;
+        }
+
+        .reaction-count {
+            background-color: #c9e2f5;
+            color: black;
+        }
+    </style>
 </body>
 </html>
 
 @functions {
-    private string GetEmoji(Emoji reactionType)
+    private string GetEmoji(Emoji reactionType) => reactionType switch
     {
-        return reactionType switch
-        {
-            Emoji.Heart => "❤️",
-            Emoji.ThumbsUp => "👍",
-            Emoji.Cry => "😢",
-            Emoji.Dragon => "🐉",
-            Emoji.Laughing => "😹",
-            Emoji.Throwing_Up => "🤮",
-            Emoji.Sparkle => "✨",
-            _ => string.Empty,
-        };
-    }
+        Emoji.Heart => "❤️",
+        Emoji.ThumbsUp => "👍",
+        Emoji.Cry => "😢",
+        Emoji.Dragon => "🐉",
+        Emoji.Laughing => "😹",
+        Emoji.Throwing_Up => "🤮",
+        Emoji.Sparkle => "✨",
+        _ => string.Empty
+    };
 }

@@ -38,6 +38,7 @@
 
 .scroll-text::webkit-scrollbar{
     display:none;
+    margin-bottom: 10px;
 }
 
 .reaction-button,

@@ -44,10 +44,10 @@
                         }
 
                         <div class="post-content">
-                            <div class="scroll-text">
+                            <div class="scroll-text" style="margin-bottom: 10px;">
                                 <p>@post.PostText</p>
                             </div>
-                            <div class="post-meta">
+                            <div class="post-meta" style="margin-top: 10px;">
                                 <span><strong>#</strong> @post.PostTag</span>
                                 <span>@post.CreatedAt</span>
                             </div>
@@ -100,7 +100,7 @@
 
                         @if (post.EditedAt.HasValue)
                         {
-                            <p class="text-muted" style="font-size:0.8em;">
+                            <p class="text-muted" style=" margin-top: 10px; font-size:0.8em; ">
                                 Відредаговано @post.EditedAt
                             </p>
                         }

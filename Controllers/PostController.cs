@@ -68,7 +68,6 @@ namespace museia.Controllers
         [HttpGet]
         public async Task<IActionResult> PostsPartial(string searchText)
         {
-            // повторюємо ту ж саму валідацію скарг
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
             bool hasActiveComplaint = false;
@@ -88,10 +87,8 @@ namespace museia.Controllers
             }
 
             if (hasActiveComplaint)
-                // Якщо AJAX – fetch побачить цей редирект, ми примусимо браузер перейти
                 return RedirectToAction("WarningView", "Complaint");
 
-            // тут — той самий пошук, що й у Index
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
             return PartialView("_PostsPartial", posts);
         }

@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="~/css/post.css" />
 </head>
 <body>
-    <!-- Шапка чужого профілю -->
     <div class="profile-header" style="text-align:center; margin-bottom:5vw;">
         <img src="@userAvatar" alt="Avatar" style="width:150px; height:150px; border-radius:50%; margin-bottom:10px;" />
         <h1>@Model.User.UserName</h1>
@@ -32,7 +31,6 @@
         }
     </div>
 
-    <!-- Список дописів користувача -->
     <div style="width:70vw; margin:0 auto;">
         <div id="postsContainer">
             @await Html.PartialAsync("~/Views/Post/_PostsPartial.cshtml", Model.UserPosts)
@@ -40,45 +38,52 @@
     </div>
 
     <script>
-        // Для простого перезавантаження сторінки після додавання реакції
-        function attachReactionHandlers() {
-            document.querySelectorAll('.reaction-form').forEach(form => {
-                form.addEventListener('submit', async e => {
-                    e.preventDefault();
-                    const postId = form.querySelector('input[name="postId"]').value;
-                    const reactionType = e.submitter.value;
-                    const token = form.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        const userPostsUrl = '@Url.Action("UserPostsPartial", "User", new { id = Model.User.Id })';
+        const container = document.getElementById('postsContainer');
 
-                    const fd = new FormData();
-                    fd.append('postId', postId);
-                    fd.append('reactionType', reactionType);
-                    if (token) fd.append('__RequestVerificationToken', token);
+        container.addEventListener('submit', async e => {
+          if (!e.target.classList.contains('reaction-form')) return;
+          e.preventDefault();
 
-                    try {
-                        const res = await fetch(form.action, {
-                            method: 'POST',
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                            body: fd
-                        });
-                        if (res.ok) {
-                            // Повне перезавантаження сторінки
-                            window.location.reload();
-                        } else {
-                            form.submit();
-                        }
-                    } catch {
-                        form.submit();
-                    }
-                });
+          const form = e.target;
+          const postId = form.querySelector('input[name="postId"]').value;
+          const reactionType = e.submitter.value;
+          const tokenInput = form.querySelector('input[name="__RequestVerificationToken"]');
+
+          const fd = new FormData();
+          fd.append('postId', postId);
+          fd.append('reactionType', reactionType);
+          if (tokenInput) fd.append(tokenInput.name, tokenInput.value);
+
+          try {
+            const res = await fetch(form.action, {
+              method: 'POST',
+              headers: { 'X-Requested-With': 'XMLHttpRequest' },
+              body: fd
             });
-        }
 
-        // Стартова ініціалізація обробників
-        document.addEventListener('DOMContentLoaded', attachReactionHandlers);
+            if (res.ok && !res.redirected) {
+              const r2 = await fetch(userPostsUrl, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+              });
+              if (r2.ok) {
+                const html = await r2.text();
+                container.innerHTML = html;
+              }
+            } else if (res.redirected) {
+              window.location.href = res.url;
+            } else {
+              form.submit();
+            }
+          } catch {
+            form.submit();
+          }
+        });
     </script>
 
+
+
     <style>
-        /* Override Bootstrap focus/active shadows and outlines globally */
         .btn:focus,
         .btn:active:focus,
         .btn-link.nav-link:focus,
@@ -89,7 +94,6 @@
             box-shadow: none !important;
         }
 
-        /* Remove underline from btn-link in all states */
         .btn-link,
         .btn-link:hover,
         .btn-link:focus,
@@ -98,7 +102,6 @@
             color: inherit !important;
         }
 
-        /* Reaction count badges */
         .reaction-count.my-reaction {
             background-color: #a3cde1;
             color: black;

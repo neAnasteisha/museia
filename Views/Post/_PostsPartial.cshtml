@@ -8,6 +8,7 @@
 @{
     var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
     var userType = await CurrentUserService.GetCurrentUserTypeAsync();
+    var routeUserId = ViewContext.RouteData.Values["id"]?.ToString();
 }
 
 <div class="posts m-3" style="display:flex; flex-direction:column; align-items:center;">
@@ -27,13 +28,17 @@
                         @{
                             var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
                         }
-                        @if (post.UserID != currentUserId)
+                        @if (post.UserID.ToString() == routeUserId || post.UserID == currentUserId)
                         {
-                            <span class="nickname" style="font-weight:bold;">@nickname</span>
+                            <span class="nickname" style="font-weight:bold; color:black">@nickname</span>
                         }
                         else
                         {
-                            <a asp-controller="User" asp-action="OtherUserProfile" asp-route-id="@post.UserID" class="btn btn-link nickname">
+                            <a asp-controller="User"
+                               asp-action="OtherUserProfile"
+                               asp-route-id="@post.UserID"
+                               class="nickname"
+                               style="font-weight:bold;">
                                 @nickname
                             </a>
                         }

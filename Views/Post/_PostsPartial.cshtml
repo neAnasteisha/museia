@@ -1,0 +1,130 @@
+﻿@using System.Security.Claims
+@using System.Linq
+@model List<Post>
+
+@inject museia.Services.CurrentUserService CurrentUserService
+@inject museia.IService.IPostService postService
+
+@{
+    var currentUserId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var userType = await CurrentUserService.GetCurrentUserTypeAsync();
+    var routeUserId = ViewContext.RouteData.Values["id"]?.ToString();
+}
+
+<div class="posts m-3" style="display:flex; flex-direction:column; align-items:center;">
+    @if (Model.Any())
+    {
+        foreach (var post in Model.OrderByDescending(p => p.CreatedAt))
+        {
+            <div id="post-@post.PostID" class="post mb-4 p-3 border" style="width:70vw; border-radius:1vw; padding:2vw;">
+                <div style="display:flex; gap:2vw;">
+                    @if (!string.IsNullOrEmpty(post.PostPhoto))
+                    {
+                        <div class="post-image">
+                            <img src="@post.PostPhoto" alt="Фото допису" style="height:21vw; width:auto;" />
+                        </div>
+                    }
+                    <div style="flex:1; display:flex; flex-direction:column; gap:1.5vw;">
+                        @{
+                            var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
+                        }
+                        @if (post.UserID.ToString() == routeUserId || post.UserID == currentUserId)
+                        {
+                            <span class="nickname" style="font-weight:bold; color:black">@nickname</span>
+                        }
+                        else
+                        {
+                            <a asp-controller="User"
+                               asp-action="OtherUserProfile"
+                               asp-route-id="@post.UserID"
+                               class="nickname"
+                               style="font-weight:bold;">
+                                @nickname
+                            </a>
+                        }
+
+                        <div class="post-content">
+                            <div class="scroll-text">
+                                <p>@post.PostText</p>
+                            </div>
+                            <div class="post-meta">
+                                <span><strong>#</strong> @post.PostTag</span>
+                                <span>@post.CreatedAt</span>
+                            </div>
+                        </div>
+
+                        <div class="post-actions">
+                            @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
+                            {
+                                var myReaction = post.Reactions?.FirstOrDefault(r => r.UserID == currentUserId);
+
+                                <form asp-controller="Reaction" asp-action="AddReaction" method="post" class="reaction-form" style="display:flex; gap:0.8vw; position:relative;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="postId" value="@post.PostID" />
+
+                                    @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
+                                    {
+                                        var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
+                                        var isMine = myReaction?.ReactionType == emoji;
+                                        <button type="submit" name="reactionType" value="@((int)emoji)" class="btn btn-link" style="font-size:1.5em; padding:0; border:none; position:relative;">
+                                            <span>@GetEmoji(emoji)</span>
+                                            @if (count > 0)
+                                            {
+                                                <span class="reaction-count @(isMine ? "my-reaction" : "")" style="font-size:0.8em;position:absolute;top:-0.5em;right:-0.7em;border-radius:50%;padding:0.1em 0.4em;line-height:1;">
+                                                    @count
+                                                </span>
+                                            }
+                                        </button>
+                                    }
+                                </form>
+                            }
+                            else
+                            {
+                                <div style="display:flex; gap:0.8vw;">
+                                    @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
+                                    {
+                                        var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
+                                        if (count > 0)
+                                        {
+                                            <div style="position:relative; font-size:1.5em;">
+                                                <span>@GetEmoji(emoji)</span>
+                                                <span class="reaction-count" style="font-size:0.8em; position:absolute; top:-0.5em; right:-0.7em; border-radius:50%; padding:0.1em 0.4em; line-height:1;">
+                                                    @count
+                                                </span>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                        @if (post.EditedAt.HasValue)
+                        {
+                            <p class="text-muted" style="font-size:0.8em;">
+                                Відредаговано @post.EditedAt
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h4>Створені вами дописи відображатимуться тут 😊</h4>
+    }
+</div>
+
+@functions {
+    private string GetEmoji(Emoji reactionType) => reactionType switch
+    {
+        Emoji.Heart => "❤️",
+        Emoji.ThumbsUp => "👍",
+        Emoji.Cry => "😢",
+        Emoji.Dragon => "🐉",
+        Emoji.Laughing => "😹",
+        Emoji.Throwing_Up => "🤮",
+        Emoji.Sparkle => "✨",
+        _ => string.Empty,
+    };
+}

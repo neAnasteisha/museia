@@ -49,13 +49,21 @@ namespace museia.Controllers
             return RedirectToAction("Index", "Post");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddReaction(Emoji reactionType, uint postId)
         {
             var userId = _userManager.GetUserId(User);
             await _reactionService.AddReactionAsync(reactionType, userId, postId);
-            return RedirectToAction("Index", "Post");
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return Ok();
+
+            var referer = Request.Headers["Referer"].ToString();
+            return Redirect(!string.IsNullOrEmpty(referer) ? referer : Url.Action("Profile", "User"));
         }
-        
+
+
         public async Task<IActionResult> Profile()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -82,6 +90,19 @@ namespace museia.Controllers
 
             return View(profileViewModel); 
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UserPostsPartial(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return BadRequest();
+
+            var posts = await _postService.GetPostsOfUserAsync(id);
+            return PartialView("~/Views/Post/_PostsPartial.cshtml", posts);
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> SendWarning(uint complaintId, uint postId, string postsUserId)

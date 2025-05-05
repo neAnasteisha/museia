@@ -47,27 +47,32 @@
 
     <div class="container-register">
         <h2 class="text-center">Реєстрація</h2>
+
+        <p class="text-note">
+            Зірочка(*) біля назви поля означає, що поле необхідно заповнити.
+        </p>
+
         <form method="post" action="/Account/Register" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="mb-3">
-                <label class="form-label">Ім'я</label>
+                <label class="form-label">Ім'я<span class="highlight">*</span></label>
                 <input type="text" class="form-control" name="username" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Email</label>
+                <label class="form-label">Email<span class="highlight">*</span></label>
                 <input type="email" class="form-control" name="email" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">Пароль</label>
+                <label class="form-label">Пароль<span class="highlight">*</span></label>
                 <input type="password" class="form-control" name="password" required>
 
-                <label class="form-label">Повторіть пароль</label>
+                <label class="form-label">Повторіть пароль<span class="highlight">*</span></label>
                 <input type="password" class="form-control" name="confirmPassword" required />
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Аватар (необов'язково)</label>
+                <label class="form-label">Аватар</label>
                 <input type="file" class="form-control" id="avatarInput" accept="image/*" />
                 <img id="imagePreview" style="display: none;" />
                 <input type="hidden" name="avatarCropped" id="avatarCropped" />

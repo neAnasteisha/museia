@@ -3,13 +3,13 @@
 
 @{
     ViewData["Title"] = "All Posts";
-    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 @inject museia.Services.CurrentUserService CurrentUserService
 @inject museia.IService.IPostService postService
 
 @{
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var userType = await CurrentUserService.GetCurrentUserTypeAsync();
 }
 
@@ -23,110 +23,99 @@
 </head>
 <body>
     <div style="width: 70vw; margin: 0 auto;">
-    <form method="get" asp-action="Index" class="m-3" style="padding-left:1.5vw;">
-        <input type="text" name="searchText" class="form-control" placeholder="Пошук по дописах" style="width: 20vw; color:#959ab1" />
-    </form>
+        <form id="searchForm" method="get" asp-action="Index" class="m-3" style="padding-left:1.5vw;">
+            <input type="text"
+                   name="searchText"
+                   class="form-control"
+                   placeholder="Пошук"
+                   style="width: 20vw; color:#959ab1"
+                   value="@(ViewContext.HttpContext.Request.Query["searchText"].ToString())" />
+        </form>
     </div>
 
-    <div class="posts m-3" style="display:flex; align-items: center; flex-direction: column;">
-        @if (Model.Count != 0)
-        {
-            foreach (var post in Model)
-            {
-                <div class="post mb-4 p-3 border" style="height:fit-content; width: 70vw; border-radius: 1vw; padding: 2vw;">
-                    <div class="mb-2" style="display:flex; flex-direction:row; gap:2vw; align-items: flex-start; justify-content: flex-start;">
-                        @if (!string.IsNullOrEmpty(post.PostPhoto))
-                        {
-                            <div class="post-image">
-                                <img src="@post.PostPhoto" alt="Фото допису" style="width: auto; height:21vw;" />
-                            </div>
-                        }
-                        <div style="display:flex; flex-direction:column; gap:2vw; height: fit-content; max-height:20vw;">
-                            @{
-                                var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
-                            }
-                            @if (post.UserID == currentUserId)
-                            {
-                                <a class="nickname" style="color: black;">@nickname</a>
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("OtherUserProfile", "User", new { id = post.UserID })" class="btn btn-link nickname">
-                                    @nickname
-                                </a>
-                            }
-                            <div class="post-content">
-                                <h4 class="post-text">@post.PostText</h4>
-                                <div class="post-meta">
-                                    <span class="post-tag"><strong>#</strong> @post.PostTag</span>
-                                    <span class="post-date"> @post.CreatedAt.ToString("yyyy.MM.dd")</span>
-                                </div>
-                            </div>
+    <div id="postsContainer">
+        @await Html.PartialAsync("_PostsPartial", Model)
+    </div>
 
-                            <div class="post-actions">
-                                @if (User.Identity.IsAuthenticated && post.UserID != currentUserId && userType != UserType.Moderator)
-                                {
-                                    <form asp-controller="Reaction" asp-action="AddReaction" method="post" style="display:flex; gap: 0.8vw; align-items:center; flex-wrap: wrap;">
-                                        <input type="hidden" name="postId" value="@post.PostID" />
-
-                                        @foreach (Emoji emoji in Enum.GetValues(typeof(Emoji)))
-                                        {
-                                            var count = post.Reactions?.Count(r => r.ReactionType == emoji) ?? 0;
-
-                                            <button type="submit" name="reactionType" value="@((int)emoji)"
-                                                    class="btn btn-link"
-                                                    style="font-size: 1.5em; padding: 0; position: relative; text-decoration: none; border: none; box-shadow: none;">
-                                                <span>@GetEmoji(emoji)</span>
-                                                @if (count > 0)
-                                                {
-                                                    <span style="font-size: 0.8em; position: absolute; top: -0.5em; right: -0.7em; background-color: #e0e0e0; border-radius: 50%; padding: 0.1em 0.4em; line-height: 1;">
-                                                        @count
-                                                    </span>
-                                                }
-                                            </button>
-                                        }
-                                    </form>
-                                    <div style="margin-top: 0.8em;">
-                                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })" class="btn btn-complaint-post" style="padding:0;">Поскаржитись</a>
-                                    </div>
-                                }
-                            </div>
-
-                            @if (post.EditedAt.HasValue)
-                            {
-                                <p class="text-muted" style="font-size:0.8em; margin-top:0.5em;">
-                                    Відредаговано @post.EditedAt.Value.ToString("dd.MM.yyyy HH:mm")
-                                </p>
-                            }
-                        </div>
-                    </div>
-                </div>
+    <script>
+        async function reloadPosts() {
+            const params = new URLSearchParams(window.location.search);
+            const url = `/Post/PostsPartial?${params.toString()}`;
+            const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, redirect: 'follow' });
+            if (res.redirected) { window.location.href = res.url; return; }
+            if (res.ok) {
+                const html = await res.text();
+                document.getElementById('postsContainer').innerHTML = html;
+                initReactionForms();
             }
         }
-        else
-        {
-            <div>
-                <h4>Нічого не вдалось знайти :(</h4>
-            </div>
-        }
-    </div>
 
+        function initReactionForms() {
+            document.querySelectorAll('.reaction-form').forEach(form => {
+                const clone = form.cloneNode(true);
+                form.replaceWith(clone);
+                clone.addEventListener('submit', async e => {
+                    e.preventDefault();
+                    const btn = e.submitter;
+                    const postId = clone.querySelector('input[name="postId"]').value;
+                    const reactionType = btn.value;
+                    const tokenInput = clone.querySelector('input[name="__RequestVerificationToken"]');
+
+                    const fd = new FormData();
+                    fd.append('postId', postId);
+                    fd.append('reactionType', reactionType);
+                    if (tokenInput) fd.append(tokenInput.name, tokenInput.value);
+
+                    try {
+                        const res = await fetch(clone.action, { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: fd });
+                        if (res.redirected) { window.location.href = res.url; return; }
+                        if (res.ok) await reloadPosts(); else clone.submit();
+                    } catch {
+                        clone.submit();
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initReactionForms();
+            document.getElementById('searchForm').addEventListener('submit', e => {
+                e.preventDefault();
+                const q = e.target.searchText.value;
+                history.replaceState(null, '', `?searchText=${encodeURIComponent(q)}`);
+                reloadPosts();
+            });
+        });
+    </script>
+
+    <style>
+        .btn:focus,
+        .btn:active:focus,
+        .btn-link.nav-link:focus,
+        .form-control:focus,
+        .form-check-input:focus,
+        .btn-check:focus + .btn {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-link,
+        .btn-link:hover,
+        .btn-link:focus,
+        .btn-link:active {
+            text-decoration: none !important;
+            color: inherit !important;
+        }
+
+        .reaction-count.my-reaction {
+            background-color: #a3cde1;
+            color: black;
+        }
+
+        .reaction-count {
+            background-color: #c9e2f5;
+            color: black;
+        }
+    </style>
 </body>
 </html>
-
-@functions {
-    private string GetEmoji(Emoji reactionType)
-    {
-        return reactionType switch
-        {
-            Emoji.Heart => "❤️",
-            Emoji.ThumbsUp => "👍",
-            Emoji.Cry => "😢",
-            Emoji.Dragon => "🐉",
-            Emoji.Laughing => "😹",
-            Emoji.Throwing_Up => "🤮",
-            Emoji.Sparkle => "✨",
-            _ => string.Empty,
-        };
-    }
-}

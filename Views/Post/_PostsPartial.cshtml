@@ -77,6 +77,15 @@
                                         </button>
                                     }
                                 </form>
+                                <div class="menu-container" onclick="toggleMenu(this)">
+                                    <button class="dots-button" aria-label="Меню">
+                                        &#8943; <!--Три горизонтальні крапки -->
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })">Поскаржитись</a>
+                                    </div>
+                                </div>
+
                             }
                             else
                             {
@@ -128,3 +137,19 @@
         _ => string.Empty,
     };
 }
+<script>
+    function toggleMenu(el) {
+        
+        document.querySelectorAll('.menu-container').forEach(c => {
+            if (c !== el) c.classList.remove('open');
+        });
+        el.classList.toggle('open');
+    }
+
+    document.addEventListener('click', function (e) {
+        const isMenu = e.target.closest('.menu-container');
+        if (!isMenu) {
+            document.querySelectorAll('.menu-container').forEach(c => c.classList.remove('open'));
+        }
+    });
+</script>

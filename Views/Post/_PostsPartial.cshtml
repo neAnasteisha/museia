@@ -27,7 +27,7 @@
                         @{
                             var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
                         }
-                        @if (post.UserID == currentUserId)
+                        @if (post.UserID != currentUserId)
                         {
                             <span class="nickname" style="font-weight:bold;">@nickname</span>
                         }

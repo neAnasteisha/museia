@@ -24,6 +24,8 @@
                             <img src="@post.PostPhoto" alt="Фото допису" style="height:21vw; width:auto;" />
                         </div>
                     }
+                    <div>
+                        <div style="     height: 100%; display: flex; flex-direction: column;">
                     <div style="flex:1; display:flex; flex-direction:column; gap:1.5vw;">
                         @{
                             var nickname = await postService.GetUserNicknameForPostAsync((int)post.PostID);
@@ -46,10 +48,6 @@
                         <div class="post-content">
                             <div class="scroll-text" style="margin-bottom: 10px;">
                                 <p>@post.PostText</p>
-                            </div>
-                            <div class="post-meta" style="margin-top: 10px;">
-                                <span><strong>#</strong> @post.PostTag</span>
-                                <span>@post.CreatedAt</span>
                             </div>
                         </div>
 
@@ -106,13 +104,22 @@
                                 </div>
                             }
                         </div>
-
-                        @if (post.EditedAt.HasValue)
-                        {
-                            <p class="text-muted" style=" margin-top: 10px; font-size:0.8em; ">
-                                Відредаговано @post.EditedAt
-                            </p>
-                        }
+                        </div>
+                        <div class="post-content">
+                            <div class="post-meta" style="margin-top: 10px;">
+                                <span><strong>#</strong> @post.PostTag</span>
+                                @if (post.EditedAt.HasValue)
+                                {
+                                    <span> Відредаговано @post.EditedAt</span>
+                                }
+                                else
+                                {
+                                    <span>@post.CreatedAt</span>
+                                }
+                            </div>
+                        </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>

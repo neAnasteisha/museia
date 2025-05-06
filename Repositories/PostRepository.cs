@@ -70,6 +70,19 @@
                 .ToListAsync();
         }
 
+        public async Task<List<Post>> GetPostsByUsersNickAsync(string nick)
+        {
+            string? userId = _context.Users
+                .Where(u => u.UserName == nick)
+                .Select(u => u.Id)
+                .FirstOrDefault();
+            return await _context.Posts
+                .Where(p => p.IsHidden == false)
+                .Where(p => p.UserID == userId)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task<List<Post>> SearchPostsByTextAsync(string searchText)
         {
             var allPosts = await _context.Posts

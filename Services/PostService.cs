@@ -80,6 +80,11 @@
                     return await _postRepository.GetPostsByTagAsync(enumTag);
                 }
             }
+            else if (searchText.StartsWith("@"))
+            {
+                var nick = searchText.Substring(1);
+                return await _postRepository.GetPostsByUsersNickAsync(nick);
+            }
             else
             {
                 return await _postRepository.SearchPostsByTextAsync(searchText);

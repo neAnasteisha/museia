@@ -166,7 +166,47 @@
             document.querySelectorAll('.menu-container').forEach(c => c.classList.remove('open'));
         }
     });
+
+    function updatePost(postId, counts, myReaction) {
+        const postElement = document.getElementById(`post-${postId}`);
+        if (postElement) {
+            const buttons = postElement.querySelectorAll('.btn-reaction');
+            buttons.forEach(button => {
+                const emojiType = button.getAttribute('data-emoji');
+                const countElement = button.querySelector('.reaction-count');
+                const count = counts[emojiType];
+                if (countElement) {
+                    countElement.textContent = count;
+                }
+            });
+
+            const myReactionElement = postElement.querySelector('.my-reaction');
+            if (myReactionElement) {
+                myReactionElement.classList.remove('my-reaction');
+            }
+
+            const newReactionButton = postElement.querySelector(`button[data-emoji="${myReaction}"]`);
+            if (newReactionButton) {
+                newReactionButton.classList.add('my-reaction');
+            }
+        }
+    }
+
+    function addReaction(postId, reactionType) {
+        $.ajax({
+            url: '@Url.Action("AddReaction", "Post")',
+            type: 'POST',
+            data: {
+                postId: postId,
+                reactionType: reactionType
+            },
+            success: function (response) {
+                updatePost(response.PostId, response.Counts, response.MyReaction);
+            }
+        });
+    }
 </script>
+
 
 @* <style>
     .menu-container {

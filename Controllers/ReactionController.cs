@@ -21,22 +21,19 @@ namespace museia.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]  // перевіряємо токен
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddReaction(uint postId, Emoji reactionType)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
                 return Unauthorized();
 
-            // додаємо або оновлюємо реакцію
-            await _reactionService.AddReactionAsync(reactionType, userId, postId, );
+            await _reactionService.AddReactionAsync(reactionType, userId, postId);
 
-            // забираємо всі реакції поточного поста
             var reactions = await _context.Reactions
                 .Where(r => r.PostID == postId)
                 .ToListAsync();
 
-            // групуємо по типу
             var counts = reactions
                 .GroupBy(r => r.ReactionType)
                 .ToDictionary(
@@ -44,11 +41,9 @@ namespace museia.Controllers
                     g => g.Count()
                 );
 
-            // визначаємо вашу поточну реакцію
             var my = reactions.FirstOrDefault(r => r.UserID == userId)?.ReactionType;
             int? myReaction = my.HasValue ? (int?)my.Value : null;
 
-            // повертаємо JSON
             return Json(new
             {
                 PostId = postId,

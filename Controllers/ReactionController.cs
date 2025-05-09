@@ -29,7 +29,7 @@ namespace museia.Controllers
                 return Unauthorized();
 
             // додаємо або оновлюємо реакцію
-            await _reactionService.AddReactionAsync(reactionType, userId, postId);
+            await _reactionService.AddReactionAsync(reactionType, userId, postId, );
 
             // забираємо всі реакції поточного поста
             var reactions = await _context.Reactions

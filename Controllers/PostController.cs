@@ -11,6 +11,7 @@ using NuGet.Protocol.Plugins;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -35,7 +36,7 @@ namespace museia.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchText)
+        public async Task<IActionResult> Index(string searchText, int page = 1, int pageSize = 5)
         {
             // 1) пошук
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
@@ -62,7 +63,20 @@ namespace museia.Controllers
             if (hasActiveComplaint)
                 return RedirectToAction("WarningView", "Complaint");
 
-            return View(posts);
+            var totalItems = posts.Count;
+            var pagedPosts = posts
+            .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var viewModel = new PostListViewModel
+            {
+                Posts = pagedPosts,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]

@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model List<Post>
+@model museia.Models.PostListViewModel
 
 @{
     ViewData["Title"] = "All Posts";
@@ -34,8 +34,83 @@
     </div>
 
     <div id="postsContainer">
-        @await Html.PartialAsync("_PostsPartial", Model)
+        @await Html.PartialAsync("_PostsPartial", Model.Posts)
     </div>
+
+    <ul class="pagination">
+        @* Попередня сторінка *@
+        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-page="@(Model.CurrentPage - 1)"
+               asp-route-searchText="@ViewContext.HttpContext.Request.Query["searchText"]">
+                &laquo;
+            </a>
+        </li>
+
+        @* Перша сторінка *@
+        <li class="page-item @(Model.CurrentPage == 1 ? "active" : "")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-page="1"
+               asp-route-searchText="@ViewContext.HttpContext.Request.Query["searchText"]">
+                1
+            </a>
+        </li>
+
+        @* Якщо поточна сторінка більше 2, показуємо "..." *@
+        @if (Model.CurrentPage > 2)
+        {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+
+        @* Поточна сторінка і сусідні сторінки (одна до і одна після) *@
+        @for (int i = Math.Max(2, Model.CurrentPage - 1); i <= Math.Min(Model.TotalPages - 1, Model.CurrentPage + 1); i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@i"
+                   asp-route-searchText="@ViewContext.HttpContext.Request.Query["searchText"]">
+                    @i
+                </a>
+            </li>
+        }
+
+        @* Якщо поточна сторінка менше за передостанню, показуємо "..." *@
+        @if (Model.CurrentPage < Model.TotalPages - 1)
+        {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+
+        @* Остання сторінка *@
+        @if (Model.TotalPages > 1)
+        {
+            <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@Model.TotalPages"
+                   asp-route-searchText="@ViewContext.HttpContext.Request.Query["searchText"]">
+                    @Model.TotalPages
+                </a>
+            </li>
+        }
+
+        @* Наступна сторінка *@
+        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-page="@(Model.CurrentPage + 1)"
+               asp-route-searchText="@ViewContext.HttpContext.Request.Query["searchText"]">
+                &raquo;
+            </a>
+        </li>
+    </ul>
+
 
     <script>
         async function reloadPosts() {

@@ -19,20 +19,23 @@
             <div id="post-@post.PostID" class="post mb-4 p-3 border" style="width:70vw; border-radius:1vw; padding:2vw; position:relative;">
 
                 <div class="menu-container" style="position:absolute; top:1vw; right:1vw;" onclick="toggleMenu(this)">
-                    <button class="dots-button" aria-label="Меню">&#8943;</button>
-                    <div class="dropdown-menu">
-                        @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
-                        {
-                            <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" style="width: 100%;">Редагувати</a>
-                            <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })" onsubmit="return confirm('Ви впевнені, що хочете видалити цей допис?')" style="margin:0;">
-                                <button type="submit" style="background:none; border:none;  padding:8px 10px; cursor:pointer;">Видалити</button>
-                            </form>
-                        }
-                        else if (User.Identity.IsAuthenticated && userType != UserType.Moderator)
-                        {
-                            <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })">Поскаржитись</a>
-                        }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <button class="dots-button" aria-label="Меню">&#8943;</button>
+                        <div class="dropdown-menu">
+                            @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
+                            {
+                                <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" style="width: 100%;">Редагувати</a>
+                                <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })" onsubmit="return confirm('Ви впевнені, що хочете видалити цей допис?')" style="margin:0;">
+                                    <button type="submit" style="background:none; border:none;  padding:8px 10px; cursor:pointer;">Видалити</button>
+                                </form>
+                            }
+                            else if (User.Identity.IsAuthenticated && userType != UserType.Moderator)
+                            {
+                                <a href="@Url.Action("Report", "Complaint", new { postId = post.PostID })">Поскаржитись</a>
+                            }
                     </div>
+                    }
                 </div>
 
                 <div style="display:flex; gap:2vw;">

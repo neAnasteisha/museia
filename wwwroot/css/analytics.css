@@ -8,6 +8,18 @@ body, th, h2, tr {
 }
 
 
+.email-th {
+    width: 200px;
+}
+
+.username-th {
+    width: 200px;
+}
+
+.complaint-th {
+    width: 60px;
+}
+
 .table {
     border-color: #0e0514;
     background-color: white;
@@ -32,13 +44,4 @@ body, th, h2, tr {
         background-color: #fffaf1;
         transition: background-color 0.3s ease;
     }
-.email-th{
-    width:250px;
-}
-.username-th{
-    width:250px;
-}
-.complaint-th{
-    width:130px;
-}
 

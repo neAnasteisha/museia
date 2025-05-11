@@ -19,65 +19,77 @@
     </style>
 </head>
 <body>
+    <div class="container-edit">
+        <h2 class="text-center">Редагування профілю</h2>
 
-    <h2>Редагування профілю</h2>
-
-    <form method="post" enctype="multipart/form-data">
-        <div class="form-label">
-            <label for="username">Ім'я користувача</label>
-            <input type="text" class="form-control" asp-for="Username" placeholder="Вкажіть тут нове ім'я.">
-        </div>
-
-        <div class="form-label">
-            <label for="description">Опис</label>
-            <textarea class="form-control" asp-for="Description" rows="3" placeholder="Вкажіть тут новий опис."></textarea>
-        </div>
-
-        @if (!string.IsNullOrEmpty(Model.AvatarUrl))
-        {
+        <form method="post" enctype="multipart/form-data">
             <div class="form-label">
-                <p>Поточний аватар:</p>
-                <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 220px; max-height: 250px; object-fit: cover; margin-bottom: 8px;" />
+                <label for="username">Ім'я користувача</label>
+                <input type="text" class="form-control" asp-for="Username" placeholder="Вкажіть тут нове ім'я.">
             </div>
-        }
 
-        <div class="photo-section">
-            @Html.Partial("_CropperPartial", new CropperConfig
-       {
-           InputId = "avatarInput",
-           PreviewImageId = "imagePreview",
-           CroppedImageId = "croppedResult",
-           HiddenFieldName = "avatarCropped",
-           HiddenFieldId = "avatarCropped",
-           CancelButtonId = "cancelButton",
-           ActionWrapperId = "avatarActions",
-           CroppedWrapperId = "croppedWrapper",
-           Label = "Новий аватар (необов'язково)"
-       })
-        </div>
+            <div class="form-label">
+                <label for="description">Опис</label>
+                <textarea class="form-control" asp-for="Description" rows="3" placeholder="Вкажіть тут новий опис."></textarea>
+            </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
-    </form>
+            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
+            {
+                <div class="form-label">
+                    <p>Поточний аватар:</p>
+                    <img src="@Model.AvatarUrl" alt="Аватар" class="img-thumbnail" style="max-width: 220px; max-height: 250px; object-fit: cover; margin-bottom: 8px;" />
+                </div>
+            }
 
-    <form method="post" asp-action="DeleteProfile">
-        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
-    </form>
+            <div class="photo-section">
+                @Html.Partial("_CropperPartial", new CropperConfig
+           {
+               InputId = "avatarInput",
+               PreviewImageId = "imagePreview",
+               CroppedImageId = "croppedResult",
+               HiddenFieldName = "avatarCropped",
+               HiddenFieldId = "avatarCropped",
+               CancelButtonId = "cancelButton",
+               ActionWrapperId = "avatarActions",
+               CroppedWrapperId = "croppedWrapper",
+               Label = "Новий аватар (необов'язково)"
+           })
+            </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <script src="~/js/cropper-handler.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            initCropper({
-                inputId: "avatarInput",
-                previewImageId: "imagePreview",
-                croppedImageId: "croppedResult",
-                hiddenFieldId: "avatarCropped",
-                cancelButtonId: "cancelButton",
-                actionWrapperId: "avatarActions",
-                croppedWrapperId: "croppedWrapper"
+            <div class="buttons-container">
+                <div class="button-wrapper">
+                    <button type="submit" class="btn btn-primary mt-3">Зберегти</button>
+                </div>
+                <div class="button-wrapper">
+                    <form method="post" asp-action="DeleteProfile">
+                        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="/" class="text-decoration-none">🔙 Вернутись назад</a>
+            </div>
+
+        </form>
+
+        
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+        <script src="~/js/cropper-handler.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                initCropper({
+                    inputId: "avatarInput",
+                    previewImageId: "imagePreview",
+                    croppedImageId: "croppedResult",
+                    hiddenFieldId: "avatarCropped",
+                    cancelButtonId: "cancelButton",
+                    actionWrapperId: "avatarActions",
+                    croppedWrapperId: "croppedWrapper"
+                });
             });
-        });
-    </script>
-
+        </script>
+    </div>
 </body>
 </html>

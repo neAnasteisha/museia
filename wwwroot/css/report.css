@@ -4,7 +4,34 @@
 
 h2 {
     color: #0e0514;
-    /*font-weight: 499;*/
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.container-report {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 90px auto 30px auto;
+    max-width: 450px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+    color: #0e0514;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 499;
+}
+
+.form-control {
+    border: 1px solid #0e0514;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    width: 400px;
+    height: 200px;
+    resize: none;
 }
 
 .complaintReason {
@@ -12,30 +39,25 @@ h2 {
     margin-bottom: 4px;
 }
 
-.form-control {
-    border: 1px solid #0e0514;
-    border-radius: 4px;
-    margin-bottom: 12px;
-    width: 450px;
-}
-
-.btn-primary {
+.btn-success.w-100 {
     background-color: #5a506a;
     border-color: #0e0514;
     color: white;
+    border-radius: 4px;
+    margin: 4px 0;
+    font-weight: 499;
+    font-size: 15px;
 }
-
-    .btn-primary:hover {
+    .btn-success.w-100:hover {
         background-color: #5a506a;
-        border-color: #fffaf1;
+        border-color: #b3c7c9;
         color: white;
     }
-
-    .btn-primary:focus, .btn-primary:active:focus {
-        background-color: #5a506a;
-        border-color: #fffaf1;
-        color: white;
-    }
+        .btn-success.w-100:focus, .btn-success.w-100:active:focus {
+            background-color: #5a506a;
+            border-color: #b3c7c9;
+            color: white;
+        }
 
 body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     font-family: 'Noto Sans', Arial, Helvetica, sans-serif !important;

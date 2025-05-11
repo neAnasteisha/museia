@@ -12,6 +12,7 @@ body, th, h2, tr {
     background-color: white;
     width: 900px;
     overflow: hidden;
+    margin: 0 auto; 
 }
 
     .table thead {
@@ -53,4 +54,8 @@ body, th, h2, tr {
 .complaint-th {
     text-align: center;
     vertical-align: middle;
+}
+
+h2 {
+    text-align: center;
 }

@@ -11,6 +11,7 @@ using NuGet.Protocol.Plugins;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -35,12 +36,10 @@ namespace museia.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index(string searchText)
+        public async Task<IActionResult> Index(string searchText, int page = 1, int pageSize = 5)
         {
-            // 1) пошук
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
 
-            // 2) перевірка активної скарги
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
             bool hasActiveComplaint = false;
@@ -62,11 +61,24 @@ namespace museia.Controllers
             if (hasActiveComplaint)
                 return RedirectToAction("WarningView", "Complaint");
 
-            return View(posts);
+            var totalItems = posts.Count;
+            var pagedPosts = posts
+            .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var viewModel = new PostListViewModel
+            {
+                Posts = pagedPosts,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> PostsPartial(string searchText)
+        public async Task<IActionResult> PostsPartial(string searchText, int page = 1, int pageSize = 5)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userPosts = await _postService.GetPostsOfUserAsync(currentUserId);
@@ -90,8 +102,16 @@ namespace museia.Controllers
                 return RedirectToAction("WarningView", "Complaint");
 
             List<Post> posts = await _postService.SearchPostsAsync(searchText);
-            return PartialView("_PostsPartial", posts);
+
+            var totalItems = posts.Count;
+            var pagedPosts = posts
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return PartialView("_PostsPartial", pagedPosts);
         }
+
 
         public IActionResult Privacy()
         {

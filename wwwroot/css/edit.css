@@ -4,19 +4,32 @@
 
 h2 {
     color: #0e0514;
-    /*font-weight: 499;*/
+    font-weight: bold;
+    margin-bottom: 17px;
+}
+
+.container-edit {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 90px auto 30px auto;
+    max-width: 450px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-label {
     color: #0e0514;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 499;
 }
-
 
 .form-control {
     border: 1px solid #0e0514;
     border-radius: 4px;
-    width: 450px;
     margin-bottom: 12px;
+    resize: none;
 }
 
 
@@ -122,23 +135,33 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     }
 
 
-
 .btn-danger {
     background-color: #5a506a;
     border-color: #0e0514;
     color: white;
     margin-top: 15px;
 }
-
     .btn-danger:hover {
         background-color: #5a506a;
         border-color: #fffaf1;
         color: white;
     }
-
     .btn-danger:focus, .btn-danger:active:focus {
         background-color: #5a506a;
         border-color: #fffaf1;
         color: white;
     }
-    
+
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    justify-content: stretch;
+}
+
+.button-wrapper {
+    flex: 1;
+    display: flex;
+}
+    .button-wrapper button {
+        flex: 1;
+    }

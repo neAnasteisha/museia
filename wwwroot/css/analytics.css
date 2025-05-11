@@ -7,34 +7,27 @@ body, th, h2, tr {
     line-height: 2vw;
 }
 
-
-.email-th {
-    width: 200px;
-}
-
-.username-th {
-    width: 200px;
-}
-
-.complaint-th {
-    width: 60px;
-}
-
 .table {
     border-color: #0e0514;
     background-color: white;
-   /* border-radius: 1vw; */
+    width: 900px;
     overflow: hidden;
-  
 }
 
-.table thead {
-    background-color: #5a506a;
-    color: white;
-}
+    .table thead {
+        background-color: #5a506a;
+        color: white;
+    }
 
-    .table th,
-    .table td {
+        .table thead th {
+            padding: 1vw;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1.1rem; 
+            font-weight: bold;
+        }
+
+    .table tbody td {
         padding: 1vw;
         text-align: left;
         font-size: 1rem;
@@ -45,3 +38,19 @@ body, th, h2, tr {
         transition: background-color 0.3s ease;
     }
 
+.email-th {
+    width: 350px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.username-th {
+    width: 350px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.complaint-th {
+    text-align: center;
+    vertical-align: middle;
+}

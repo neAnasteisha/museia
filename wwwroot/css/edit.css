@@ -213,11 +213,11 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
 }
 
 .button-wrapper-post {
-    flex: 1;
-    margin: 0px 0px 0px 0px;
+    width: 100%;
     display: flex;
-    gap: 10px;
+    justify-content: center;
 }
+
     .button-wrapper-post button {
-        flex: 1;
+        width: 100%;
     }

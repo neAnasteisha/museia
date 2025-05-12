@@ -67,7 +67,10 @@
 
             <div class="button-wrapper-post">
                 <button type="submit" class="btn btn-save-changes mt-3">Зберегти</button>
-                <button asp-action="Profile" asp-controller="User" class="btn btn-save-changes mt-3">Скасувати</button>
+                @* <button asp-action="Profile" asp-controller="User" class="btn btn-save-changes mt-3">Скасувати</button> *@
+            </div>
+            <div class="text-center mt-3">
+                <a asp-action="Profile" asp-controller="User" class="text-decoration-none">🔙 Вернутись назад</a>
             </div>
         </form>
 

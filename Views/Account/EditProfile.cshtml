@@ -36,13 +36,14 @@
                     </div>
 
                     <div class="buttons-container">
-                        <div class="button-wrapper">
+                        <div class="button-wrapper-post">
                             <button type="submit" class="btn btn-danger mt-3">Зберегти</button>
                         </div>
-                        <div class="button-wrapper">
-                            <form method="post" asp-action="DeleteProfile">
-                                <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">Видалити профіль</button>
-                            </form>
+                        <div class="button-wrapper-post">
+                            <button type="submit" name="delete" value="true" class="btn btn-danger mt-3"
+                                    onclick="return confirm('Ви впевнені, що хочете видалити свій профіль?')">
+                                Видалити профіль
+                            </button>
                         </div>
                     </div>
                 </div>

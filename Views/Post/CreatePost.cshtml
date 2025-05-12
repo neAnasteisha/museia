@@ -22,55 +22,57 @@
     </style>
 </head>
 <body>
+    <div class="container-create-post">
 
-    <form method="post" enctype="multipart/form-data">
-        <div>
-            <h2 class="text">📝 Створення допису</h2>
-
+        <form method="post" enctype="multipart/form-data">
             <div>
-                <label class="form-label">Опис</label>
-                <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
+                <h2 class="text-center">📝 Створення допису</h2>
+
+                <div>
+                    <label class="form-label">Опис</label>
+                    <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
+                </div>
+
+                <div>
+                    <label class="form-label">Тег</label>
+                    <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
+                </div>
+
+                <div class="photo-section">
+                    @Html.Partial("_CropperPartial", new CropperConfig
+               {
+                   InputId = "photoInput",
+                   PreviewImageId = "imagePreview",
+                   CroppedImageId = "croppedResult",
+                   HiddenFieldName = "photoCropped",
+                   HiddenFieldId = "photoCropped",
+                   CancelButtonId = "cancelButton",
+                   ActionWrapperId = "photoActions",
+                   CroppedWrapperId = "croppedWrapper",
+                   Label = "Фото (необов'язково)"
+               })
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Опублікувати</button>
             </div>
+        </form>
 
-            <div>
-                <label class="form-label">Тег</label>
-                <select asp-for="PostTag" asp-items="ViewBag.PostTags" class="form-control"></select>
-            </div>
-
-            <div class="photo-section">
-                @Html.Partial("_CropperPartial", new CropperConfig
-           {
-               InputId = "photoInput",
-               PreviewImageId = "imagePreview",
-               CroppedImageId = "croppedResult",
-               HiddenFieldName = "photoCropped",
-               HiddenFieldId = "photoCropped",
-               CancelButtonId = "cancelButton",
-               ActionWrapperId = "photoActions",
-               CroppedWrapperId = "croppedWrapper",
-               Label = "Фото (необов'язково)"
-           })
-            </div>
-
-            <button type="submit" class="btn btn-success-publish mt-3">Опублікувати</button>
-        </div>
-    </form>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <script src="~/js/cropper-handler.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            initCropper({
-                inputId: "photoInput",
-                previewImageId: "imagePreview",
-                croppedImageId: "croppedResult",
-                hiddenFieldId: "photoCropped",
-                cancelButtonId: "cancelButton",
-                actionWrapperId: "photoActions",
-                croppedWrapperId: "croppedWrapper"
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+        <script src="~/js/cropper-handler.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                initCropper({
+                    inputId: "photoInput",
+                    previewImageId: "imagePreview",
+                    croppedImageId: "croppedResult",
+                    hiddenFieldId: "photoCropped",
+                    cancelButtonId: "cancelButton",
+                    actionWrapperId: "photoActions",
+                    croppedWrapperId: "croppedWrapper"
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 
 </body>
 </html>

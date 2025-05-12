@@ -23,73 +23,77 @@
     </style>
 </head>
 <body>
+    <div class="container-edit">
 
-    <h2>Редагування допису</h2>
+        <h2>Редагування допису</h2>
 
-    <form asp-action="EditPost" method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="PostID" />
+        <form asp-action="EditPost" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="PostID" />
 
-        <div class="form-group">
-            <label asp-for="PostText">Текст допису</label>
-            <textarea asp-for="PostText" class="form-control"></textarea>
-            <span asp-validation-for="PostText" class="text-danger"></span>
-        </div>
+            <div class="form-group">
+                <label asp-for="PostText">Текст допису</label>
+                <textarea asp-for="PostText" class="form-control"></textarea>
+                <span asp-validation-for="PostText" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="PostTag">Тег</label>
-            <select asp-for="PostTag" asp-items="@(new SelectList(ViewBag.PostTags, "Value", "Text"))" class="form-control"></select>
-            <span asp-validation-for="PostTag" class="text-danger"></span>
-        </div>
+            <div class="form-group">
+                <label asp-for="PostTag">Тег</label>
+                <select asp-for="PostTag" asp-items="@(new SelectList(ViewBag.PostTags, "Value", "Text"))" class="form-control"></select>
+                <span asp-validation-for="PostTag" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label>Поточне зображення:</label>
-            @if (!string.IsNullOrEmpty(Model.PostPhotoUrl))
-            {
-                <img src="@Model.PostPhotoUrl" alt="Фото допису" style="max-width: 200px; display: block; margin-bottom: 12px;" />
-            }
-        </div>
+            <div class="form-group">
+                <label>Поточне зображення:</label>
+                @if (!string.IsNullOrEmpty(Model.PostPhotoUrl))
+                {
+                    <img src="@Model.PostPhotoUrl" alt="Фото допису" style="max-width: 200px; display: block; margin-bottom: 12px;" />
+                }
+            </div>
 
-        <div class="photo-section">
-            @Html.Partial("_CropperPartial", new CropperConfig
-       {
-           InputId = "photoInput",
-           PreviewImageId = "imagePreview",
-           CroppedImageId = "croppedResult",
-           HiddenFieldName = "PostPhotoCropped",      
-           HiddenFieldId = "PostPhotoCropped",       
-           CancelButtonId = "cancelButton",
-           ActionWrapperId = "photoActions",
-           CroppedWrapperId = "croppedWrapper",
-           Label = "Нове зображення (необов'язково)"
-       })
-        </div>
+            <div class="photo-section">
+                @Html.Partial("_CropperPartial", new CropperConfig
+           {
+               InputId = "photoInput",
+               PreviewImageId = "imagePreview",
+               CroppedImageId = "croppedResult",
+               HiddenFieldName = "PostPhotoCropped",
+               HiddenFieldId = "PostPhotoCropped",
+               CancelButtonId = "cancelButton",
+               ActionWrapperId = "photoActions",
+               CroppedWrapperId = "croppedWrapper",
+               Label = "Нове зображення (необов'язково)"
+           })
+            </div>
 
-        <button type="submit" class="btn btn-save-changes mt-3">Зберегти</button>
-        <a asp-action="Profile" asp-controller="User" class="btn btn-cancel-changes mt-3">Скасувати</a>
-    </form>
+            <div class="button-wrapper">
+                <button type="submit" class="btn btn-save-changes mt-3">Зберегти</button>
+                <button asp-action="Profile" asp-controller="User" class="btn btn-cancel-changes mt-3">Скасувати</button>
+            </div>
+        </form>
 
-    @if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)
-    {
-        <p class="text-danger mt-2">
-            @ViewData.ModelState[string.Empty].Errors[0].ErrorMessage
-        </p>
-    }
+        @if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+        {
+            <p class="text-danger mt-2">
+                @ViewData.ModelState[string.Empty].Errors[0].ErrorMessage
+            </p>
+        }
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-    <script src="~/js/cropper-handler.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            initCropper({
-                inputId: "photoInput",
-                previewImageId: "imagePreview",
-                croppedImageId: "croppedResult",
-                hiddenFieldId: "PostPhotoCropped", 
-                cancelButtonId: "cancelButton",
-                actionWrapperId: "photoActions",
-                croppedWrapperId: "croppedWrapper"
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+        <script src="~/js/cropper-handler.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                initCropper({
+                    inputId: "photoInput",
+                    previewImageId: "imagePreview",
+                    croppedImageId: "croppedResult",
+                    hiddenFieldId: "PostPhotoCropped",
+                    cancelButtonId: "cancelButton",
+                    actionWrapperId: "photoActions",
+                    croppedWrapperId: "croppedWrapper"
+                });
             });
-        });
-    </script>
+        </script>
 
+    </div>
 </body>
 </html>

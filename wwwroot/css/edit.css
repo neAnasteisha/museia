@@ -12,8 +12,17 @@ h2 {
     background-color: white;
     border-radius: 10px;
     padding: 25px;
-    margin: 10px auto 10px auto;
+    margin: 60px auto 10px auto;
     max-width: 450px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container-edit-profile {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 90px auto 10px auto;
+    max-width: 700px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -25,6 +34,13 @@ h2 {
     font-size: 15px;
     font-weight: 499;
 }
+    .form-label p {
+        color: #0e0514;
+        display: block;
+        margin-bottom: 4px;
+        font-size: 15px;
+        font-weight: 499;
+    }
 
 .form-control {
     border: 1px solid #0e0514;
@@ -60,7 +76,7 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     background-color: #5a506a;
     border-color: #0e0514;
     color: white;
-    margin-right: 7px;
+    margin-right: 0px;
     margin-top: 6px;
 }
 
@@ -155,11 +171,14 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
 
 .buttons-container {
     display: flex;
-    gap: 10px;
-    justify-content: stretch;
+    flex-direction: column; /* ставить кнопки одна під одною */
+    align-items: center; /* центрує їх по горизонталі */
+    gap: 14px; /* відстань між кнопками */
+    margin-top: 20px;
 }
 
 .button-wrapper {
+    width: 200px;
     flex: 1;
     display: flex;
 }
@@ -168,4 +187,37 @@ body, h1, h2, h3, h4, h5, h6, p, a, span, div {
     }
 
 
-    
+.form-and-avatar {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.form-items {
+    flex: 1;
+    min-width: 200px;
+}
+
+.photo-form {
+    flex: 1;
+    max-width: 220px;
+    text-align: center;
+}
+
+.photo-form img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+}
+
+.button-wrapper-post {
+    flex: 1;
+    margin: 0px 0px 0px 0px;
+    display: flex;
+    gap: 10px;
+}
+    .button-wrapper-post button {
+        flex: 1;
+    }

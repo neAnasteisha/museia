@@ -24,11 +24,11 @@
 </head>
 <body>
     <div class="container-edit">
-
         <h2 class="text-center">Редагування допису</h2>
 
         <form asp-action="EditPost" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="PostID" />
+            <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
 
             <div class="form-group">
                 <label asp-for="PostText">Текст допису</label>
@@ -67,11 +67,14 @@
 
             <div class="button-wrapper-post">
                 <button type="submit" class="btn btn-save-changes mt-3">Зберегти</button>
-                @* <button asp-action="Profile" asp-controller="User" class="btn btn-save-changes mt-3">Скасувати</button> *@
             </div>
-            <div class="text-center mt-3">
-                <a asp-action="Profile" asp-controller="User" class="text-decoration-none">🔙 Вернутись назад</a>
-            </div>
+
+            @if (ViewData["ReturnUrl"] != null)
+            {
+                <div class="text-center mt-3">
+                    <a href="@ViewData["ReturnUrl"]" class="text-decoration-none">🔙 Вернутись назад</a>
+                </div>
+            }
         </form>
 
         @if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)
@@ -96,7 +99,6 @@
                 });
             });
         </script>
-
     </div>
 </body>
 </html>

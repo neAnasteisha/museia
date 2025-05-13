@@ -187,7 +187,7 @@ namespace museia.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> EditPost(uint id)
+        public async Task<IActionResult> EditPost(uint id, string? returnUrl = null)
         {
             var post = await _postService.GetPostById(id);
             if (post == null || post.UserID != _userManager.GetUserId(User))
@@ -202,14 +202,17 @@ namespace museia.Controllers
                 PostPhotoUrl = post.PostPhoto,
                 PostTag = post.PostTag
             };
+
             ViewBag.PostTags = _postService.GetPostTags();
+            ViewData["ReturnUrl"] = returnUrl ?? Url.Action("Profile", "User");
 
             return View(model);
         }
 
+
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> EditPost(EditPostViewModel model)
+        public async Task<IActionResult> EditPost(EditPostViewModel model, string? ReturnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -234,7 +237,6 @@ namespace museia.Controllers
             post.PostTag = model.PostTag ?? post.PostTag;
             post.EditedAt = DateTime.Now;
 
-            // Якщо є обрізане фото (base64)
             if (!string.IsNullOrEmpty(model.PostPhotoCropped))
             {
                 var base64Data = Regex.Match(model.PostPhotoCropped, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
@@ -243,7 +245,6 @@ namespace museia.Controllers
                 string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads/posts", post.UserID);
                 Directory.CreateDirectory(uploadsFolder);
 
-                // Видалити старе фото
                 if (!string.IsNullOrEmpty(post.PostPhoto))
                 {
                     string oldImagePath = Path.Combine("wwwroot", post.PostPhoto.TrimStart('/'));
@@ -261,9 +262,12 @@ namespace museia.Controllers
             }
 
             await _postService.UpdatePost(post);
+
+            if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                return Redirect(ReturnUrl);
+
             return RedirectToAction("Profile", "User");
         }
-
 
 
 

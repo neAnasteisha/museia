@@ -25,7 +25,7 @@
                         <div class="dropdown-menu">
                             @if (User.Identity.IsAuthenticated && post.UserID == currentUserId)
                             {
-                                <a href="@Url.Action("EditPost", "Post", new { id = post.PostID })" style="width: 100%;">Редагувати</a>
+                                <a href="@Url.Action("EditPost", "Post", new { id = post.PostID, returnUrl = Context.Request.Path + Context.Request.QueryString })">Редагувати</a>
                                 <form method="post" action="@Url.Action("DeletePost", "Post", new { id = post.PostID })" onsubmit="return confirm('Ви впевнені, що хочете видалити цей допис?')" style="margin:0;">
                                     <button type="submit" class="dropdown-item">Видалити</button>
                                 </form>

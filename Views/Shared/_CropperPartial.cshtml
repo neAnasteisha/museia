@@ -5,17 +5,16 @@
     <input type="file" class="form-control" id="@Model.InputId" accept="image/*" />
     <input type="hidden" name="@Model.HiddenFieldName" id="@Model.HiddenFieldId" />
 
-    <div class="cropper-row" style="display:flex; flex-direction:row; gap:2vw; align-items:flex-start;">
+    <div class="cropper-row" style="display:flex; flex-direction:column; width:100%; align-items:center;">
         <div>
             <img id="@Model.PreviewImageId" style="display: none; max-width: 20vw; border: 1px solid #ccc; padding: 4px; background: #fff;" />
-            <div class="avatar-buttons" id="@Model.ActionWrapperId" style="display: none; margin-top: 10px;">
-                <button type="button" id="@Model.CancelButtonId" class="btn btn-outline-danger btn-sm">Скасувати</button>
+            <div class="avatar-buttons" id="@Model.ActionWrapperId" style="display: none; ">
+                <button type="button" id="@Model.CancelButtonId" class="btn btn-outline-danger btn-sm" style="margin:0px !important;">Скасувати</button>
             </div>
         </div>
 
-        <div id="@Model.CroppedWrapperId" style="display: none; padding:0.75vw;">
-            <span class="preview-label" style="margin-bottom: 4px;">Попередній перегляд:</span>
-            <img id="@Model.CroppedImageId" style="max-width: 15vw; margin-top:0.7vw; border: 1px solid #ccc; padding: 4px; background: #fff; display: block !important;" />
+        <div id="@Model.CroppedWrapperId" style="display: none; height:0vw;">
+            <img id="@Model.CroppedImageId" style="max-width: 0vw; margin-top:0.7vw; background: #fff; display: block !important;" />
         </div>
     </div>
 </div>

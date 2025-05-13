@@ -198,10 +198,11 @@ h2 {
 
 
 
-/*.text-center.mt-3 {
+.text-center.mt-3 {
     color: #0e0514;
     font-weight: 499;
     font-size: 15px;
+
 }
 
     .text-center.mt-3 a {
@@ -210,7 +211,7 @@ h2 {
 
     .text-center.mt-3 a:hover {
          color: #5a506a;
-    }*/
+    }
 
 
 .nickname {

@@ -130,14 +130,15 @@ namespace museia.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreatePost()
+        public IActionResult CreatePost(string? returnUrl = null)
         {
-            ViewBag.PostTags = _postService.GetPostTags();
+            ViewData["ReturnUrl"] = returnUrl ?? Url.Action("Index", "Post");
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(Post model, string photoCropped)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePost(Post model, string photoCropped, string? ReturnUrl)
         {
             string photoPath = null;
 
@@ -172,6 +173,12 @@ namespace museia.Controllers
             }
 
             await _postService.CreatePostAsync(model.PostText, photoPath, model.PostTag, userId);
+
+            // Перевіряємо, чи передано ReturnUrl, і чи це локальний URL (щоб уникнути open redirect)
+            if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+            {
+                return Redirect(ReturnUrl);
+            }
 
             return RedirectToAction("Index", "Post");
         }

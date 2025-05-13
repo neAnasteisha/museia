@@ -28,6 +28,8 @@
             <div>
                 <h2 class="text-center">📝 Створення допису</h2>
 
+                <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
                 <div>
                     <label class="form-label">Опис</label>
                     <textarea class="form-control" rows="4" asp-for="PostText"></textarea>
@@ -55,7 +57,13 @@
 
                 <button type="submit" class="btn btn-success w-100">Опублікувати</button>
                 <div class="text-center mt-3">
-                    <a asp-action="Profile" asp-controller="User" class="text-decoration-none">🔙 Вернутись назад</a>
+                    @if (ViewData["ReturnUrl"] != null)
+                    {
+                        <div class="text-center mt-3">
+                            <a href="@ViewData["ReturnUrl"]" class="text-decoration-none">🔙 Вернутись назад</a>
+                        </div>
+                    }
+
                 </div>
             </div>
         </form>

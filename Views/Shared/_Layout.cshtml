@@ -33,13 +33,11 @@
                     }
                 }
 
-                <!-- Кнопка для мобільного меню -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <!-- Навбар -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated && userType == UserType.Moderator)
@@ -53,7 +51,10 @@
                         else if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a href="/Post/CreatePost" class="btn btn-success me-2" style="color: white"> Створити допис</a>
+                                <a href="@($"/Post/CreatePost?returnUrl={Context.Request.Path}{Context.Request.QueryString}")" class="btn btn-success me-2" style="color: white">
+                                    Створити допис
+                                </a>
+
                             </li>
                             @if (ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Profile")
                             {
